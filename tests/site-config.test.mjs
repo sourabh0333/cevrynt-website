@@ -122,3 +122,21 @@ test("development portal UI and annotation-like markers are not visible with the
   assert.match(nextConfig, /devIndicators: false/);
   assert.doesNotMatch(homepage, /detail-index|scene-index|debug-navigation|annotation/i);
 });
+
+test("Phase 4 motion keeps its product story controllable and safe without motion", async () => {
+  const heroMotion = await readFile(new URL("../src/components/motion/hero-product-motion.jsx", import.meta.url), "utf8");
+  const storyMotion = await readFile(new URL("../src/components/motion/story-motion.jsx", import.meta.url), "utf8");
+
+  assert.match(heroMotion, /useReducedMotion/);
+  assert.match(heroMotion, /aria-label="Document-to-decision states"/);
+  assert.match(heroMotion, /aria-pressed/);
+  assert.match(heroMotion, /setIsPaused\(true\)/);
+  assert.match(storyMotion, /IntersectionObserver/);
+  assert.match(storyMotion, /prefers-reduced-motion: reduce/);
+  assert.doesNotMatch(storyMotion, /ScrollTrigger/);
+});
+
+test("the root body tolerates browser-extension hydration attributes", async () => {
+  const layout = await readFile(new URL("../src/app/layout.js", import.meta.url), "utf8");
+  assert.match(layout, /<body[^>]*suppressHydrationWarning/);
+});

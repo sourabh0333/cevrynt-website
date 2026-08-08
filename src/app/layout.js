@@ -18,5 +18,5 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  return <html lang="en" className={`${geistSans.variable} h-full antialiased`}><body className="min-h-full"><a className="skip-link" href="#main-content">Skip to content</a><SiteNavigation /><MotionProvider />{children}<SiteFooter /></body></html>;
+  return <html lang="en" className={`${geistSans.variable} h-full antialiased`}><body className="min-h-full" suppressHydrationWarning><a className="skip-link" href="#main-content">Skip to content</a><SiteNavigation /><MotionProvider />{children}<SiteFooter /></body></html>;
 }
