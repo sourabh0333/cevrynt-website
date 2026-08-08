@@ -1,0 +1,5 @@
+2026/08/08-12:51:41.956 1c6c Creating DB C:\Users\green\OneDrive\Documents\Cevrynt Website\cevrynt-website\.qa-full-final\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/08/08-12:51:41.967 1c6c Reusing MANIFEST C:\Users\green\OneDrive\Documents\Cevrynt Website\cevrynt-website\.qa-full-final\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/08-12:51:43.177 6148 Level-0 table #5: started
+2026/08/08-12:51:43.184 6148 Level-0 table #5: 683161 bytes OK
+2026/08/08-12:51:43.188 6148 Delete type=0 #3
