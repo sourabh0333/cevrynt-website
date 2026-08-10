@@ -3,8 +3,7 @@ const headingLines = [
   "decision-ready underwriting.",
 ];
 
-const supportingCopy = "Cevrynt helps alternative lenders turn borrower documents and business signals into evidence-linked analysis for faster, consistent human review.";
-const supportingWords = supportingCopy.split(" ");
+const supportingCopy = "Turn borrower documents and business signals into evidence-linked analysis for human underwriting.";
 
 function SignalMark() {
   const dots = [
@@ -27,21 +26,11 @@ export function AnimatedHeroCopy() {
       <h1 className="hero-animated-heading" aria-label={headingLines.join(" ")}>
         {headingLines.map((line) => (
           <span className="hero-heading-line" aria-hidden="true" key={line}>
-            {Array.from(line).map((character, index) => (
-              <span className="hero-char" key={`${character}-${index}`}>
-                {character === " " ? "\u00a0" : character}
-              </span>
-            ))}
+            <span className="hero-line-text">{line}</span>
           </span>
         ))}
       </h1>
-      <p className="home-hero-lede" aria-label={supportingCopy}>
-        <span aria-hidden="true">
-          {supportingWords.map((word, index) => (
-            <span className="hero-word" key={`${word}-${index}`}>{word}{index < supportingWords.length - 1 ? "\u00a0" : ""}</span>
-          ))}
-        </span>
-      </p>
+      <p className="home-hero-lede">{supportingCopy}</p>
     </>
   );
 }
