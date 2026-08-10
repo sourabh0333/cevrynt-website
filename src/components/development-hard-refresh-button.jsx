@@ -11,9 +11,7 @@ async function hardRefresh() {
     await Promise.all(registrations.map((registration) => registration.unregister()));
   }
 
-  const url = new URL(window.location.href);
-  url.searchParams.set("_dev_refresh", Date.now().toString());
-  window.location.replace(url.toString());
+  window.location.reload();
 }
 
 export function DevelopmentHardRefreshButton() {
