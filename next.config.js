@@ -11,6 +11,7 @@ const developmentNoCacheHeaders = [
 const nextConfig = {
   reactCompiler: true,
   poweredByHeader: false,
+  allowedDevOrigins: ["192.168.0.199"],
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: isProduction ? 31536000 : 0,

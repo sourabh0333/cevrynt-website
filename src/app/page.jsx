@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "@/components/icons";
 import { HeroMotion } from "@/components/hero-motion";
 import { AnimatedHeroCopy } from "@/components/animated-hero-copy";
+import { RainbowCta } from "@/components/ui/rainbow-cta";
 import { workflow } from "@/content/site-pages";
 
 export const revalidate = 3600;
@@ -25,10 +26,7 @@ export default function Home() {
         <div className="home-hero-inner">
           <AnimatedHeroCopy />
           <div className="hero-actions hero-reveal">
-            <a className="primary-cta hero-primary-cta" href={calendlyUrl} target="_blank" rel="noreferrer">
-              <span className="cta-swap cta-swap-base">Get a demo <ArrowUpRight /></span>
-              <span className="cta-swap cta-swap-hover" aria-hidden="true">Get a demo <ArrowUpRight /></span>
-            </a>
+            <RainbowCta href={calendlyUrl} label="Get a demo" />
           </div>
         </div>
         <div className="hero-dashboard-wrap">

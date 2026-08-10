@@ -13,3 +13,17 @@ export function ArrowUpRight({ className = "" }) {
     </svg>
   );
 }
+
+const signalDots = [
+  [18, 2], [18, 10], [18, 18], [18, 26], [18, 34],
+  [2, 18], [10, 18], [26, 18], [34, 18],
+  [10, 10], [26, 10], [10, 26], [26, 26],
+];
+
+export function SignalMark({ className = "" }) {
+  return (
+    <svg className={className} viewBox="0 0 36 36" aria-hidden="true">
+      {signalDots.map(([cx, cy]) => <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="2.35" />)}
+    </svg>
+  );
+}

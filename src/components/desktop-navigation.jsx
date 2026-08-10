@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, ChevronDown } from "@/components/icons";
-import { navGroups } from "@/content/site-pages";
+import { ArrowUpRight, ChevronDown, SignalMark } from "@/components/icons";
+import { navGroups, pageByPath } from "@/content/site-pages";
+
+const topArticle = pageByPath.get("blog/from-documents-to-decision-ready-underwriting");
 
 const descriptions = {
   "Platform overview": "Connect the complete underwriting review.",
@@ -75,11 +77,14 @@ export function NavVector({ label }) {
   return <svg viewBox="0 0 24 24"><path d="M4 17 9 12l3 3 8-9" /><path d="M15 6h5v5" /></svg>;
 }
 
-function MenuVisual({ group }) {
+function MenuVisual({ group, onNavigate }) {
   const [kicker, title] = visualCopy[group] || visualCopy.Platform;
   const showGlobe = group === "Product" || group === "Solutions";
+  const isResources = group === "Resources";
+  const Wrapper = isResources ? Link : "aside";
+  const wrapperProps = isResources ? { href: `/${topArticle.path}`, onClick: onNavigate } : {};
   return (
-    <aside className={`nav-feature nav-feature-${group.toLowerCase()}`}>
+    <Wrapper className={`nav-feature nav-feature-${group.toLowerCase()}`} {...wrapperProps}>
       {showGlobe ? (
         <svg className="nav-feature-vector nav-feature-globe" viewBox="0 0 320 250" aria-hidden="true">
           <defs>
@@ -111,8 +116,13 @@ function MenuVisual({ group }) {
           <circle cx="119" cy="102" r="6" /><circle cx="210" cy="122" r="6" /><circle cx="294" cy="55" r="6" />
         </svg>
       )}
-      <div className="nav-feature-copy"><span>{kicker}</span><strong>{title}</strong></div>
-    </aside>
+      <div className="nav-feature-copy">
+        {isResources && <SignalMark className="nav-feature-signal" />}
+        <span>{isResources ? "From the Cevrynt blog" : kicker}</span>
+        <strong>{isResources ? topArticle.title : title}</strong>
+        {isResources && <span className="nav-feature-more">Learn more <ArrowUpRight /></span>}
+      </div>
+    </Wrapper>
   );
 }
 
@@ -184,7 +194,7 @@ export function DesktopNavigation() {
                         {secondaryLinks.map(([label, href]) => <Link href={href} key={href} onClick={() => setOpenMenu(null)}>{label}</Link>)}
                       </div>
                     </div>
-                    <MenuVisual group={group.label} />
+                    <MenuVisual group={group.label} onNavigate={() => setOpenMenu(null)} />
                   </div>
                 </motion.div>
               )}

@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/config/site";
 import { TimedDemoPopup } from "@/components/timed-demo-popup";
 import { DevelopmentCacheReset } from "@/components/development-cache-reset";
+import { DevelopmentHardRefreshButton } from "@/components/development-hard-refresh-button";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -57,6 +58,7 @@ export default function RootLayout({ children }) {
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {process.env.NODE_ENV === "development" ? <DevelopmentCacheReset /> : null}
+        {process.env.NODE_ENV === "development" ? <DevelopmentHardRefreshButton /> : null}
         <SiteHeader />
         {children}
         <SiteFooter />

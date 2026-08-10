@@ -7,7 +7,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-shell">
         <div className="footer-brand">
-          <Image src="/brand/cevrynt-logo-v2.png" alt="Cevrynt" width={1029} height={366} sizes="144px" />
+          <Image src="/brand/cevrynt-logo-v2.png" alt="Cevrynt" width={1029} height={366} priority loading="eager" sizes="144px" />
           <p>From borrower documents to decision-ready underwriting.</p>
           <p className="footer-disclaimer">Cevrynt is not a lender. Lenders retain final approval authority.</p>
         </div>

@@ -240,7 +240,7 @@ Mobile compact-on-scroll state:
 - Hover replaces background and content from bottom to top; hover-out reverses smoothly from top to bottom.
 - Do not animate text separately in a way that leaves ghost text or mismatched timing.
 - Use transform/opacity and keep the movement deliberate rather than fast.
-- Current hero CTA target size is approximately `154 × 42px` on desktop and mobile.
+- Current hero CTA target size is approximately `154 × 42px` on desktop and `128 × 36px` on mobile (≤560px), intentionally smaller to match a lighter, more restrained mobile hero.
 
 ## Logos, icons, and assets
 
