@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cevrynt Web Performance"
+  short_description: "Fast, accessible, server-first Cevrynt websites"
+  default_prompt: "Use $cevrynt-web-performance to build or review this Cevrynt page for speed, SEO, accessibility, and restrained motion."

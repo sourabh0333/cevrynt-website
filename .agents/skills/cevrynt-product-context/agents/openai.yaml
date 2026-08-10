@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cevrynt Product Context"
+  short_description: "Verified Cevrynt positioning and claim guardrails"
+  default_prompt: "Use $cevrynt-product-context to write accurate, lender-first Cevrynt website content without unsupported claims."
