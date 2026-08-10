@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/.qa-workspace-final
+/.qa-production-phase3-production-768.png
+/.qa-production-full
