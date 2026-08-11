@@ -256,10 +256,12 @@ Project assets currently include:
 - `/public/brand/cevrynt-logo-v2.png`
 - `/public/brand/cevrynt-logo.svg`
 - `/public/brand/cevrynt-mark-v2.png`
-- `/public/brand/cevrynt-favicon-v2.ico`
-- `/public/brand/cevrynt-apple-icon-v2.png`
-- `/public/brand/cevrynt-icon-192-v2.png`
-- `/public/brand/cevrynt-icon-512-v2.png`
+- `/public/brand/cevrynt-favicon-v3.ico`
+- `/public/brand/cevrynt-favicon.svg`
+- `/public/brand/cevrynt-favicon-96.png`
+- `/public/brand/cevrynt-apple-icon-v3.png`
+- `/public/brand/cevrynt-icon-192-v3.png`
+- `/public/brand/cevrynt-icon-512-v3.png`
 - `/public/brand/shopline-logo.png`
 - `/public/media/cevrynt-dashboard-website.webp`
 - `/public/media/cevrynt-dashboard-website-analytics.webp`

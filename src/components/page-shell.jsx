@@ -1,34 +1,49 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@/components/icons";
+import { HeroMotion } from "@/components/hero-motion";
+import { PageHeroCopy } from "@/components/page-hero-copy";
+import { RainbowCta } from "@/components/ui/rainbow-cta";
 import { workflow } from "@/content/site-pages";
 
 const calendlyUrl = "https://calendly.com/arin-cevrynt/cevrynt-demo";
 
 export function PageShell({ page }) {
   const ctaHref = page.ctaHref || calendlyUrl;
+  const useDarkHero = page.group !== "Resources" && page.group !== "Article" && !page.legal;
 
   return (
     <main id="main-content">
-      <section className="page-hero">
-        <div className="page-hero-inner">
-          <nav className="breadcrumbs" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">/</span>
-            <span>{page.group}</span>
-          </nav>
-          <p className="eyebrow">{page.group}</p>
-          <h1>{page.title}</h1>
-          <p className="page-lede">{page.description}</p>
-          {!page.legal && (
-            <a className="primary-cta" href={ctaHref} target={ctaHref.startsWith("http") ? "_blank" : undefined} rel={ctaHref.startsWith("http") ? "noreferrer" : undefined}>
-              {page.cta || "Book a walkthrough"}
-              <span><ArrowUpRight /></span>
-            </a>
-          )}
-        </div>
-        <div className="page-hero-orb" aria-hidden="true" />
-      </section>
+      {useDarkHero ? (
+        <HeroMotion>
+          <div className="page-hero-dark-inner">
+            <PageHeroCopy heading={page.title} lede={page.description} />
+            <div className="hero-actions">
+              <RainbowCta href={ctaHref} label={page.cta || "Book a walkthrough"} />
+            </div>
+          </div>
+        </HeroMotion>
+      ) : (
+        <section className="page-hero">
+          <div className="page-hero-inner">
+            <nav className="breadcrumbs" aria-label="Breadcrumb">
+              <Link href="/">Home</Link>
+              <span aria-hidden="true">/</span>
+              <span>{page.group}</span>
+            </nav>
+            <p className="eyebrow">{page.group}</p>
+            <h1>{page.title}</h1>
+            <p className="page-lede">{page.description}</p>
+            {!page.legal && (
+              <a className="primary-cta" href={ctaHref} target={ctaHref.startsWith("http") ? "_blank" : undefined} rel={ctaHref.startsWith("http") ? "noreferrer" : undefined}>
+                {page.cta || "Book a walkthrough"}
+                <span><ArrowUpRight /></span>
+              </a>
+            )}
+          </div>
+          <div className="page-hero-orb" aria-hidden="true" />
+        </section>
+      )}
 
       <section className="page-content section-shell">
         <div>

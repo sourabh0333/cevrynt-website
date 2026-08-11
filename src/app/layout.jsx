@@ -47,9 +47,13 @@ export const metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   icons: {
-    icon: "/brand/cevrynt-favicon-v2.ico",
-    shortcut: "/brand/cevrynt-favicon-v2.ico",
-    apple: "/brand/cevrynt-apple-icon-v2.png",
+    icon: [
+      { url: "/brand/cevrynt-favicon.svg", type: "image/svg+xml" },
+      { url: "/brand/cevrynt-favicon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/brand/cevrynt-favicon-v3.ico", sizes: "any" },
+    ],
+    shortcut: "/brand/cevrynt-favicon-v3.ico",
+    apple: "/brand/cevrynt-apple-icon-v3.png",
   },
 };
 

@@ -23,7 +23,7 @@ export function HeroMotion({ children }) {
       pointer: "(pointer: fine)",
     }, ({ conditions }) => {
       if (conditions.motion) {
-        const headingLines = gsap.utils.toArray(".hero-line-text");
+        const headingLines = gsap.utils.toArray(".hero-line-text, .page-hero-dark-heading");
 
         gsap.timeline({
           defaults: { ease: "power3.out" },
@@ -34,22 +34,24 @@ export function HeroMotion({ children }) {
           .from(".home-hero-lede", { autoAlpha: 0, y: 12, duration: 0.58 }, 0.48)
           .from(".hero-actions", { autoAlpha: 0, y: 10, duration: 0.58 }, 0.62);
 
-        gsap.from(".hero-dashboard-frame", {
-          autoAlpha: 0,
-          y: 30,
-          scale: 0.985,
-          duration: 0.96,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".hero-dashboard-wrap",
-            start: "top 96%",
-            once: true,
-          },
-        });
+        if (document.querySelector(".hero-dashboard-wrap")) {
+          gsap.from(".hero-dashboard-frame", {
+            autoAlpha: 0,
+            y: 30,
+            scale: 0.985,
+            duration: 0.96,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: ".hero-dashboard-wrap",
+              start: "top 96%",
+              once: true,
+            },
+          });
+        }
       }
 
       if (!conditions.motion) {
-        gsap.set([".hero-line-text", ".home-hero-lede", ".hero-signal", ".hero-actions"], { autoAlpha: 1, clearProps: "opacity,visibility,transform" });
+        gsap.set([".hero-line-text", ".page-hero-dark-heading", ".home-hero-lede", ".hero-signal", ".hero-actions"], { autoAlpha: 1, clearProps: "opacity,visibility,transform" });
       }
 
       if (!conditions.motion || !conditions.pointer) return undefined;
