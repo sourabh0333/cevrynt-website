@@ -16,14 +16,22 @@ export async function generateMetadata({ params }) {
 
   if (!page) return {};
 
+  const title = page.metaTitle || page.title;
+  const description = page.metaDescription || page.description;
+
   return {
-    title: page.title,
-    description: page.description,
+    title,
+    description,
+    keywords: page.keywords,
     alternates: { canonical: `/${page.path}` },
     openGraph: {
-      title: page.title,
-      description: page.description,
+      title,
+      description,
       url: `/${page.path}`,
+    },
+    twitter: {
+      title,
+      description,
     },
     robots: page.legal ? { index: false, follow: true } : undefined,
   };

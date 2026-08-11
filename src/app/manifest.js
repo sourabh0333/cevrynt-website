@@ -1,13 +1,13 @@
 export default function manifest() {
   return {
-    name: "Cevrynt",
+    name: "Cevrynt — AI Underwriting Infrastructure",
     short_name: "Cevrynt",
     description:
-      "Cevrynt helps businesses build and scale modern digital commerce experiences.",
+      "From borrower documents to decision-ready underwriting for alternative lenders and SMB finance teams.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f8fafc",
-    theme_color: "#14766f",
+    background_color: "#f7faf9",
+    theme_color: "#013e37",
     icons: [
       {
         src: "/brand/cevrynt-favicon.svg",

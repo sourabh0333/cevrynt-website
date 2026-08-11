@@ -5,15 +5,28 @@ import { HeroMotion } from "@/components/hero-motion";
 import { PageHeroCopy } from "@/components/page-hero-copy";
 import { RainbowCta } from "@/components/ui/rainbow-cta";
 import { workflow } from "@/content/site-pages";
+import { siteConfig } from "@/config/site";
+import { JsonLd } from "@/components/json-ld";
+import { WalkthroughBand } from "@/components/walkthrough-band";
 
 const calendlyUrl = "https://calendly.com/arin-cevrynt/cevrynt-demo";
 
 export function PageShell({ page }) {
   const ctaHref = page.ctaHref || calendlyUrl;
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteConfig.url },
+      { "@type": "ListItem", position: 2, name: page.group, item: `${siteConfig.url}/${page.path}` },
+      { "@type": "ListItem", position: 3, name: page.title, item: `${siteConfig.url}/${page.path}` },
+    ],
+  };
   const useDarkHero = page.group !== "Resources" && page.group !== "Article" && !page.legal;
 
   return (
     <main id="main-content">
+      <JsonLd data={breadcrumbJsonLd} />
       {useDarkHero ? (
         <HeroMotion>
           <div className="page-hero-dark-inner">
@@ -48,14 +61,13 @@ export function PageShell({ page }) {
       <section className="page-content section-shell">
         <div>
           <p className="section-kicker">What this page covers</p>
-          <h2>{page.article ? "A connected operating model" : "Built for reviewable decisions"}</h2>
+          <h2>Built for reviewable decisions</h2>
         </div>
         <div className="point-grid">
           {page.points.map((point, index) => (
             <article key={point}>
               <span>0{index + 1}</span>
               <h3>{point}</h3>
-              <p>Keep the underwriting team in control with evidence, context, and a clear review path.</p>
             </article>
           ))}
         </div>
@@ -85,16 +97,7 @@ export function PageShell({ page }) {
         </section>
       )}
 
-      <section className="walkthrough-band section-shell">
-        <div>
-          <p className="section-kicker">Founder-led walkthrough</p>
-          <h2>See how Cevrynt fits your underwriting process.</h2>
-        </div>
-        <div>
-          <p>Bring a representative workflow and the review questions your team needs answered.</p>
-          <a className="text-link" href={calendlyUrl} target="_blank" rel="noreferrer">Book a walkthrough <ArrowUpRight /></a>
-        </div>
-      </section>
+      <WalkthroughBand />
     </main>
   );
 }
