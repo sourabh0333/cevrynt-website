@@ -4,7 +4,33 @@ import { SiteHeader } from "@/components/site-header";
 import { siteConfig } from "@/config/site";
 import { TimedDemoPopup } from "@/components/timed-demo-popup";
 import { DevelopmentCacheReset } from "@/components/development-cache-reset";
+import { SmoothScroll } from "@/components/smooth-scroll";
+import { JsonLd } from "@/components/json-ld";
 import "./globals.css";
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/brand/cevrynt-logo-v2.png`,
+  description: siteConfig.description,
+  email: "sales@cevrynt.com",
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "sales@cevrynt.com",
+    contactType: "sales",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description: siteConfig.description,
+  publisher: { "@type": "Organization", name: siteConfig.name },
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +50,15 @@ export const metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
+  keywords: [
+    "AI underwriting platform",
+    "merchant cash advance underwriting software",
+    "alternative lending software",
+    "bank statement analysis software",
+    "underwriting decision intelligence",
+  ],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  category: "technology",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -41,6 +76,12 @@ export const metadata = {
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
@@ -56,7 +97,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <JsonLd data={organizationJsonLd} />
+        <JsonLd data={websiteJsonLd} />
         {process.env.NODE_ENV === "development" ? <DevelopmentCacheReset /> : null}
+        <SmoothScroll />
         <SiteHeader />
         {children}
         <SiteFooter />
