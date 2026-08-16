@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, ChevronDown, SignalMark } from "@/components/icons";
 import { navGroups, pageByPath } from "@/content/site-pages";
 
-const topArticle = pageByPath.get("blog/from-documents-to-decision-ready-underwriting");
+const topArticle = pageByPath.get("blog/from-documents-to-decision-ready-underwriting") || { title: "Underwriting resources", path: "resources" };
 
 const descriptions = {
   "Platform overview": "Connect the complete underwriting review.",
@@ -168,10 +168,10 @@ export function DesktopNavigation() {
               {isOpen && (
                 <motion.div
                   className={`nav-panel nav-panel-${group.label.toLowerCase()}`}
-                  initial={reduceMotion ? { x: "-50%", opacity: 1 } : { x: "-50%", opacity: 0, scale: 0.985 }}
+                  initial={reduceMotion ? { x: "-50%", opacity: 1 } : { x: "-50%", opacity: 0, scale: 0.995, y: -8 }}
                   animate={{ x: "-50%", opacity: 1, y: 0, scale: 1 }}
-                  exit={reduceMotion ? { x: "-50%", opacity: 0 } : { x: "-50%", opacity: 0, scale: 0.99, transition: { duration: 0.16, ease: "easeOut" } }}
-                  transition={{ delay: reduceMotion ? 0 : 0.1, duration: reduceMotion ? 0.01 : 0.46, ease: [0.16, 1, 0.3, 1] }}
+                  exit={reduceMotion ? { x: "-50%", opacity: 0 } : { x: "-50%", opacity: 0, scale: 0.995, y: -6, transition: { duration: 0.2, ease: "easeOut" } }}
+                  transition={{ delay: reduceMotion ? 0 : 0.08, duration: reduceMotion ? 0.01 : 0.4, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className="nav-panel-inner">
                     <div className="nav-panel-content">

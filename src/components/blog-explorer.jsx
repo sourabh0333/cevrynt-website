@@ -1,13 +1,12 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BlogCard } from "@/components/blog-card";
 import { SearchIcon } from "@/components/icons";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 export function BlogExplorer({ posts, categories }) {
   const [topic, setTopic] = useState("all");
@@ -24,26 +23,24 @@ export function BlogExplorer({ posts, categories }) {
     });
   }, [posts, topic, query]);
 
-  useGSAP(
-    () => {
-      const cards = gsap.utils.toArray(".blog-card");
-      if (!cards.length) return undefined;
+  useEffect(() => {
+    const root = gridRef.current;
+    const cards = root ? gsap.utils.toArray(".blog-card", root) : [];
+    if (!cards.length) return undefined;
 
-      const media = gsap.matchMedia();
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.set(cards, { autoAlpha: 0, y: 20 });
-        ScrollTrigger.batch(cards, {
-          start: "top 92%",
-          once: true,
-          onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 }),
-        });
-        return () => gsap.set(cards, { clearProps: "opacity,visibility,transform" });
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.set(cards, { autoAlpha: 0, y: 20 });
+      ScrollTrigger.batch(cards, {
+        start: "top 92%",
+        once: true,
+        onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 }),
       });
+      return () => gsap.set(cards, { clearProps: "opacity,visibility,transform" });
+    });
 
-      return () => media.revert();
-    },
-    { scope: gridRef, dependencies: [filtered.length, topic, query] }
-  );
+    return () => media.revert();
+  }, [filtered.length, topic, query]);
 
   return (
     <div ref={gridRef}>

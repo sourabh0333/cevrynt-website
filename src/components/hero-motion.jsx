@@ -1,17 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroWebGLBackground } from "@/components/hero-webgl-background";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger);
 
 export function HeroMotion({ children }) {
   const heroRef = useRef(null);
 
-  useGSAP(() => {
+  useEffect(() => {
     const hero = heroRef.current;
     if (!hero) return undefined;
 
@@ -94,7 +93,7 @@ export function HeroMotion({ children }) {
       cleanupPointer();
       media.revert();
     };
-  }, { scope: heroRef });
+  }, []);
 
   return (
     <section className="home-hero" ref={heroRef}>

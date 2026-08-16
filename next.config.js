@@ -9,7 +9,7 @@ const developmentNoCacheHeaders = [
 ];
 
 const nextConfig = {
-  reactCompiler: true,
+  reactCompiler: false,
   poweredByHeader: false,
   allowedDevOrigins: ["192.168.0.199"],
   images: {
