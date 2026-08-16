@@ -10,6 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+# this project uses pnpm (see packageManager + pnpm-workspace.yaml) — never commit npm/yarn lockfiles
+package-lock.json
+yarn.lock
+
 # testing
 /coverage
 
