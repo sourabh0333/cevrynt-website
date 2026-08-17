@@ -106,8 +106,16 @@ body:has(.page-hero) .site-header { background: transparent; }
   content: "";
   opacity: 0;
   transition: opacity 320ms ease;
+  /* Both of these animate paint properties — background-position and
+     background-color — across the fixed bar that sits over the hero. This
+     surface is invisible until the header compacts, but opacity:0 does not stop
+     an animation, so they were repainting continuously behind the hero for
+     nothing. Paused until the bar is actually shown; identical once it is. */
   animation: nav-surface-travel 18s linear infinite, hero-tone-shift 16s ease-in-out infinite;
+  animation-play-state: paused;
 }
+.site-header[data-compact] .header-shell::before,
+.site-header[data-menu-open] .header-shell::before { animation-play-state: running; }
 .site-header[data-compact] {
   --nav-inset: 38px;
   --nav-top: 8px;
@@ -359,8 +367,6 @@ body:has(.page-hero) .site-header { background: transparent; }
 .demo-prompt-close i:last-child { transform: rotate(-45deg); }
 
 .home-hero {
-  --mouse-x: 50%;
-  --mouse-y: 300px;
   --hero-bottom-fold: 128px;
   position: relative;
   min-height: 980px;
@@ -368,16 +374,71 @@ body:has(.page-hero) .site-header { background: transparent; }
   isolation: isolate;
   border-bottom-left-radius: 64px;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--hero-bottom-fold)), calc(100% - var(--hero-bottom-fold)) 100%, 0 100%);
+  /* Was `animation: hero-tone-shift 16s infinite`, which animated
+     background-color across the whole 957px hero forever — a full repaint every
+     frame for a tone shift the aurora below now carries for free. */
   background-color: var(--hero-chrome);
-  animation: hero-tone-shift 16s ease-in-out infinite;
 }
-.hero-webgl-background { position: absolute; z-index: 0; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; background-image: radial-gradient(circle at 20% 30%, rgba(1,62,55,0.45), transparent 28%), radial-gradient(circle at 85% 20%, rgba(1,62,55,0.38), transparent 34%), radial-gradient(ellipse 1000px 800px at 50% 40%, rgba(1,62,55,0.22), transparent 60%); }
-.hero-webgl-background::before { position: absolute; inset: 0; background: radial-gradient(circle at 35% 50%, rgba(255,239,179,0.22) 0%, rgba(255,239,179,0.08) 20%, transparent 50%), radial-gradient(circle at 75% 40%, rgba(1,96,83,0.2) 0%, transparent 35%), radial-gradient(ellipse 1200px 900px at 50% 35%, rgba(255,239,179,0.12) 0%, transparent 65%); pointer-events: none; animation: hero-glow-pulse 8s ease-in-out infinite; content: ""; }
-.hero-ambient, .hero-grid { position: absolute; inset: 0; pointer-events: none; }
-.hero-ambient { z-index: 0; background: radial-gradient(circle at 26% 34%, rgba(1,62,55,0.5), transparent 22%), radial-gradient(circle at 78% 25%, rgba(1,62,55,0.42), transparent 28%), radial-gradient(ellipse 800px 600px at 50% 45%, rgba(1,62,55,0.28), transparent 50%); background-size: 140% 140%; animation: hero-ambient-shift 18s ease-in-out infinite alternate; }
-.hero-grid, .hero-grid-glow { display: none; }
-.hero-mouse-glow { position: absolute; z-index: 0; top: 0; left: 0; width: 420px; height: 420px; pointer-events: none; background: radial-gradient(circle at center, rgba(1,96,83,0.32), rgba(1,62,55,0.16) 38%, transparent 72%); transform: translate3d(calc(var(--mouse-x) - 210px), calc(var(--mouse-y) - 210px), 0); will-change: transform; }
-.home-hero[data-webgl-ready] .hero-ambient, .home-hero[data-webgl-ready] .hero-grid, .home-hero[data-webgl-ready] .hero-grid-glow, .home-hero[data-webgl-ready] .hero-mouse-glow { opacity: 0; }
+
+/* ==========================================================================
+   Hero aurora
+   Three pre-painted gradient fields that only ever move. The gradients
+   themselves never animate: the browser rasterises each layer once and then
+   moves it with transform, which is compositor work rather than paint work.
+   That is the whole difference between this and what it replaced — a shader
+   plus a stack of layers animating background-position and background-color
+   across the full hero, with a requestAnimationFrame pointer glow on top.
+   ========================================================================== */
+.hero-aurora { position: absolute; z-index: 0; overflow: hidden; inset: 0; pointer-events: none; }
+.hero-aurora span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  will-change: transform;
+}
+.hero-aurora-a {
+  top: -34%;
+  left: -20%;
+  width: 92%;
+  height: 94%;
+  background: radial-gradient(closest-side, rgba(10, 124, 106, 0.55), rgba(10, 110, 95, 0.16) 58%, transparent 78%);
+  animation: hero-drift-a 26s ease-in-out infinite alternate;
+}
+.hero-aurora-b {
+  top: -14%;
+  right: -22%;
+  width: 86%;
+  height: 88%;
+  background: radial-gradient(closest-side, rgba(1, 96, 83, 0.6), rgba(1, 72, 64, 0.18) 56%, transparent 76%);
+  animation: hero-drift-b 32s ease-in-out infinite alternate;
+}
+/* A whisper of the brand secondary, low enough to read as light rather than
+   colour — this is what keeps the band from going flat green. */
+.hero-aurora-c {
+  bottom: -32%;
+  left: 20%;
+  width: 76%;
+  height: 72%;
+  background: radial-gradient(closest-side, rgba(255, 239, 179, 0.14), rgba(255, 239, 179, 0.05) 52%, transparent 74%);
+  animation: hero-drift-c 38s ease-in-out infinite alternate;
+}
+@keyframes hero-drift-a {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(9%, 7%, 0) scale(1.12); }
+}
+@keyframes hero-drift-b {
+  from { transform: translate3d(0, 0, 0) scale(1.06); }
+  to { transform: translate3d(-11%, 9%, 0) scale(1); }
+}
+@keyframes hero-drift-c {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(7%, -8%, 0) scale(1.14); }
+}
+
+/* Coarse pointers keep the composition and drop the continuous work entirely. */
+@media (hover: none), (pointer: coarse) {
+  .hero-aurora span { animation: none; will-change: auto; }
+}
 .home-hero-inner { position: relative; z-index: 1; display: flex; width: min(1040px, calc(100vw - 64px)); min-height: 574px; margin-inline: auto; flex-direction: column; align-items: center; justify-content: flex-start; padding: 122px 0 58px; color: #f8fbfa; text-align: center; }
 .home-hero h1 { margin: 0; max-width: 780px; font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(2rem, 3.8vw, 3.8rem); font-weight: 600; letter-spacing: -0.038em; line-height: 1.04; text-wrap: balance; }
 .hero-signal { display: block; width: 34px; height: 34px; margin-bottom: 20px; overflow: visible; fill: #a7ff1c; transform-origin: center; }
@@ -414,7 +475,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .hero-dashboard-wrap { position: relative; z-index: 1; width: min(1600px, calc(100vw - 80px)); margin: -38px auto 0; padding: 0; }
 .hero-dashboard-frame { --dashboard-fold: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 13%); position: relative; overflow: hidden; border: 0; border-radius: 0; padding: 0; background: transparent; box-shadow: none; }
 .hero-dashboard-frame::before { position: absolute; z-index: 2; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 18%, rgba(255,239,179,0.18) 50%, transparent 68%); clip-path: var(--dashboard-fold); content: ""; pointer-events: none; transform: translateX(-85%); animation: dashboard-sheen 8s ease-in-out 2s infinite; }
-.hero-dashboard-frame::after { position: absolute; z-index: 3; top: 0; left: 0; width: 10%; height: 13%; background-image: url("/media/cevrynt-dashboard-website.webp"); background-position: top left; background-repeat: no-repeat; background-size: 1000% auto; clip-path: polygon(0 0, 100% 0, 0 100%); content: ""; pointer-events: none; transform-origin: center; animation: dashboard-photo-fold 2400ms cubic-bezier(0.65, 0, 0.35, 1) 1.2s both; will-change: transform, opacity; }
+.hero-dashboard-frame::after { position: absolute; z-index: 3; top: 0; left: 0; width: 10%; height: 13%; background-image: url("/media/cevrynt-dashboard-website.webp"); background-position: top left; background-repeat: no-repeat; background-size: 1000% auto; clip-path: polygon(0 0, 100% 0, 0 100%); content: ""; pointer-events: none; transform-origin: center; animation: dashboard-photo-fold 2400ms cubic-bezier(0.65, 0, 0.35, 1) 1.2s both; }
 .hero-dashboard-float { position: relative; z-index: 1; clip-path: var(--dashboard-fold); animation: dashboard-float 7s ease-in-out 4s infinite alternate both; width: 100%; }
 .hero-dashboard-float img { display: block; width: 100%; height: auto; object-fit: cover; object-position: center center; filter: saturate(0.92) contrast(1.04); }
 @keyframes dashboard-float { to { transform: translate3d(0, -8px, 0); } }
@@ -423,11 +484,9 @@ body:has(.page-hero) .site-header { background: transparent; }
 @keyframes logo-fold-back { 0%, 100% { transform: none; } 42% { transform: rotateY(58deg) translateX(5px); } }
 @keyframes logo-fold-front { 0%, 100% { transform: none; } 42% { transform: rotateY(-58deg) translateX(-5px); } }
 @keyframes logo-fold-edge { 0%, 100% { opacity: 1; } 45% { opacity: 0.35; } }
-@keyframes hero-ambient-shift { from { opacity: 0.58; background-position: 0% 20%, 100% 0%; } to { opacity: 1; background-position: 14% 3%, 84% 18%; } }
 @keyframes nav-ambient-shift { from { background-position: 0% 50%, 100% 0%; } to { background-position: 10% 42%, 90% 12%; } }
 @keyframes nav-surface-travel { from { background-position: 0 50%; } to { background-position: 480px 50%; } }
 @keyframes hero-tone-shift { 0%, 100% { background-color: var(--hero-chrome); } 50% { background-color: var(--hero-deep); } }
-@keyframes hero-glow-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
 .section-heading { max-width: 760px; }
 .section-heading h2, .problem-section > h2, .why-section h2, .shopline-section h2, .pilot-section h2, .walkthrough-band h2, .workflow-band h2, .final-cta h2, .page-content h2 {
@@ -700,15 +759,86 @@ body:has(.page-hero) .site-header { background: transparent; }
 .ss-word { --lit: 1; color: color-mix(in srgb, #f6fbf9 calc(var(--lit) * 100%), rgba(234, 243, 240, 0.24)); }
 
 /* -- Finale ---------------------------------------------------------------- */
+/* The closer centres, while every other section hangs off the 12-column rule.
+   That change of axis is what makes it read as the end of the page. */
 .fn { overflow: hidden; }
 .fn-glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 58% 60% at 42% 8%, rgba(255,239,179,0.13), transparent 62%), radial-gradient(ellipse 54% 58% at 60% 100%, rgba(10,92,80,0.5), transparent 60%); }
-.fn-inner { position: relative; }
-.fn-lede { max-width: 46ch; margin-top: var(--s-item); }
-.fn-actions { display: flex; align-items: center; gap: 28px; margin-top: var(--s-block); flex-wrap: wrap; }
-.fn .primary-cta { background: var(--surface); color: var(--ink); }
-.fn .primary-cta span { background: var(--yellow); }
+
+.fn-field { position: relative; width: var(--page); margin-inline: auto; }
+.fn-stage { position: relative; }
+/* One soft light following the pointer, matching the single follower the hero
+   uses. PointerField writes --px/--py; coarse pointers never get a listener. */
+.fn-aura {
+  position: absolute;
+  inset: -30% -10%;
+  background: radial-gradient(360px 360px at var(--px, 50%) var(--py, 45%), rgba(10, 92, 80, 0.09), transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 620ms ease;
+}
+.fn-stage:hover .fn-aura { opacity: 1; }
+
+.fn-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 62rem;
+  margin-inline: auto;
+  text-align: center;
+}
+.fn-index { color: var(--label); letter-spacing: 0.16em; }
+/* Drop rule: falls from the index into the heading. */
+.fn-drop {
+  width: 1px;
+  height: clamp(34px, 4.4vw, 58px);
+  margin: clamp(12px, 1.4vw, 18px) 0 clamp(18px, 2.2vw, 30px);
+  background: linear-gradient(180deg, var(--border), var(--rail));
+  transform-origin: top center;
+}
+.fn-kicker { margin-bottom: clamp(16px, 2vw, 26px); }
+.fn-title { max-width: 20ch; }
+.fn-lede { max-width: 52ch; margin-top: var(--s-item); }
+
+.fn-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(18px, 2.2vw, 26px);
+  margin-top: clamp(34px, 4.2vw, 56px);
+}
+/* Larger than the in-page CTAs, because this one is the point of the section. */
+.fn .primary-cta { padding: 7px 8px 7px 26px; font-size: 0.96rem; background: var(--surface); color: var(--ink); }
+.fn .primary-cta span { width: 42px; height: 42px; background: var(--yellow); }
+
 .fn-secondary { display: inline-flex; align-items: center; gap: 8px; color: rgba(234,243,240,0.72); font-size: 0.92rem; font-weight: 600; }
+.fn-secondary svg { transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1); }
 .fn-secondary:hover { color: var(--yellow); }
+.fn-secondary:hover svg { transform: translate(3px, -3px); }
+
+/* Closing rule, opening outward from the centre. */
+.fn-rule {
+  width: min(100%, 46rem);
+  height: 1px;
+  margin-top: clamp(44px, 5.6vw, 82px);
+  background: linear-gradient(90deg, transparent, var(--border) 18%, var(--border) 82%, transparent);
+  transform-origin: center;
+}
+
+@media (max-width: 860px) {
+  .fn-title { max-width: 16ch; }
+  .fn-inner { text-align: left; align-items: flex-start; }
+  /* align-self, not just align-items: under the parent's flex-start the actions
+     row would otherwise shrink to the button's natural width, and the existing
+     full-width mobile CTA rule would have nothing to fill. */
+  .fn-actions { align-self: stretch; align-items: stretch; }
+  .fn-secondary { justify-content: flex-start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fn-aura { display: none; }
+  .fn-drop, .fn-rule { transform: none !important; }
+}
 
 /* -- Partnership band ------------------------------------------------------ */
 .pt { overflow: hidden; }
@@ -882,7 +1012,11 @@ body:has(.page-hero) .site-header { background: transparent; }
    band without saying anything.
    ========================================================================== */
 .pt-full { grid-column: 2 / span 11; }
-.pq-merge { display: grid; grid-template-columns: minmax(0, 0.86fr) 130px minmax(0, 1.14fr); align-items: center; margin-top: clamp(38px, 6vw, 78px); }
+/* The middle track must be exactly as wide as the SVG in it. It was pinned at
+   130px while .pq-wires grew to 170px, so the paths overflowed their column and
+   the two lanes converged 60-odd pixels past the node they are supposed to
+   arrive at — the lines ended in empty space beside the question. */
+.pq-merge { display: grid; grid-template-columns: minmax(0, 0.86fr) clamp(110px, 12vw, 170px) minmax(0, 1.14fr); align-items: center; margin-top: clamp(38px, 6vw, 78px); }
 
 .pq-lanes { display: flex; flex-direction: column; gap: clamp(44px, 6.5vw, 88px); }
 .pq-lane { display: flex; flex-direction: column; align-items: flex-start; gap: clamp(14px, 1.8vw, 20px); }
@@ -922,11 +1056,16 @@ body:has(.page-hero) .site-header { background: transparent; }
   to { stroke-dashoffset: 0; }
 }
 
-.pq-question { position: relative; padding-left: clamp(26px, 14vw, 250px); }
+/* The node sits just outside this box, where the wires land. A 250px indent
+   left a void between the two, so the wires appeared to end at nothing and the
+   question read as a separate block rather than the thing they arrive at. */
+.pq-question { position: relative; padding-left: clamp(26px, 5vw, 92px); }
 .pq-node {
   position: absolute;
   top: 50%;
-  left: calc(clamp(26px, 3vw, 44px) * -0.5 - 15px);
+  /* Half its own width, so the node centres exactly on this box's left edge —
+     which is where the wires now terminate. */
+  left: -15px;
   display: grid;
   width: 30px;
   height: 30px;
@@ -937,7 +1076,6 @@ body:has(.page-hero) .site-header { background: transparent; }
   transform: translateY(-50%);
 }
 .pq-node::after { width: 11px; height: 11px; border-radius: 50%; background: var(--ink-deeper); content: ""; }
-.pq-question-label { margin: 0 0 14px; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.14em; }
 .pq-question-text {
   margin: 0;
   max-width: 22ch;
@@ -949,12 +1087,26 @@ body:has(.page-hero) .site-header { background: transparent; }
   line-height: 1.14;
 }
 
-.pq-foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 66px); margin-top: clamp(40px, 5vw, 72px); border-top: 1px solid rgba(234, 243, 240, 0.16); padding-top: clamp(26px, 3vw, 40px); }
-.pq-scope { display: flex; flex-direction: column; gap: 13px; margin: 0; padding: 0; list-style: none; }
-.pq-scope-item { position: relative; padding-left: 24px; color: #f6fbf9; font-size: clamp(0.95rem, 1.15vw, 1.05rem); line-height: 1.55; }
+/* Three tiers of decreasing weight below the diagram: scope across the full
+   width, then fine print and the link as one quiet closing row. Typography and
+   whitespace carry the hierarchy; nothing new is drawn. */
+.pq-foot { margin-top: clamp(40px, 5vw, 72px); border-top: 1px solid rgba(234, 243, 240, 0.16); padding-top: clamp(26px, 3vw, 40px); }
+.pq-scope { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 48px); margin: 0; padding: 0; list-style: none; }
+.pq-scope-item { position: relative; max-width: 32ch; padding-left: 24px; color: #f6fbf9; font-size: clamp(0.95rem, 1.15vw, 1.05rem); line-height: 1.55; }
 .pq-scope-item::before { position: absolute; top: 0.62em; left: 0; width: 12px; height: 1px; background: var(--yellow); content: ""; }
-.pq-limits { margin: 0; max-width: 56ch; color: rgba(234, 243, 240, 0.62); font-size: 0.85rem; line-height: 1.62; }
-.pq-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 20px; color: var(--yellow); font-size: 0.92rem; font-weight: 640; }
+
+.pq-fine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px clamp(24px, 4vw, 56px);
+  margin-top: clamp(30px, 3.6vw, 52px);
+  border-top: 1px solid rgba(234, 243, 240, 0.1);
+  padding-top: clamp(18px, 2vw, 26px);
+}
+.pq-limits { margin: 0; max-width: 74ch; color: rgba(234, 243, 240, 0.55); font-size: 0.82rem; line-height: 1.6; }
+.pq-link { display: inline-flex; flex: none; align-items: center; gap: 9px; color: var(--yellow); font-size: 0.92rem; font-weight: 640; }
 .pq-link svg { transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1); }
 .pq-link:hover svg { transform: translate(3px, -3px); }
 
@@ -973,7 +1125,13 @@ body:has(.page-hero) .site-header { background: transparent; }
   .pq-wires { display: none; }
   .pq-question { padding-left: 20px; border-left: 2px solid var(--yellow); }
   .pq-node { display: none; }
-  .pq-foot { grid-template-columns: minmax(0, 1fr); }
+  .pq-scope { grid-template-columns: minmax(0, 1fr); gap: 13px; }
+  .pq-scope-item { max-width: none; }
+  .pq-fine { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 1080px) and (min-width: 861px) {
+  .pq-scope { gap: clamp(16px, 2.4vw, 30px); }
 }
 
 /* The travelling dash is the band's only continuous animation. Coarse pointers
@@ -1045,336 +1203,242 @@ body:has(.page-hero) .site-header { background: transparent; }
 :root { interpolate-size: allow-keywords; }
 
 /* ==========================================================================
-   12 Resources — contents spread
-   A lead entry held open on the left, the index as a rail on the right, and
-   moving through the rail promotes an entry into the lead. Deliberately not the
-   hairline-index-plus-cursor-preview used by "Why Cevrynt" — running that twice
-   would make the two sections read as one component.
+   12 Resources — four lines of type
+   No images, no frames, no rules. Earlier versions put pictures in the layout
+   and cost a screen of height for four links, with the frames reading as
+   boxes. Interaction is carried by a fill that wipes across the hovered title
+   while the other rows recede.
    ========================================================================== */
 .rs-full { grid-column: 2 / span 11; }
-.rp {
+.rx { display: flex; flex-direction: column; margin: clamp(24px, 2.8vw, 40px) 0 0; padding: 0; list-style: none; }
+.rx-row { min-width: 0; }
+/* Masks the entrance, so each line rises from under its own edge. */
+.rx-clip { display: block; overflow: hidden; }
+.rx-inner { display: block; }
+
+.rx-link {
   display: grid;
-  grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
-  align-items: start;
-  column-gap: clamp(32px, 4.4vw, 78px);
-  margin-top: clamp(28px, 3.4vw, 52px);
+  grid-template-columns: clamp(82px, 9vw, 126px) minmax(0, 1fr) auto clamp(18px, 1.6vw, 24px);
+  align-items: baseline;
+  column-gap: clamp(16px, 2.2vw, 36px);
+  padding: clamp(12px, 1.5vw, 20px) 0;
+  opacity: 1;
+  transition: opacity 440ms ease;
 }
+/* Pointing at one line quiets the others. */
+.rx:hover .rx-row:not(:hover) .rx-link { opacity: 0.4; }
+.rx-link:focus-visible { outline: 3px solid var(--rail); outline-offset: 4px; }
 
-/* Lead ---------------------------------------------------------------------- */
-.rp-lead-link { display: block; }
-.rp-lead-media {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  border-radius: 16px;
-  aspect-ratio: 900 / 560;
-  background: var(--ink-deeper);
-}
-.rp-shot {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transform: scale(1.05);
-  transition: opacity 620ms cubic-bezier(0.16, 1, 0.3, 1), transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rp-shot.is-active { opacity: 1; transform: none; }
-.rp-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.rx-kind { color: var(--rail); letter-spacing: 0.15em; text-transform: uppercase; }
 
-.rp-lead-kind {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  border-radius: 999px;
-  padding: 7px 14px;
-  background: rgba(1, 31, 28, 0.78);
-  color: var(--yellow);
-  backdrop-filter: blur(6px);
-  font-size: 0.64rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.rp-lead-copy { display: block; padding-top: clamp(20px, 2.2vw, 28px); }
-.rp-lead-title {
+.rx-title {
   display: block;
   color: var(--ink);
-  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: clamp(1.5rem, 2.5vw, 2.24rem);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.42rem, 2.9vw, 2.5rem);
   font-weight: 400;
-  letter-spacing: -0.036em;
-  line-height: 1.12;
-  text-wrap: balance;
+  letter-spacing: -0.038em;
+  line-height: 1.1;
 }
-.rp-lead-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin-top: clamp(12px, 1.4vw, 18px);
-  color: var(--rail);
+/* The sweep: a two-stop gradient slid behind the glyphs. No duplicated text, so
+   nothing is announced twice and the line can never reflow. Guarded, because
+   the technique needs transparent text to show the fill — without support that
+   would leave the title invisible rather than merely unanimated. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .rx-title {
+    background-image: linear-gradient(90deg, var(--rail) 0 50%, var(--ink) 50% 100%);
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: background-position 760ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .rx-link:hover .rx-title,
+  .rx-link:focus-visible .rx-title { background-position: 0 0; }
+}
+
+.rx-meta {
+  color: var(--label);
   letter-spacing: 0.11em;
   text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 400ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.rp-lead-meta svg { transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1); }
-.rp-lead-link:hover .rp-lead-meta svg { transform: translate(3px, -3px); }
+.rx-row:hover .rx-meta { opacity: 1; transform: none; }
 
-/* Replays whenever the lead changes, because the copy is keyed on the index. */
-@keyframes rp-copy-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: none; }
+.rx-cue {
+  display: inline-flex;
+  justify-self: end;
+  color: var(--rail);
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  transition: opacity 380ms ease, transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-.rp-lead-copy { animation: rp-copy-in 460ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-
-/* Rail ---------------------------------------------------------------------- */
-.rp-rail { margin: 0; padding: 0; list-style: none; }
-.rp-row { position: relative; }
-.rp-row:last-child { border-bottom: 1px solid var(--border); }
-.rp-row-link {
-  position: relative;
-  display: grid;
-  grid-template-columns: clamp(30px, 3vw, 44px) minmax(0, 1fr) clamp(16px, 1.5vw, 22px);
-  align-items: center;
-  column-gap: clamp(14px, 1.8vw, 26px);
-  padding: clamp(20px, 2.3vw, 30px) 0;
-}
-.rp-row-rule {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 1px;
-  background: var(--border);
-  transform-origin: left center;
-}
-/* Active state is an accent hairline over the rule plus emphasis on the type —
-   no panel, no fill, nothing that would read as a card. */
-.rp-row-rule::after {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 1px;
-  background: var(--rail);
-  content: "";
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rp-row.is-active .rp-row-rule::after { transform: scaleX(1); }
-
-.rp-row-num { color: var(--label); letter-spacing: 0.14em; transition: color 320ms ease; }
-.rp-row.is-active .rp-row-num { color: var(--rail); }
-
-.rp-row-main { display: flex; min-width: 0; flex-direction: column; gap: 9px; }
-.rp-row-title {
-  color: var(--ink);
-  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
-  font-weight: 560;
-  letter-spacing: -0.026em;
-  line-height: 1.32;
-  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.rp-row.is-active .rp-row-title { transform: translateX(clamp(4px, 0.6vw, 9px)); }
-.rp-row-kind {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 5px 10px;
-  color: var(--label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1) 40ms, color 320ms ease;
-}
-.rp-row-kind i { display: block; width: 14px; height: 1px; background: currentcolor; opacity: 0.55; }
-.rp-row.is-active .rp-row-kind { color: var(--rail); transform: translateX(clamp(4px, 0.6vw, 9px)); }
-
-.rp-row-cue { display: inline-flex; justify-self: end; color: var(--label); opacity: 0; transform: translate(-6px, 6px); transition: opacity 380ms ease, transform 460ms cubic-bezier(0.16, 1, 0.3, 1), color 320ms ease; }
-.rp-row.is-active .rp-row-cue { color: var(--rail); opacity: 1; transform: none; }
-.rp-row-link:focus-visible { outline: 3px solid var(--rail); outline-offset: 3px; }
-
-.rp-row-thumb { display: none; }
-
-@media (max-width: 1080px) {
-  .rp { grid-template-columns: minmax(0, 1fr); row-gap: clamp(30px, 4vw, 46px); }
-  .rp-lead { display: none; }
-  .rp-row-link { grid-template-columns: clamp(28px, 6vw, 40px) minmax(0, 1fr) clamp(78px, 15vw, 104px); }
-  .rp-row-cue { display: none; }
-  .rp-row-thumb { display: block; overflow: hidden; border-radius: 9px; aspect-ratio: 900 / 560; }
-  .rp-row-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
-}
+.rx-row:hover .rx-cue { opacity: 1; transform: none; }
 
 /* ==========================================================================
-   13 Before you ask — bare disclosure list
-   No panels. Questions sit on the page in the same serif as every other
-   heading, separated by a hairline, and the open state is an accent hairline
-   drawing itself across the row instead of a container lighting up.
+   13 Before you ask — one lit rail
+   A continuous hairline runs down the left of the list and the open question
+   lights its own segment of it. No numbers, no per-row dividers, no panels —
+   state is read from a single device instead of four competing ones.
    ========================================================================== */
-/* The two columns sit on the same lines as the header above them: questions
-   under the heading (2–8), "keep reading" under the lede (9–12). The aside used
-   to start at column 10, which left it a column adrift of the lede it sits
-   beneath — the misalignment that was visible at the bottom of the section. */
-.ob-body { align-items: start; }
-.ob-main { grid-column: 2 / span 7; margin-right: clamp(18px, 5vw, 250px) !important;}
-
-/* Both columns open with a control row of the same height, so the first
-   hairline on the left starts at exactly the same y as the first on the right. */
-/* .ob-bar, .ob-aside-label {
+.ob-main { grid-column: 2 / span 11; }
+.ob-list {
   display: flex;
-  min-height: 30px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 0 0 clamp(13px, 1.5vw, 19px);
-  padding: 0;
-} */
-.ob-count { color: var(--label); letter-spacing: 0.12em; text-transform: uppercase; }
-.ob-toggle-all {
-  border: 0;
-  padding: 6px 0;
-  background: transparent;
-  color: var(--rail);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
+  flex-direction: column;
+  border-left: 1px solid var(--border);
+  margin-top: clamp(24px, 3vw, 42px);
 }
-/* Underline grows from the left rather than the control gaining a chrome pill. */
-.ob-toggle-all span { position: relative; display: inline-block; }
-.ob-toggle-all span::after {
-  position: absolute;
-  right: 0;
-  bottom: -3px;
-  left: 0;
-  height: 1px;
-  background: currentcolor;
-  content: "";
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.ob-toggle-all:hover span::after,
-.ob-toggle-all:focus-visible span::after { transform: scaleX(1); }
+.ob-item { position: relative; }
 
-.ob-list { display: flex; flex-direction: column; margin-top: clamp(20px, 2.4vw, 30px); margin-bottom: clamp(40px, 4.5vw, 60px); padding: 0; list-style: none; }
-.ob-item { border-top: 1px solid var(--border); }
-.ob-item:last-child { border-bottom: 1px solid var(--border); }
+/* Absolute against .ob-item, not the summary, so the lit segment covers the
+   whole open question including its answer. */
+.ob-seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1px;
+  width: 2px;
+  background: var(--rail);
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 560ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease;
+}
+.ob-item:hover .ob-seg { opacity: 0.34; transform: scaleY(1); }
+.ob-item[open] .ob-seg { opacity: 1; transform: scaleY(1); }
+
 .ob-item summary {
-  position: relative;
   display: grid;
-  grid-template-columns: clamp(28px, 2.8vw, 44px) minmax(0, 1fr) 16px;
+  grid-template-columns: minmax(0, 1fr) 16px;
   align-items: start;
-  column-gap: clamp(12px, 1.6vw, 24px);
-  padding: clamp(22px, 2.5vw, 34px) 0;
+  column-gap: clamp(18px, 2.4vw, 36px);
+  padding: clamp(19px, 2.3vw, 29px) 0 clamp(19px, 2.3vw, 29px) clamp(22px, 3vw, 48px);
   list-style: none;
   cursor: pointer;
 }
 .ob-item summary::-webkit-details-marker { display: none; }
-.ob-item summary:focus-visible { outline: 3px solid var(--rail); outline-offset: 4px; }
+.ob-item summary:focus-visible { outline: 3px solid var(--rail); outline-offset: -2px; }
 
-.ob-item-index { padding-top: 0.42em; color: var(--label); letter-spacing: 0.14em; transition: color 300ms ease; }
-.ob-item:hover .ob-item-index, .ob-item[open] .ob-item-index { color: var(--rail); }
-
-.ob-item-q {
+.ob-q {
   color: var(--ink);
-  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: clamp(1.18rem, 1.95vw, 1.72rem);
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.18rem, 2.05vw, 1.8rem);
   font-weight: 400;
   letter-spacing: -0.034em;
   line-height: 1.2;
   text-wrap: balance;
   transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms ease;
 }
-.ob-item:hover .ob-item-q { transform: translateX(clamp(5px, 0.7vw, 10px)); }
-.ob-item[open] .ob-item-q { color: var(--rail); }
+.ob-item summary:hover .ob-q { transform: translateX(5px); }
+.ob-item[open] .ob-q { color: var(--rail); }
 
-/* The one piece of chrome kept: a hairline cross, because a disclosure needs a
-   visible affordance even in a design this bare. */
-.ob-item-icon { position: relative; width: 16px; height: 16px; margin-top: 0.5em; justify-self: end; }
-.ob-item-icon i {
+/* One hairline cross, kept because a disclosure still needs an affordance. */
+.ob-mark { position: relative; width: 15px; height: 15px; margin-top: 0.44em; justify-self: end; }
+.ob-mark::before, .ob-mark::after {
   position: absolute;
   top: 50%;
   left: 0;
-  width: 16px;
+  width: 15px;
   height: 1px;
   background: var(--label);
-  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1), background 300ms ease;
+  content: "";
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), background 300ms ease;
 }
-.ob-item-icon i:last-child { transform: rotate(90deg); }
-.ob-item:hover .ob-item-icon i { background: var(--rail); }
-.ob-item[open] .ob-item-icon i { background: var(--rail); }
-.ob-item[open] .ob-item-icon i:last-child { transform: rotate(0deg); }
+.ob-mark::after { transform: rotate(90deg); }
+.ob-item summary:hover .ob-mark::before,
+.ob-item summary:hover .ob-mark::after,
+.ob-item[open] .ob-mark::before,
+.ob-item[open] .ob-mark::after { background: var(--rail); }
+.ob-item[open] .ob-mark::after { transform: rotate(0deg); }
 
-/* Open state: center hairline hidden as requested */
-.ob-item-rule { display: none; }
-
-.ob-item-answer { padding: 0 0 clamp(24px, 2.6vw, 36px) calc(clamp(28px, 2.8vw, 44px) + clamp(12px, 1.6vw, 24px)); }
-.ob-item-answer p {
+.ob-answer { padding: 0 clamp(18px, 2.4vw, 36px) clamp(24px, 2.8vw, 36px) clamp(22px, 3vw, 48px); }
+.ob-answer p {
   margin: 0;
-  max-width: 62ch;
+  max-width: 64ch;
   color: var(--muted);
   font-size: 1rem;
-  line-height: 1.72;
+  line-height: 1.74;
   opacity: 0;
   transform: translateY(-8px);
-  transition: opacity 420ms ease 80ms, transform 480ms cubic-bezier(0.16, 1, 0.3, 1) 80ms;
+  transition: opacity 420ms ease 90ms, transform 480ms cubic-bezier(0.16, 1, 0.3, 1) 90ms;
 }
-.ob-item[open] .ob-item-answer p { opacity: 1; transform: none; }
+.ob-item[open] .ob-answer p { opacity: 1; transform: none; }
 
 /* Animates open where the browser can transition to an intrinsic height;
    elsewhere it simply opens instantly, which is correct for a disclosure. */
 .ob-item::details-content {
   block-size: 0;
   overflow: hidden;
-  transition: block-size 320ms cubic-bezier(0.16, 1, 0.3, 1), content-visibility 320ms allow-discrete;
+  transition: block-size 340ms cubic-bezier(0.16, 1, 0.3, 1), content-visibility 340ms allow-discrete;
 }
 .ob-item[open]::details-content { block-size: auto; }
 
-/* Keep reading ------------------------------------------------------------- */
-/* The question list runs roughly twice the height of these four links, so the
-   aside travels with the reader instead of stranding the bottom-right corner
-   empty. */
-.ob-aside { position: sticky; top: 14vh; grid-column: 9 / span 4; align-self: start; margin-top: clamp(20px, 2.4vw, 20px); }
-.ob-aside-label { color: var(--label); letter-spacing: 0.13em; text-transform: uppercase; }
-.ob-links { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
-.ob-links li { border-top: 1px solid var(--border); }
-.ob-links li:last-child { border-bottom: 1px solid var(--border); }
-.ob-links a {
+/* Keep reading — one horizontal row underneath, which is what lets the
+   questions run full width and removes the old two-column misalignment. */
+.ob-more {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: clamp(13px, 1.4vw, 17px) 0;
-  color: var(--ink);
-  font-size: 0.97rem;
-  font-weight: 520;
-  letter-spacing: -0.018em;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(14px, 1.8vw, 24px) clamp(24px, 3.4vw, 56px);
+  margin-top: clamp(34px, 4vw, 58px);
+  border-top: 1px solid var(--border);
+  padding-top: clamp(18px, 2vw, 26px);
 }
-.ob-links a span { transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1); }
-.ob-links a svg { flex: none; color: var(--label); transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms ease; }
-.ob-links a:hover span { transform: translateX(5px); }
-.ob-links a:hover svg { color: var(--rail); transform: translate(4px, -4px); }
-
-@media (max-width: 1080px) {
-  .ob-main { grid-column: 2 / span 10; }
-  .ob-aside { position: static; grid-column: 2 / span 10; margin-top: var(--s-block); }
+.ob-more-label { margin: 0; color: var(--label); letter-spacing: 0.13em; text-transform: uppercase; }
+.ob-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 1.6vw, 20px) clamp(20px, 2.8vw, 44px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
+.ob-links a { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-size: 0.95rem; font-weight: 540; letter-spacing: -0.018em; }
+.ob-links a span { position: relative; }
+.ob-links a span::after {
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 1px;
+  background: var(--rail);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ob-links a:hover span::after { transform: scaleX(1); }
+.ob-links a svg { flex: none; color: var(--label); transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1), color 300ms ease; }
+.ob-links a:hover svg { color: var(--rail); transform: translate(3px, -3px); }
 
 @media (max-width: 860px) {
-  .rs-full, .ob-main, .ob-aside { grid-column: 1; }
+  .rs-full, .ob-main { grid-column: 1; }
 
-  .rp-row-link { padding: clamp(16px, 4.2vw, 22px) 0; column-gap: clamp(12px, 3.4vw, 18px); }
+  .rx-link {
+    grid-template-columns: minmax(0, 1fr) clamp(18px, 5vw, 24px);
+    row-gap: 9px;
+    column-gap: 14px;
+    padding: clamp(15px, 3.8vw, 20px) 0;
+  }
+  .rx-kind { grid-column: 1 / -1; }
+  .rx-meta { display: none; }
+  .rx-cue { align-self: center; opacity: 1; transform: none; }
 
-  .ob-item summary { grid-template-columns: clamp(28px, 7vw, 38px) minmax(0, 1fr) 14px; column-gap: clamp(12px, 3.4vw, 18px); }
-  .ob-item-answer { padding-left: calc(clamp(28px, 7vw, 38px) + clamp(12px, 3.4vw, 18px)); }
+  .ob-item summary { padding-left: clamp(18px, 4.6vw, 28px); column-gap: 16px; }
+  .ob-answer { padding-right: 0; padding-left: clamp(18px, 4.6vw, 28px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rp-shot, .rp-lead-copy, .rp-row-title, .rp-row-kind, .rp-row-cue, .rp-row-rule::after { transition: none; }
-  .rp-lead-copy { animation: none; }
-  .rp-row-title, .rp-row-kind, .rp-row-cue { transform: none !important; }
-  .rp-row-cue { opacity: 1; }
-  .ob-item::details-content, .ob-item-rule, .ob-item-answer p { transition: none; }
-  .ob-item-answer p { opacity: 1; transform: none; }
+  .rx-link, .rx-title, .rx-meta, .rx-cue { transition: none; }
+  .rx-meta, .rx-cue { opacity: 1; transform: none; }
+  .rx-clip { overflow: visible; }
+  .ob-seg, .ob-q, .ob-mark::before, .ob-mark::after, .ob-item::details-content, .ob-answer p { transition: none; }
+  .ob-answer p { opacity: 1; transform: none; }
 }
 
 @media (max-width: 1080px) {
@@ -1696,6 +1760,13 @@ body:has(.page-hero) .site-header { background: transparent; }
 @media (max-width: 860px) {
   .bs-full, .rmx-full { grid-column: 1; }
   .br-card { position: static; }
+  /* The 200–380px gap is runway for the sticky deck: it is the distance each
+     card holds while the next one climbs over it. Sticky is switched off here,
+     so that runway stopped being scroll distance and became literal empty
+     space — a third of a screen between every card, which is why they arrived
+     one at a time with nothing in between. Static cards only need a normal gap.
+     Deliberately scoped to this breakpoint; the desktop deck is unchanged. */
+  .br-card + .br-card { margin-top: clamp(18px, 5vw, 30px); }
   .br-card-inner { padding: 24px; border-radius: 20px; }
 }
 
@@ -2025,7 +2096,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 @media (max-width: 860px) {
   .eg { grid-template-columns: minmax(0, 1fr); }
   .eg-rail { grid-column: 1; padding-top: 0; margin-bottom: 14px; }
-  .eg-head, .eg-lede, .eg-full, .eg-note, .hw-figures, .hw-steps, .ob-list, .ob-aside { grid-column: 1; }
+  .eg-head, .eg-lede, .eg-full, .eg-note, .hw-figures, .hw-steps { grid-column: 1; }
   .sb { margin-top: -60px; }
   .hw-body { display: flex; flex-direction: column; }
   .hw-figures { order: 2; margin-top: clamp(16px, 2.5vw, 32px); }
@@ -2428,8 +2499,8 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .hero-grid-glow, .hero-mouse-glow { display: none; }
-  .hero-webgl-background { display: none; }
+  /* The aurora holds its composition; only the drift stops. */
+  .hero-aurora span { animation: none; will-change: auto; }
   /* Static fallbacks: every scroll-driven surface resolves to its finished state. */
   [data-reveal] { opacity: 1 !important; transform: none !important; }
   [data-reveal] .hx-word-inner { transform: none !important; }

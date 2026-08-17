@@ -30,18 +30,13 @@ export function ProblemCards({ items }) {
       const entries = gsap.utils.toArray(".pb-item", root);
       const fill = root.querySelector(".pb-spine-fill");
 
-      const intro = gsap.timeline({
-        scrollTrigger: { trigger: root, start: "top 80%", once: true },
-      });
-
-      entries.forEach((entry, index) => {
-        const num = entry.querySelector(".pb-num");
-        const copy = entry.querySelector(".pb-item-copy");
-        const at = index * 0.13;
-        intro.fromTo(num, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.66, ease: "power3.out" }, at);
-        intro.fromTo(copy, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.74, ease: "power3.out" }, at + 0.08);
-      });
-
+      // Built before the intro timeline, and that order matters — see the note
+      // in control-boundary.jsx. An empty `gsap.timeline({ scrollTrigger })`
+      // populated afterwards is left half-built for a tick, and creating
+      // another trigger in the same block force-refreshes it; a `once` trigger
+      // that already reads as past then kills itself while ScrollTrigger is
+      // iterating its own array, and the next read is undefined. Creating this
+      // one first means there is nothing half-built to walk into.
       if (fill) {
         gsap.set(fill, { scaleX: 0 });
         ScrollTrigger.create({
@@ -56,6 +51,18 @@ export function ProblemCards({ items }) {
           },
         });
       }
+
+      const intro = gsap.timeline({ paused: true });
+
+      entries.forEach((entry, index) => {
+        const num = entry.querySelector(".pb-num");
+        const copy = entry.querySelector(".pb-item-copy");
+        const at = index * 0.13;
+        intro.fromTo(num, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.66, ease: "power3.out" }, at);
+        intro.fromTo(copy, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.74, ease: "power3.out" }, at + 0.08);
+      });
+
+      ScrollTrigger.create({ trigger: root, start: "top 80%", animation: intro });
     });
 
     return () => media.revert();

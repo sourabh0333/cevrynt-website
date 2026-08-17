@@ -53,13 +53,15 @@ export function PartnerQuestion({ question, scope, href }) {
         gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
       });
 
-      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: "top 74%", once: true } });
+      // Populated before its trigger is attached — see control-boundary.jsx.
+      const tl = gsap.timeline({ paused: true });
       tl.from(lanes, { x: -26, autoAlpha: 0, duration: 0.7, ease: "power3.out", stagger: 0.12 }, 0);
       tl.from(marks, { scale: 0.94, duration: 0.86, ease: "power3.out", stagger: 0.12 }, 0.05);
       tl.to(paths, { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" }, 0.28);
       tl.from(node, { scale: 0, autoAlpha: 0, duration: 0.55, ease: "back.out(2.4)" }, 0.95);
       tl.from(card, { x: 26, autoAlpha: 0, duration: 0.72, ease: "power3.out" }, 1.02);
       tl.from(items, { y: 16, autoAlpha: 0, duration: 0.56, ease: "power3.out", stagger: 0.08 }, 1.2);
+      ScrollTrigger.create({ trigger: el, start: "top 74%", animation: tl });
     });
 
     return () => media.revert();
@@ -94,13 +96,20 @@ export function PartnerQuestion({ question, scope, href }) {
           <path className="pq-flow pq-flow-b" d="M0 174 C 68 174, 62 110, 130 110" />
         </svg>
 
+        {/* No "The shared question" label here any more: the heading already
+            says "one merchant-underwriting question", and two lanes visibly
+            merging into one lit node says it a second time. A third statement
+            in words was just noise around the focal point. */}
         <div className="pq-question">
           <span className="pq-node" aria-hidden="true" />
-          <p className="hx-mono pq-question-label">The shared question</p>
           <p className="pq-question-text">{question}</p>
         </div>
       </div>
 
+      {/* Was two text columns of equal weight side by side — a bulleted list
+          against a block of small print — with nothing telling the eye which to
+          read first. Now it descends: scope across the full width, then the
+          fine print and the link as one quiet closing row. */}
       <div className="pq-foot">
         <ul className="pq-scope">
           {scope.map((item) => (
@@ -108,10 +117,13 @@ export function PartnerQuestion({ question, scope, href }) {
           ))}
         </ul>
 
-        <div className="pq-limits-wrap">
+        <div className="pq-fine">
+          {/* The lede above already calls this "a documented development and
+              referral partnership", so that sentence is not repeated here.
+              Every required negation is kept. */}
           <p className="pq-limits">
-            A documented development and referral partnership. It does not imply a generally available live
-            integration, automatic data sharing, universal merchant eligibility, or guaranteed funding.
+            This partnership does not imply a generally available live integration, automatic data sharing,
+            universal merchant eligibility, or guaranteed funding.
           </p>
           <Link className="pq-link" href={href}>
             Read the partnership context <ArrowUpRight />

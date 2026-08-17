@@ -3,10 +3,24 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { HeroWebGLBackground } from "@/components/hero-webgl-background";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Hero entrance motion.
+ *
+ * The background used to run two systems at once: a WebGL shader, and — beneath
+ * it — a stack of CSS layers animating `background-position` and
+ * `background-color` across the full 957px hero, plus a requestAnimationFrame
+ * loop driving a pointer-following glow. When the shader started, those layers
+ * were only set to `opacity: 0`, which hides them but does not stop a single
+ * frame of their work. So the page paid for both the whole time and showed one.
+ *
+ * All of it is gone. The background is now three pre-painted gradient fields
+ * that only ever move (see .hero-aurora), which is compositor work instead of
+ * paint work, and this component is back to what it should have been: the
+ * entrance timeline and nothing else.
+ */
 export function HeroMotion({ children }) {
   const heroRef = useRef(null);
 
@@ -15,11 +29,9 @@ export function HeroMotion({ children }) {
     if (!hero) return undefined;
 
     const media = gsap.matchMedia();
-    let cleanupPointer = () => {};
 
     media.add({
       motion: "(prefers-reduced-motion: no-preference)",
-      pointer: "(pointer: fine)",
     }, ({ conditions }) => {
       if (conditions.motion) {
         const headingLines = gsap.utils.toArray(".hero-line-text, .page-hero-dark-heading");
@@ -53,55 +65,21 @@ export function HeroMotion({ children }) {
         gsap.set([".hero-line-text", ".page-hero-dark-heading", ".home-hero-lede", ".hero-signal", ".hero-actions"], { autoAlpha: 1, clearProps: "opacity,visibility,transform" });
       }
 
-      if (!conditions.motion || !conditions.pointer) return undefined;
-
-      const bounds = () => hero.getBoundingClientRect();
-      let targetX = hero.clientWidth / 2;
-      let targetY = Math.min(hero.clientHeight * 0.32, 360);
-      let currentX = targetX;
-      let currentY = targetY;
-      let frame = 0;
-
-      const render = () => {
-        currentX += (targetX - currentX) * 0.09;
-        currentY += (targetY - currentY) * 0.09;
-        hero.style.setProperty("--mouse-x", `${currentX}px`);
-        hero.style.setProperty("--mouse-y", `${currentY}px`);
-        if (Math.abs(targetX - currentX) + Math.abs(targetY - currentY) > 0.2) {
-          frame = requestAnimationFrame(render);
-        } else {
-          frame = 0;
-        }
-      };
-
-      const onPointerMove = (event) => {
-        const rect = bounds();
-        targetX = event.clientX - rect.left;
-        targetY = event.clientY - rect.top;
-        if (!frame) frame = requestAnimationFrame(render);
-      };
-
-      hero.addEventListener("pointermove", onPointerMove, { passive: true });
-      cleanupPointer = () => {
-        if (frame) cancelAnimationFrame(frame);
-        hero.removeEventListener("pointermove", onPointerMove);
-      };
-      return cleanupPointer;
+      return undefined;
     });
 
-    return () => {
-      cleanupPointer();
-      media.revert();
-    };
+    return () => media.revert();
   }, []);
 
   return (
     <section className="home-hero" ref={heroRef}>
-      <HeroWebGLBackground />
-      <div className="hero-ambient" aria-hidden="true" />
-      <div className="hero-grid" aria-hidden="true" />
-      <div className="hero-grid-glow" aria-hidden="true" />
-      <div className="hero-mouse-glow" aria-hidden="true" />
+      {/* Three gradient fields that only ever move. No shader, no pointer
+          loop, no animated background-position anywhere behind this. */}
+      <div className="hero-aurora" aria-hidden="true">
+        <span className="hero-aurora-a" />
+        <span className="hero-aurora-b" />
+        <span className="hero-aurora-c" />
+      </div>
       {children}
     </section>
   );

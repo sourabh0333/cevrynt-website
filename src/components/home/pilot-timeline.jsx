@@ -40,10 +40,14 @@ export function PilotTimeline({ stages, close }) {
       });
 
       steps.forEach((step, index) => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: step, start: "top 84%", once: true } });
+        // No `once` here — see control-boundary.jsx. A timeline-attached
+        // trigger has no `end` for one tick, and `once` makes it kill itself
+        // mid-way through ScrollTrigger's own iteration of that list.
+        const tl = gsap.timeline({ paused: true });
         tl.from(step.querySelector(".pt2-step-body"), { y: 26, autoAlpha: 0, duration: 0.68, ease: "power3.out" }, 0);
         tl.to(checks[index], { strokeDashoffset: 0, duration: 0.5, ease: "power2.out" }, 0.2);
         tl.add(() => step.classList.add("is-done"), 0.2);
+        ScrollTrigger.create({ trigger: step, start: "top 84%", animation: tl });
       });
 
       if (fill) {

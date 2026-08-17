@@ -38,10 +38,12 @@ export function WhyList({ items }) {
         const rule = row.querySelector(".wy-rule");
         const term = row.querySelector(".wy-term-inner");
         const meta = row.querySelector(".wy-meta");
-        const tl = gsap.timeline({ scrollTrigger: { trigger: row, start: "top 90%", once: true } });
+        // Populated before its trigger is attached — see control-boundary.jsx.
+        const tl = gsap.timeline({ paused: true });
         tl.fromTo(rule, { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power2.inOut" }, 0);
         tl.fromTo(term, { yPercent: 108 }, { yPercent: 0, duration: 0.86, ease: "power3.out" }, 0.12);
         tl.fromTo(meta, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, 0.24);
+        ScrollTrigger.create({ trigger: row, start: "top 90%", animation: tl });
         return tl;
       });
     });

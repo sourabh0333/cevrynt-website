@@ -9,7 +9,7 @@ import { BenefitRows } from "@/components/home/benefit-rows";
 import { WorkedExample } from "@/components/home/worked-example";
 import { ScrubStatement } from "@/components/home/scrub-statement";
 import { ObjectionBlock } from "@/components/home/objection-block";
-import { Reveal } from "@/components/reveal";
+
 import { RevealLines } from "@/components/home/reveal-lines";
 import { ParallaxLayers } from "@/components/home/scroll-fx";
 import { RoadmapTrack } from "@/components/home/roadmap-track";
@@ -18,9 +18,10 @@ import { WhyList } from "@/components/home/why-list";
 import { ControlBoundary } from "@/components/home/control-boundary";
 import { PartnerQuestion } from "@/components/home/partner-question";
 import { PilotTimeline } from "@/components/home/pilot-timeline";
-import { ResourceSpread } from "@/components/home/resource-spread";
+import { ResourceLines } from "@/components/home/resource-lines";
+import { FounderClose } from "@/components/home/founder-close";
 import { ProductShot } from "@/components/home/product-shot";
-import { ScrollProgress, Magnetic, PointerField } from "@/components/home/fx";
+import { ScrollProgress, PointerField } from "@/components/home/fx";
 import { RainbowCta } from "@/components/ui/rainbow-cta";
 import { workflow, sitePages } from "@/content/site-pages";
 
@@ -514,7 +515,7 @@ export default function Home() {
         />
         <div className="eg rs-body">
           <div className="rs-full">
-            <ResourceSpread items={resources} />
+            <ResourceLines items={resources} />
           </div>
         </div>
       </section>
@@ -524,30 +525,14 @@ export default function Home() {
       {/* 14 — Finale */}
       <section className="fn band-white" aria-labelledby="cta-heading">
         <div className="fn-glow" aria-hidden="true" />
-        <Reveal className="eg fn-inner" variant="rise">
-          <span className="eg-rail hx-mono">14</span>
-          <div className="eg-head">
-            <p className="hx-kicker">Founder-led walkthrough</p>
-            <RevealLines as="h2" className="t-display-1" id="cta-heading" text="Bring one real workflow. We'll map the review together." />
-            <p className="t-lede fn-lede">
-              Define representative files, lender-specific review criteria, and a clear evaluation plan with
-              the founder.
-            </p>
-            <div className="fn-actions">
-              <Magnetic>
-                <a className="primary-cta" href={calendlyUrl} target="_blank" rel="noreferrer">
-                Book on Calendly
-                <span>
-                  <ArrowUpRight />
-                </span>
-                </a>
-              </Magnetic>
-              <a className="fn-secondary" href="mailto:arin@cevrynt.com">
-                arin@cevrynt.com <ArrowUpRight />
-              </a>
-            </div>
-          </div>
-        </Reveal>
+        <FounderClose
+          index="14"
+          kicker="Founder-led walkthrough"
+          heading="Bring one real workflow. We'll map the review together."
+          lede="Define representative files, lender-specific review criteria, and a clear evaluation plan with the founder."
+          calendlyUrl={calendlyUrl}
+          email="arin@cevrynt.com"
+        />
       </section>
     </main>
   );
