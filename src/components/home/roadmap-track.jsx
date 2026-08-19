@@ -87,31 +87,47 @@ export function RoadmapTrack({ stations }) {
       });
     };
 
+    // Mutable so the single trigger below always reads current measurements.
+    let len = 0;
+    let ratios = [];
+
+    const measure = () => {
+      const built = buildPath();
+      if (!built) return;
+      len = built.len;
+      ratios = nodeRatios(built.pts, built.len);
+      gsap.set(draw, { strokeDasharray: len });
+    };
+
+    const apply = (progress) => {
+      if (!len) return;
+      gsap.set(draw, { strokeDashoffset: len * (1 - progress) });
+      nodes.forEach((n, i) => n.classList.toggle("is-lit", progress >= ratios[i] - 0.02));
+      cards.forEach((c, i) => c.classList.toggle("is-lit", progress >= ratios[i] - 0.02));
+    };
+
+    // The connector is the diagram, not decoration on top of it: it is measured
+    // and drawn whatever the motion preference. Only the scroll-driven reveal
+    // below is conditional. Building it inside the motion branch meant a reader
+    // with reduced motion got no route drawn at all — the paths never received
+    // a `d`, so there was nothing for the CSS fallback to reveal.
+    measure();
+
+    // The finished state is the default, and the motion branch below opts out
+    // of it. It cannot be handled inside `matchMedia` instead: when a query
+    // does not match, gsap never invokes the callback at all, so a guard in
+    // there would never run for the reader who needs it.
+    apply(1);
+
+    // Fonts change card heights, which moves the nodes the path is built from.
+    if (document.fonts?.status !== "loaded") {
+      document.fonts?.ready.then(() => measure()).catch(() => {});
+    }
+
     const media = gsap.matchMedia();
 
-    media.add({ motionOk: "(prefers-reduced-motion: no-preference)" }, ({ conditions }) => {
-      if (!conditions.motionOk) return undefined;
-
-      // Mutable so the single trigger below always reads current measurements.
-      let len = 0;
-      let ratios = [];
-
-      const measure = () => {
-        const built = buildPath();
-        if (!built) return;
-        len = built.len;
-        ratios = nodeRatios(built.pts, built.len);
-        gsap.set(draw, { strokeDasharray: len });
-      };
-
-      const apply = (progress) => {
-        if (!len) return;
-        gsap.set(draw, { strokeDashoffset: len * (1 - progress) });
-        nodes.forEach((n, i) => n.classList.toggle("is-lit", progress >= ratios[i] - 0.02));
-        cards.forEach((c, i) => c.classList.toggle("is-lit", progress >= ratios[i] - 0.02));
-      };
-
-      measure();
+    media.add({ motionOk: "(prefers-reduced-motion: no-preference)" }, () => {
+      apply(0);
 
       // One trigger for the life of the component. Re-measuring on refresh keeps
       // the path correct after resizes without tearing the trigger down.
@@ -133,13 +149,23 @@ export function RoadmapTrack({ stations }) {
         scrollTrigger: { trigger: root, start: "top 82%", once: true },
       });
 
-      // Fonts change card heights, which moves the nodes the path is built from.
       if (document.fonts?.status !== "loaded") {
         document.fonts?.ready.then(() => ScrollTrigger.refresh()).catch(() => {});
       }
+
+      // Reverting the motion branch puts the route back to drawn.
+      return () => apply(1);
     });
 
-    return () => media.revert();
+    // With no ScrollTrigger to refresh, a reduced-motion reader still needs the
+    // route re-measured when the layout reflows.
+    const onResize = () => measure();
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      media.revert();
+    };
   }, []);
 
   const rows = [stations.slice(0, 3), stations.slice(3, 6)];

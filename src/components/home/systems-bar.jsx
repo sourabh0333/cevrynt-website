@@ -7,14 +7,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const systems = [
-  "Stripe",
-  "Plaid",
-  "Basis",
-  "Fiserv",
-  "Treasury Prime",
-  "Equifax",
-  "QuickBooks",
-  "Xero",
+  "Chasing Docs",
+  "Re-keying",
+  "Cross-checking",
+  "Missing Pages",
+  "Duplicate Files",
+  "Data Mismatches",
+  "Follow-ups",
+  "Waiting",
 ];
 
 export function SystemsBar() {
@@ -62,8 +62,7 @@ export function SystemsBar() {
       <div className="eg sb-head">
         <span className="eg-rail hx-mono">01</span>
         <p className="eg-head t-eyebrow-lg">
-          Underwriting files arrive from everywhere — bank portals, accounting exports, broker email,
-          verification sources.
+          Most underwriting doesn't start with analysis. It starts with hunting for the file.
         </p>
       </div>
 
@@ -81,8 +80,7 @@ export function SystemsBar() {
 
       <div className="eg">
         <p className="eg-note hx-mono">
-          Representative systems in the alternative-lending stack. Listing a system does not indicate a live
-          integration, partnership, or endorsement.
+          A deal can be straightforward. Getting everything into a state where an underwriter can actually review it often isn’t. Cevrynt handles the work between receiving the file and understanding what’s really there.
         </p>
       </div>
     </section>

@@ -1,11 +1,11 @@
 import { SignalMark } from "@/components/icons";
 
 const headingLines = [
-  "From borrower documents to",
-  "decision-ready underwriting.",
+  "Underwrite the deal, not ",
+  "the paperwork.",
 ];
 
-const supportingCopy = "Turn borrower documents and business signals into evidence-linked analysis for human underwriting.";
+const supportingCopy = "Cevrynt turns borrower documents, bank activity, business checks, debt positions and lender rules into one evidence-linked underwriting view—so your team can review the full story without chasing files across tools.";
 
 export function AnimatedHeroCopy() {
   return (

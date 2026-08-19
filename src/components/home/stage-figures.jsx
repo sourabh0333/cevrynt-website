@@ -3,8 +3,9 @@
  *
  * These are placeholders with real structure: when product screenshots are
  * exported, pass `image` on a stage in `how-it-works.jsx` and the figure is
- * replaced by the screenshot with no layout change. Target export size is
- * 1200x900 (4:3), WebP or AVIF.
+ * replaced by the screenshot with no layout change. The How-it-works stage
+ * panel is wide, so those exports target 1600x686 (21:9); the outcome rows
+ * still take 1200x900 (4:3). WebP or AVIF.
  *
  * Nothing here represents real borrower data.
  */

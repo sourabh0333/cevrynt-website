@@ -23,7 +23,7 @@ import { FounderClose } from "@/components/home/founder-close";
 import { ProductShot } from "@/components/home/product-shot";
 import { ScrollProgress, PointerField } from "@/components/home/fx";
 import { RainbowCta } from "@/components/ui/rainbow-cta";
-import { workflow, sitePages } from "@/content/site-pages";
+import { sitePages } from "@/content/site-pages";
 
 export const revalidate = 3600;
 
@@ -77,18 +77,21 @@ const products = sitePages
 const audiences = sitePages.filter((page) => page.group === "Solutions");
 
 const problems = [
-  ["Evidence", "Context dies between tools", "Analysts move between borrower files, spreadsheets, portals, and review tools. The reasoning behind a call lives in whichever window was open at the time."],
-  ["Consistency", "Two reviewers, two reviews", "Checks vary by reviewer, by queue, and by how complex the deal looked on a Friday afternoon — not because anyone is careless."],
-  ["Explainability", "Outcomes that can't be retraced", "A decision needs its sources, its context, and a record of the human judgment applied on top. Without it, every past deal becomes an argument."],
+  ["Evidence", "The number is there. The source isn't.", "Revenue, balances, NSFs and existing positions get copied into notes and spreadsheets. A few steps later, it becomes difficult to tell exactly which statement, transaction or document supported the number."],
+  ["Consistency", "Same deal. Different underwriter. Different call.", "One reviewer catches the deposit pattern. Another focuses on the negative days. Someone else weighs an existing position differently. The file hasn't changed — the way it was reviewed has."],
+  ["Explainability", "Six months later, “why?” becomes hard to answer.", "When a deal is approved, reduced, conditioned or declined, the reasoning often lives across comments, spreadsheets and someone's memory. Revisiting that decision shouldn't mean rebuilding the underwriting from scratch."],
 ];
 
-/** `markUpTo` lights the shared Intake→Decision strip. Add `image`/`imageAlt` to swap in a screenshot. */
+/** The eight stages of one file. Swap `image`/`imageAlt` for a real export at 10:3. */
 const stages = [
-  { title: "Document intelligence", body: "Mixed borrower files are classified and structured, and every extracted field keeps a pointer back to the page it came from.", href: "/product/document-intelligence", figure: "documents", image: "/media/placeholder/stage-documents.webp", imageAlt: "Document intelligence view: borrower files classified, each field linked to its source page", markUpTo: 1 },
-  { title: "Financial analysis", body: "Deposits, balances, cash-flow rhythm, and transaction patterns are read as one view instead of six spreadsheets.", href: "/product/bank-statement-analysis", figure: "financials", image: "/media/placeholder/stage-financials.webp", imageAlt: "Cash-flow analysis view: deposit rhythm across six months with negative days flagged", markUpTo: 2 },
-  { title: "Verification and fraud", body: "Business identity and operating signals are gathered, and anything that disagrees with the file is raised for a person to resolve.", href: "/product/fraud-signals", figure: "verification", image: "/media/placeholder/stage-verification.webp", imageAlt: "Verification view: entity and officer records compared against the application", markUpTo: 4 },
-  { title: "Policy evaluation", body: "Your review criteria are applied to the deal, with exceptions and documented overrides kept visible rather than buried.", href: "/product/policy-engine", figure: "policy", image: "/media/placeholder/stage-policy.webp", imageAlt: "Policy evaluation view: lender criteria applied with an exception raised", markUpTo: 5 },
-  { title: "Evidence-backed report", body: "Findings, sources, reviewer notes, and policy outcomes arrive as one review — and the decision stays with your team.", href: "/product/underwriting-report", figure: "report", image: "/media/placeholder/stage-report.webp", imageAlt: "Underwriting report view: findings assembled with evidence attached", markUpTo: 6 },
+  { title: "Intake", body: "A deal arrives as whatever the broker sent — mixed PDFs, photos, and forms — and lands in one queue with nothing set aside.", href: "/platform", image: "/media/Steps/intake.png", imageAlt: "Intake view: mixed borrower files arriving and queued for review" },
+  { title: "Extract", body: "Fields are read off each document and keep pointing back to the page and line they came from, so nothing is retyped.", href: "/product/document-intelligence", image: "/media/Steps/Cevrynt Extract.png", imageWidth: 1600, imageHeight: 760, canvas: "#2a4742", imageAlt: "Extract view: values read from the original bank statement into normalized underwriting fields, each keeping a page and line reference back to its source" },
+  { title: "Analysis", body: "Deposits, balances, cash-flow rhythm, and transaction patterns are read as one view instead of six spreadsheets.", href: "/product/bank-statement-analysis", image: "/media/Steps/analysis.png", imageWidth: 1080, imageHeight: 850, canvas: "#0e2d2b", imageAlt: "Financial analysis view: six bank statements unified into one cash-flow rhythm, transaction pattern and quality read" },
+  { title: "KYB/KYC", body: "Business identity, entity standing, and officer records are checked against what the application actually claims.", href: "/product/business-verification", image: "/media/Steps/KYB KYC.png", imageAlt: "Verification view: application record set against the verified record" },
+  { title: "Fraud Detection", body: "Document integrity, duplicate submissions, and conflicting signals are raised for a person to resolve, never auto-declined.", href: "/product/fraud-signals", image: "/media/Steps/Fraud Detection.png", imageAlt: "Fraud view: signals converging with one raised for a reviewer to resolve" },
+  { title: "Policy Engine", body: "Your own review criteria are applied to the deal, with exceptions and documented overrides kept visible rather than buried.", href: "/product/policy-engine", image: "/media/Steps/Policy Engine.png", imageAlt: "Policy view: lender criteria applied with an exception and a recorded override" },
+  { title: "Reanalysis", body: "New statements or a corrected document re-run the file, and whatever moved since the last pass is called out.", href: "/platform", image: "/media/Steps/Reanalysis.png", imageAlt: "Reanalysis view: the file re-run against new evidence with changes called out" },
+  { title: "Deal Memo", body: "Findings, sources, notes, and policy outcomes arrive as one memo — and the final call stays with your team.", href: "/product/underwriting-report", image: "/media/placeholder/stage-deal-memo.webp", imageAlt: "Deal memo view: findings assembled with their evidence attached" },
 ];
 
 const benefits = [
@@ -325,11 +328,11 @@ export default function Home() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The fragmented-workflow problem</p>
-            <h2 className="sr-only" id="problem-heading">Why underwriting context gets lost between tools</h2>
+            <p className="hx-kicker hx-kicker-invert">THE UNDERWRITING CONTEXT PROBLEM</p>
+            {/* <h2 className="sr-only" id="problem-heading">Why underwriting context gets lost between tools</h2> */}
             <ScrubStatement
               className="t-display-1"
-              text="Underwriting context should not disappear between files, spreadsheets, checks, and policy reviews."
+              text="The numbers may be in the file.The reason behind the decision usually isn’t."
             />
           </div>
         </div>
@@ -345,8 +348,8 @@ export default function Home() {
           index="03"
           id="audience-heading"
           kicker="Who it's for"
-          heading="Four teams, four different reasons the file is hard."
-          lede="Cevrynt is built first for MCA funders and alternative lenders, with workflows that also serve brokers and commerce-platform partners."
+          heading="Same deal. Different pressure depending on where you sit."
+          lede="Cevrynt is built around the funder-side underwriting workflow first, while giving every team around the deal a cleaner way to prepare, review and understand the same borrower story."
         />
         <div className="eg au-body">
           <PointerField className="au-full" selector=".ar-card" tilt>
@@ -355,7 +358,7 @@ export default function Home() {
         </div>
       </section>
 
-      <HowItWorks deal={deal} workflow={workflow} stages={stages} />
+      <HowItWorks deal={deal} stages={stages} />
 
       {/* 05 — Outcome rows */}
       <section className="bs band-light" aria-labelledby="benefits-heading">

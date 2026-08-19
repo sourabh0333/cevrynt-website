@@ -440,12 +440,12 @@ body:has(.page-hero) .site-header { background: transparent; }
   .hero-aurora span { animation: none; will-change: auto; }
 }
 .home-hero-inner { position: relative; z-index: 1; display: flex; width: min(1040px, calc(100vw - 64px)); min-height: 574px; margin-inline: auto; flex-direction: column; align-items: center; justify-content: flex-start; padding: 122px 0 58px; color: #f8fbfa; text-align: center; }
-.home-hero h1 { margin: 0; max-width: 780px; font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(2rem, 3.8vw, 3.8rem); font-weight: 600; letter-spacing: -0.038em; line-height: 1.04; text-wrap: balance; }
+.home-hero h1 { margin: 0; max-width: 780px; font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(2rem, 4.2vw, 4.1rem); font-weight: 600; letter-spacing: -0.038em; line-height: 1.04; text-wrap: balance; }
 .hero-signal { display: block; width: 34px; height: 34px; margin-bottom: 20px; overflow: visible; fill: #a7ff1c; transform-origin: center; }
 .hero-heading-line { display: block; overflow: hidden; padding: 0 0.04em 0.05em; white-space: nowrap; }
 .hero-line-text { display: block; position: relative; }
 .page-hero h1 { margin: 0; max-width: 920px; font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 570; letter-spacing: -0.065em; line-height: 0.98; text-wrap: balance; }
-.home-hero-lede { max-width: 720px; margin: 20px auto 0; color: rgba(248,251,250,0.76); font-size: clamp(0.86rem, 1vw, 0.96rem); line-height: 1.5; text-wrap: balance; }
+.home-hero-lede { max-width: 750px; margin: 20px auto 0; color: rgba(248,251,250,0.76); font-size: clamp(0.86rem, 1vw, 0.96rem); line-height: 1.5; text-wrap: balance; }
 .page-hero-dark-inner { position: relative; z-index: 1; display: flex; width: min(880px, calc(100vw - 64px)); min-height: 100%; margin-inline: auto; flex-direction: column; align-items: center; justify-content: center; padding: 132px 0 90px; color: #f8fbfa; text-align: center; }
 .page-hero-dark-heading { margin: 0; max-width: 820px; font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(2.3rem, 3.6vw, 3.6rem); font-weight: 400; letter-spacing: -0.03em; line-height: 1.08; text-wrap: balance; }
 .page-lede { max-width: 760px; margin: 28px auto 0; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.2rem); line-height: 1.65; text-wrap: balance; }
@@ -604,7 +604,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .t-display-2 {
   margin: 0;
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: clamp(2.1rem, 4.4vw, 4.1rem);
+  font-size: clamp(2.1rem, 4.4vw, 3.1rem);
   font-weight: 600;
   letter-spacing: -0.034em;
   line-height: 1.06;
@@ -626,6 +626,9 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 /* -- Bands and their transitions ------------------------------------------- */
 .band-light { position: relative; padding-block: var(--s-band); background: var(--background); }
+/* This band ends on a full-height canvas, so it needs less breathing room under
+   it than a text section does. */
+.hw.band-light { padding-bottom: clamp(44px, 5vw, 72px); }
 .band-deep { position: relative; clip-path: inset(0); padding-block: var(--s-band); background: var(--ink-deeper); color: #eaf3f0; }
 /* Deep bands fade up out of the light band above rather than cutting hard. */
 .band-deep::before {
@@ -663,8 +666,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 /* -- 02 How it works ------------------------------------------------------- */
 .hw-body { margin-top: clamp(16px, 2.5vw, 32px); }
-.hw-figures { grid-column: 2 / span 6; }
-.hw-figure-sticky { position: sticky; top: max(72px, 7vh); }
+.hw-stage-col { grid-column: 5 / span 8; grid-row: 1; align-self: start; }
 .hw-panel {
   display: flex;
   flex-direction: column;
@@ -679,20 +681,6 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 .hw-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--label); }
 .hw-count-now { color: var(--rail); }
-
-.hw-marks { display: flex; gap: 3px; margin: 12px 0 0; padding: 0; list-style: none; }
-.hw-mark { flex: 1; }
-.hw-mark span {
-  display: block;
-  overflow: hidden;
-  border-radius: 2px;
-  padding-top: 3px;
-  background: var(--border);
-  color: transparent;
-  font-size: 0;
-  transition: background 520ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.hw-mark.is-done span { background: var(--rail); }
 
 .hw-figure-stack { position: relative; margin-top: 14px; }
 .hw-figure:first-child { position: relative; }
@@ -727,32 +715,124 @@ body:has(.page-hero) .site-header { background: transparent; }
 .fig-bar.is-peak { fill: var(--rail); }
 .fig-tick { fill: var(--label); font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 8px; text-anchor: middle; }
 
-.hw-steps { position: relative; grid-column: 8 / span 5; padding-left: 34px; }
-.hw-rail { position: absolute; top: 12px; bottom: 12px; left: 4px; width: 1px; background: var(--border); }
-.hw-rail-fill { display: block; width: 100%; height: 100%; background: var(--rail); transform: scaleY(0); transform-origin: top; }
-.hw-step { position: relative; padding-block: clamp(28px, 4.5vh, 52px); }
-.hw-step:first-child { padding-top: 0; }
-.hw-step::before {
-  position: absolute;
-  top: clamp(28px, 4.5vh, 52px);
-  left: -34px;
-  width: 9px;
-  height: 9px;
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  background: var(--background);
-  content: "";
-  transition: border-color 420ms ease, background 420ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+/* The stage list sits beside the stage panel rather than under it. A column is
+   taller than it is wide, which is far closer to the shape a product
+   screenshot actually comes in — the old full-width band was an ultrawide
+   letterbox no real export could fill.
+   Base (no JS) is a plain stack with every stage expanded and readable;
+   `.is-ready` upgrades it to the accordion. */
+.hw-strip {
+  position: relative;
+  display: grid;
+  grid-column: 2 / span 3;
+  grid-row: 1;
+  grid-template-columns: minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 18px 44px rgba(1, 62, 55, 0.06);
 }
-.hw-step:first-child::before { top: 0; }
-.hw-step.is-live::before { border-color: var(--rail); background: var(--rail); transform: scale(1.3); }
-.hw-step-index { display: block; color: var(--label); transition: color 380ms ease; }
-.hw-step.is-live .hw-step-index { color: var(--rail); }
-.hw-step h3 { margin: 12px 0 12px; color: var(--ink); }
-.hw-step p { max-width: 46ch; }
-.hw-step-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; color: var(--ink); font-size: 0.86rem; font-weight: 620; }
-.hw-step-link svg { transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1); }
-.hw-step-link:hover svg { transform: translate(3px, -3px); }
+/* The flex ratios live here, not on `.is-ready`, so arming the accordion at
+   hydration changes no layout value and animates nothing. Grid mode ignores
+   them. */
+.hwc { position: relative; display: flex; min-width: 0; flex: 1 1 0; flex-direction: column; border-top: 1px solid var(--border); }
+.hwc.is-live { flex-grow: 3.6; }
+.hwc:first-of-type { border-top: 0; }
+
+/* The heading takes the row's spare height so a closed step's title sits
+   centred in its band. */
+.hwc-title { display: flex; min-height: 0; flex: 1 1 auto; margin: 0; }
+.hwc-btn {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  padding: 6px 18px;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+.hwc-index { color: var(--label); font-size: 0.68rem; transition: color 320ms ease; }
+.hwc.is-live .hwc-index { color: var(--rail); }
+.hwc-name { font-size: clamp(0.94rem, 1vw, 1.06rem); font-weight: 620; letter-spacing: -0.014em; line-height: 1.26; }
+
+/* Indented to clear the dial, so the copy hangs off the title, not the number. */
+.hwc-panel-in { padding: 0 18px 12px 56px; }
+.hwc-panel p { margin: 0; }
+.hwc-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; color: var(--ink); font-size: 0.86rem; font-weight: 620; }
+.hwc-link svg { transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1); }
+.hwc-link:hover svg { transform: translate(3px, -3px); }
+
+/* The countdown is a ring drawn around the open card's number, so the timing
+   lives on the step it belongs to instead of on a separate control. Hovering
+   the row freezes the sweep in place — the ring is the state indicator. */
+.hwc-mark { position: relative; display: grid; width: 26px; height: 26px; flex: 0 0 26px; place-items: center; }
+.hwc-dial { position: absolute; inset: 0; width: 26px; height: 26px; transform: rotate(-90deg); }
+.hwc-dial circle { fill: none; stroke-width: 2; }
+.hwc-dial-track { stroke: var(--border); }
+.hwc-dial-run { stroke: var(--rail); stroke-linecap: round; animation: hwc-dial linear forwards; }
+@keyframes hwc-dial { from { stroke-dashoffset: 87.96; } to { stroke-dashoffset: 0; } }
+
+/* Accordion mode. The panel's own ratio sets the row height, and the list
+   stretches to match it — so the box is exactly the shape of the export and no
+   stage sits in bands. The floor stops eight rows being squeezed flat on a
+   narrower screen, where the picture is shorter than the list needs. */
+.hw.is-ready .hw-strip {
+  display: flex;
+  min-height: 460px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+.hw.is-ready .hwc {
+  overflow: hidden;
+  contain: layout paint;
+  transition: flex-grow 640ms cubic-bezier(0.22, 1, 0.36, 1), background 380ms ease;
+}
+/* The open step never shrinks below its own copy. Without this the flex share
+   of a short row clipped the "Explore capability" link, since the row hides
+   its overflow to make the accordion work. */
+.hw.is-ready .hwc.is-live { min-height: 208px; background: var(--soft-blue); }
+.hw.is-ready .hwc:not(.is-live):hover { background: var(--background); }
+
+/* `minmax(0, …)` because a bare `0fr` track still keeps its automatic minimum,
+   which the panel's own padding would hold open. */
+.hw.is-ready .hwc-panel { display: grid; overflow: hidden; grid-template-rows: minmax(0, 0fr); transition: grid-template-rows 640ms cubic-bezier(0.22, 1, 0.36, 1); }
+.hw.is-ready .hwc.is-live .hwc-panel { grid-template-rows: minmax(0, 1fr); }
+.hw.is-ready .hwc-panel-in {
+  min-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 340ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hw.is-ready .hwc.is-live .hwc-panel-in { opacity: 1; transform: none; transition-delay: 170ms; }
+
+/* Below this width the two columns stack: panel on top, list beneath it. The
+   list stops sharing the panel's height and each row sizes to its content. */
+@media (max-width: 1200px) {
+  /* Eight stacked rows are taller than a phone screen, so the stage panel
+     pins itself and the list scrolls beneath it — opening the last step
+     still leaves its view on screen. */
+  .hw-stage-col { position: sticky; z-index: 1; top: 84px; }
+  .hw-stage-col, .hw-strip { grid-column: 2 / span 11; grid-row: auto; }
+  /* Centring only makes sense against the list beside it. Once stacked, the
+     column is a flex item and `center` would shrink it to its content — which
+     is nothing, because the figures are absolutely positioned. */
+  .hw-stage-col { align-self: stretch; }
+  .hw-strip { margin-top: clamp(12px, 1.4vw, 18px); }
+  .hw.is-ready .hw-strip { display: block; height: auto; }
+  .hw.is-ready .hwc { contain: none; }
+  .hw.is-ready .hwc-btn { min-height: 60px; padding: 10px 18px; }
+  /* Stacked rows size to their own copy; the desktop floor would leave slack. */
+  .hw.is-ready .hwc.is-live { min-height: 0; }
+  .hw.is-ready .hwc-panel-in { padding: 0 18px 16px 56px; }
+}
 
 /* -- Scrubbed statement (used on deep bands) -------------------------------- */
 .ss-copy { --lit: 1; }
@@ -1692,6 +1772,9 @@ body:has(.page-hero) .site-header { background: transparent; }
 /* Scrollytelling: the shot replaces the code figure inside the sticky panel. */
 .hw-figure .ps-frame { border-radius: 12px; box-shadow: none; }
 .hw-figure .ps-caption { display: none; }
+/* The shot's own chrome bar repeats the stage name the overlaid header already
+   carries, and costs the picture ~40px. The header replaces it. */
+.hw-figure .ps-chrome { display: none; }
 
 
 /* Worked example: shot above the ledger. */
@@ -1795,23 +1878,64 @@ body:has(.page-hero) .site-header { background: transparent; }
   padding: 16px 22px 0;
   color: var(--label);
 }
-.hw-stage-now { margin: 10px 22px 12px; }
+/* The deal line, the stage name and the disclaimer each sit on the panel's own
+   light surface, above and below the picture — not over it. They are part of
+   the panel's chrome, and their height is what makes the panel taller than the
+   picture alone. */
+.hw-panel-top { padding: 15px 22px 0; }
+.hw-panel-deal { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hw-stage-now { margin: 10px 22px 14px; }
 .hw-stage-label {
   display: block;
   color: var(--ink);
   font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+  font-size: clamp(1.2rem, 1.75vw, 1.62rem);
   font-weight: 400;
   letter-spacing: -0.03em;
-  line-height: 1.1;
+  line-height: 1.12;
 }
-.hw-marks { display: flex; gap: 4px; margin: 0; padding: 0 22px 16px; list-style: none; }
-.hw-mark span { height: 5px; padding-top: 0; border-radius: 3px; }
+.hw-count { flex: 0 0 auto; }
 /* Image bleeds to the panel edges rather than floating inside padding. */
-.hw-figure-stack { margin-top: 0; border-top: 1px solid var(--border); }
+.hw-figure-stack { margin-top: 0; }
+/* Giving the frame an explicit width AND height takes `aspect-ratio` out of the
+   sizing entirely. That matters: with only a max-height, the ratio transfers
+   the cap into a max-width too, so a short window did not merely shorten the
+   frame — it narrowed it, stranding the shot in thick side bands. The frame now
+   always spans the panel and crops from the bottom instead.
+   The height is whatever is left once the header and the card strip have taken
+   theirs, up to 660px — the point where a 2.11:1 export fills the band. */
+/* The panel is exactly the shape of a step export, so the picture fills it
+   edge to edge with nothing left over above or below. Everything inside
+   inherits that height. */
+/* The picture keeps the export ratio; the panel is that plus its chrome. */
+.hw-figure-stack { aspect-ratio: 1600 / 760; border-top: 1px solid var(--border); }
+.hw-figure, .hw-figure .ps, .hw-figure .ps-frame { height: 100%; }
+.hw-figure .ps-frame { width: 100%; }
+.hw-figure .ps-shot {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  background: var(--stage-canvas, #0c2320);
+}
+/* `contain`, not `cover`: a real export is whatever shape it is, and the whole
+   view has to survive. Anything narrower than the band is centred on its own
+   canvas colour instead of being cut off at the bottom.
+   The `.is-cropped` selector below carries equal weight and comes later, so
+   this has to out-specify it rather than rely on source order. */
+.hw-figure .ps-shot.is-cropped img,
+.hw-figure .ps-shot img { height: 100%; object-fit: contain; object-position: center; }
+/* Back to ratio-driven height once the strip stacks: a fixed height against a
+   phone's narrow panel makes the frame taller than it is wide, cropping a
+   landscape view down to a sliver of its middle. */
+@media (max-width: 1200px) {
+  .hw-figure-stack { aspect-ratio: auto; }
+  .hw-figure, .hw-figure .ps, .hw-figure .ps-frame { height: auto; }
+  .hw-figure .ps-shot { height: auto; }
+}
 .hw-figure .ps-frame { border: 0; border-radius: 0; box-shadow: none; }
 .ps-shot.is-cropped img { height: 100%; object-fit: cover; object-position: top center; }
-.hw-panel-note { margin: 0; border-top: 1px solid var(--border); padding: 11px 22px; background: var(--background); color: var(--label); }
+.hw-panel { position: relative; }
+.hw-panel-note { margin: 0; border-top: 1px solid var(--border); padding: 12px 22px; background: var(--background); color: var(--label); }
 
 
 
@@ -2031,7 +2155,7 @@ body:has(.page-hero) .site-header { background: transparent; }
   letter-spacing: -0.035em;
   line-height: 1.1;
 }
-.ar-desc { margin: 0; max-width: 40ch; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+.ar-desc { margin: 0; max-width: 50ch; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 .ar-card[data-size="lead"] .ar-desc { font-size: 0.98rem; }
 .ar-points { display: flex; flex-direction: column; gap: 10px; margin: auto 0 0; padding: 22px 0 0; list-style: none; }
 .ar-points li { position: relative; padding-left: 20px; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
@@ -2057,6 +2181,11 @@ body:has(.page-hero) .site-header { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .rd-draw { stroke-dashoffset: 0 !important; }
   .rd-node-dot { border-color: var(--rail); background: var(--rail); }
+  /* The boundary rule is the point of that section. Its fill is scaled to zero
+     until the scroll handler grows it, so without this it never appears at all
+     for a reader who has asked for less motion. */
+  .cb-divider-fill { transform: scaleY(1) !important; }
+  .cb-node { border-color: var(--rail); background: var(--rail); }
   .pb-num, .pb-item-copy { transform: none !important; opacity: 1 !important; }
   .pb-spine-fill { transform: scaleX(1) !important; }
   .pb-node { border-color: var(--yellow); background: var(--yellow); }
@@ -2088,24 +2217,16 @@ body:has(.page-hero) .site-header { background: transparent; }
 @media (max-width: 1080px) {
   .eg-head { grid-column: 2 / span 10; }
   .eg-lede { grid-column: 2 / span 8; margin-top: var(--s-item); }
-  .hw-figures { grid-column: 2 / span 5; }
-  .hw-steps { grid-column: 7 / span 6; }
   .wy-tile:nth-child(n) { grid-column: span 3; }
 }
 
 @media (max-width: 860px) {
   .eg { grid-template-columns: minmax(0, 1fr); }
   .eg-rail { grid-column: 1; padding-top: 0; margin-bottom: 14px; }
-  .eg-head, .eg-lede, .eg-full, .eg-note, .hw-figures, .hw-steps { grid-column: 1; }
+  .eg-head, .eg-lede, .eg-full, .eg-note, .hw-stage-col, .hw-strip { grid-column: 1; }
   .sb { margin-top: -60px; }
   .hw-body { display: flex; flex-direction: column; }
-  .hw-figures { order: 2; margin-top: clamp(16px, 2.5vw, 32px); }
-  .hw-figure-sticky { position: static; }
   .hw-figure-stack { min-height: 0; }
-  .hw-figure { position: relative; inset: auto; opacity: 1; transform: none; }
-  .hw-figure + .hw-figure { display: none; }
-  .hw-steps { order: 1; padding-left: 26px; }
-  .hw-step::before { left: -26px; }
   .wy-bento { grid-template-columns: minmax(0, 1fr); }
   .wy-tile:nth-child(n) { grid-column: 1; min-height: 0; }
   .fn-actions { flex-direction: column; align-items: stretch; }
@@ -2206,17 +2327,250 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 .walkthrough-right > p { margin: 0; }
 .walkthrough-note { font-size: 0.82rem; color: var(--muted); opacity: 0.6; }
 
-.site-footer { border-top: 1px solid rgba(255,255,255,0.12); background: var(--ink); color: white; }
-.footer-shell { display: grid; grid-template-columns: 1.1fr 2fr; width: var(--page); margin-inline: auto; gap: 90px; padding-block: 84px; }
-.footer-brand img { width: 144px; height: auto; filter: brightness(0) invert(1); }
-.footer-brand > p { max-width: 360px; color: #bed0da; line-height: 1.65; }
-.footer-brand .footer-disclaimer { margin-top: 28px; color: #86a0ae; font-size: 0.76rem; }
-.footer-links { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; }
-.footer-links > div { display: flex; flex-direction: column; gap: 11px; }
-.footer-links strong { margin-bottom: 8px; font-size: 0.77rem; text-transform: uppercase; letter-spacing: 0.1em; }
-.footer-links a { color: #a9bdc8; font-size: 0.78rem; line-height: 1.4; }
-.footer-links a:hover { color: white; }
-.footer-bottom { display: flex; width: var(--page); margin-inline: auto; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-block: 22px; color: #8da5b2; font-size: 0.74rem; }
+/* ==========================================================================
+   Footer — the name as architecture
+   The wordmark is not below the content, it is behind it. Both occupy the same
+   grid cell, so the word fills the footer at browser width while the statement,
+   navigation and meta sit on their own layer on top. Drawn as a hairline
+   outline rather than a fill — the device the problem section already uses for
+   its numerals — with fill appearing only along the lower edge, so the crop at
+   the page edge lands on the brightest part.
+   ========================================================================== */
+.site-footer {
+  position: relative;
+  /* One cell. The signature and the content are both placed into it, which is
+     what makes them one composition instead of two stacked bands. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  isolation: isolate;
+  overflow: hidden;
+  border-top: 1px solid rgba(234,243,240,0.1);
+  background: var(--ink-deeper);
+  color: #f6fbf9;
+}
+.footer-bleed {
+  position: absolute;
+  z-index: 0;
+  bottom: -30%;
+  left: 50%;
+  width: min(1600px, 130%);
+  height: 116%;
+  background:
+    radial-gradient(closest-side, rgba(12, 132, 112, 0.4), rgba(10, 92, 80, 0.12) 56%, transparent 78%),
+    radial-gradient(closest-side, rgba(255, 239, 179, 0.08), transparent 62%);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+/* -- The architecture ------------------------------------------------------ */
+.footer-signature {
+  z-index: 1;
+  grid-area: 1 / 1;
+  display: flex;
+  align-self: end;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-weight: 700;
+  pointer-events: none;
+  user-select: none;
+  container-type: inline-size;
+  /* The type steps back exactly where the copy crosses it, then returns at full
+     strength below. Previously the outline ran at one weight the whole way
+     down, so the small text and the letterforms were competing for the same
+     pixels in the same band; this dips the word through the meta line and lets
+     it recover for the clear run to the crop. It is a mask, so it costs a
+     composite rather than a repaint. */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0.32) 50%,
+    rgba(0, 0, 0, 0.62) 66%,
+    rgba(0, 0, 0, 0.92) 80%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0.32) 50%,
+    rgba(0, 0, 0, 0.62) 66%,
+    rgba(0, 0, 0, 0.92) 80%,
+    rgba(0, 0, 0, 1) 100%
+  );
+}
+.fw-letter {
+  display: block;
+  /* Load-bearing: flex items carrying overflow: hidden have a min-content width
+     of zero, so the default flex-shrink would squeeze every glyph instead of
+     letting the word hold its natural width. */
+  flex: 0 0 auto;
+  overflow: hidden;
+  padding-top: 0.12em;
+  margin-top: -0.12em;
+  /* No crop — the word shows in full. line-height is 0.86, which is tighter
+     than the glyphs need, so this padding gives the descender on the y somewhere
+     to sit inside the box that also serves as the reveal mask. */
+  /* Pulls the baseline past the bottom of the page. The word is deliberately
+     cut here — the crop is the effect, so there is no descender padding and the
+     y is meant to run off the edge along with the rest of the baseline. */
+  margin-bottom: -0.19em;
+  /* Natural word lands at ~99% of the viewport; space-between takes the last
+     percent so it sits flush to both edges at any width. */
+  font-size: 26.4cqw;
+  letter-spacing: -0.025em;
+  line-height: 0.86;
+  pointer-events: auto;
+}
+.fw-letter-inner {
+  display: block;
+  /* Outline, not a fill — so the letters read as structure behind the copy.
+     The gradient adds light only along the lower third, where nothing overlaps
+     and the crop happens. */
+  -webkit-text-stroke: 1.5px rgba(234, 243, 240, 0.34);
+  background-image: linear-gradient(
+    180deg,
+    rgba(246, 251, 249, 0) 0%,
+    rgba(246, 251, 249, 0) 46%,
+    rgba(160, 214, 196, 0.16) 74%,
+    rgba(206, 240, 226, 0.5) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: transform 560ms cubic-bezier(0.16, 1, 0.3, 1), -webkit-text-stroke-color 340ms ease, background-image 340ms ease;
+}
+.footer-signature .fw-letter:hover .fw-letter-inner,
+.footer-signature[data-revealed] .fw-letter:hover .fw-letter-inner {
+  -webkit-text-stroke-color: rgba(255, 239, 179, 0.62);
+  transition-delay: 0ms;
+}
+
+/* -- The layer on top ------------------------------------------------------ */
+.footer-inner {
+  position: relative;
+  z-index: 2;
+  grid-area: 1 / 1;
+  width: var(--page);
+  margin-inline: auto;
+  /* The bottom padding is what sets the overlap, because the signature is
+     bottom-anchored in the same cell: less padding here pulls the whole content
+     layer further down the letterforms. At 245px the crossing hairline only
+     grazed the top edge of the type (1% in) and the layering did not read; this
+     lands it roughly a third of the way down, so the line visibly passes in
+     front of the letters and the meta sits on them. */
+  /* The low end of the bottom clamp is for phones specifically. There the word
+     is only ~97px tall against a 251px meta block, so a third-of-the-way
+     crossing is geometrically impossible; this at least lets the letterforms
+     rise into the base of the meta so the two planes still touch. */
+  padding-block: clamp(58px, 6.4vw, 96px) clamp(54px, 9.5vw, 150px);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  gap: clamp(40px, 5.5vw, 96px);
+  /* Tightened from 88px. With the disclaimer moved up under the email, the
+     columns now finish at similar heights and the gap before the meta line no
+     longer reads as a hole in the middle of the composition. */
+  padding-bottom: clamp(34px, 3.6vw, 52px);
+}
+/* Exaggerated hierarchy: this is the largest thing on the layer, and it is
+   still a fraction of the letterforms behind it. */
+.footer-statement {
+  margin: 0;
+  max-width: 15ch;
+  color: #f6fbf9;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(1.4rem, 2.4vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: -0.036em;
+  line-height: 1.12;
+}
+.footer-mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(20px, 2.4vw, 30px);
+  color: var(--yellow);
+  font-size: 0.92rem;
+  font-weight: 620;
+}
+.footer-mail span { position: relative; }
+.footer-mail span::after {
+  position: absolute;
+  right: 0;
+  bottom: -4px;
+  left: 0;
+  height: 1px;
+  background: currentcolor;
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.footer-mail svg { transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1); }
+.footer-mail:hover span::after { transform: scaleX(1); }
+.footer-mail:hover svg { transform: translate(3px, -3px); }
+
+.footer-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(16px, 2.2vw, 34px); align-self: start; }
+.footer-col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.footer-col-label { margin: 0 0 8px; color: rgba(234,243,240,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+.footer-col a, .footer-legal a { color: rgba(234,243,240,0.68); font-size: 0.79rem; line-height: 1.4; transition: color 260ms ease; }
+.footer-col a span, .footer-legal a span { position: relative; }
+.footer-col a span::after, .footer-legal a span::after {
+  position: absolute;
+  right: 0;
+  bottom: -3px;
+  left: 0;
+  height: 1px;
+  background: var(--yellow);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.footer-col a:hover, .footer-legal a:hover { color: #f6fbf9; }
+.footer-col a:hover span::after, .footer-legal a:hover span::after { transform: scaleX(1); }
+
+.footer-meta {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px clamp(22px, 3vw, 48px);
+  padding-top: clamp(18px, 2vw, 26px);
+  color: rgba(234,243,240,0.44);
+}
+/* The grid line that crosses the type. Full browser width, drawn in front of
+   the letterforms — the layering cue that ties the two planes together. */
+.footer-meta::before {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  background: rgba(234,243,240,0.16);
+  content: "";
+  transform: translateX(-50%);
+}
+.footer-copy { white-space: nowrap; }
+.footer-disclaimer { margin: clamp(24px, 2.8vw, 34px) 0 0; max-width: 32ch; color: rgba(234,243,240,0.42); font-size: 0.76rem; line-height: 1.6; }
+.footer-legal { display: flex; flex-wrap: wrap; gap: 10px clamp(16px, 2.2vw, 28px); margin: 0; padding: 0; list-style: none; }
+.footer-legal a { font-size: 0.75rem; }
+
+/* -- Reveal ---------------------------------------------------------------- */
+/* 135%: the mask box is a little taller than the glyph, so the letter has
+   slightly further to travel to clear it before the reveal. */
+.footer-signature[data-reveal="letters"] .fw-letter-inner { transform: translate3d(0, 135%, 0); }
+.footer-signature[data-revealed] .fw-letter-inner {
+  transform: translate3d(0, 0, 0);
+  transition: transform 1080ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i) * 66ms);
+}
 
 @keyframes hero-enter { from { opacity: 0; transform: translate3d(0, 18px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 @keyframes ambient-float-one { from { transform: translate3d(-8px, 5px, 0); } to { transform: translate3d(16px, -12px, 0); } }
@@ -2248,7 +2602,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   .nav-link, .nav-menu > button { padding-inline: 7px; font-size: 0.8rem; }
   .signin-link { display: none; }
   .workflow-list { grid-template-columns: repeat(4, 1fr); }
-  .footer-shell { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 860px) {
@@ -2314,7 +2668,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   .hero-dashboard-frame::after { width: 11%; height: 10%; background-size: 909% auto; }
   .point-grid { grid-template-columns: 1fr; }
   .walkthrough-band, .page-content > div:first-child { grid-template-columns: 1fr; gap: 42px; }
-  .footer-links { grid-template-columns: repeat(3, 1fr); }
+  .footer-nav { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 560px) {
@@ -2340,8 +2694,8 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   .workflow-list { grid-template-columns: repeat(2, 1fr); }
   .partner-band { width: 100%; padding: 54px 20px; border-radius: 0; }
   .partner-logos { flex-direction: column; }
-  .footer-links { grid-template-columns: repeat(2, 1fr); }
-  .footer-bottom { flex-direction: column; gap: 8px; }
+  .footer-nav { grid-template-columns: repeat(2, 1fr); }
+  .footer-meta { flex-direction: column; gap: 8px; }
 }
 
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -2505,14 +2859,9 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
   [data-reveal] .hx-word-inner { transform: none !important; }
   .ss-word { --lit: 1; }
-  /* Scrollytelling collapses to a plain sequence: first figure only, rail full. */
-  .hw-rail-fill { transform: scaleY(1) !important; }
-  .hw-figure-sticky { position: static; }
+  /* The stage panel still follows the open card — it just cuts rather than
+     crossfades, and the strip never advances on its own. */
   .hw-figure-stack { min-height: 0; }
-  .hw-figure { position: relative; inset: auto; opacity: 1; transform: none; }
-  .hw-figure + .hw-figure { display: none; }
-  .hw-mark span { background: var(--rail); }
-  .hw-step { padding-block: var(--s-block); }
 }
 
 @media (pointer: coarse) {
