@@ -6,7 +6,12 @@ export const revalidate = 3600;
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return sitePages.map((page) => ({ slug: page.path.split("/") }));
+  // "platform" has its own bespoke route at src/app/platform/page.jsx, which
+  // Next always matches first for that path — this only avoids the catch-all
+  // pre-rendering an unreachable duplicate at build time.
+  return sitePages
+    .filter((page) => page.path !== "platform")
+    .map((page) => ({ slug: page.path.split("/") }));
 }
 
 export async function generateMetadata({ params }) {

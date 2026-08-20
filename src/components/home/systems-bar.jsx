@@ -62,7 +62,7 @@ export function SystemsBar() {
       <div className="eg sb-head">
         <span className="eg-rail hx-mono">01</span>
         <p className="eg-head t-eyebrow-lg">
-          Most underwriting doesn't start with analysis. It starts with hunting for the file.
+          Most underwriting doesn&apos;t start with analysis. It starts with hunting for the file.
         </p>
       </div>
 

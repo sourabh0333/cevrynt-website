@@ -27,7 +27,7 @@ export async function GET() {
 
 Cevrynt is AI-assisted underwriting infrastructure for alternative lenders — merchant cash advance funders, alternative lenders and revenue-based finance companies, brokers/ISOs, and e-commerce merchant underwriting. Cevrynt is not a lender, does not make or guarantee funding offers, and does not replace lender judgment. Lenders retain final approval authority in every case.
 
-The underwriting workflow Cevrynt structures: Intake → Documents → Financials → Verification → Fraud → Policy → Report → Human Decision.
+The underwriting workflow Cevrynt structures: BUSINESS IDENTITY → CASH FLOW → EXISTING OBLIGATIONS → FILE INTEGRITY → POLICY FIT → Report → Human Decision.
 
 ${section("Platform", platformPages)}
 ${section("Product", productPages)}

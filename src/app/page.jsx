@@ -58,12 +58,12 @@ const productThumbs = {
 };
 
 const stageLabels = {
-  "product/document-intelligence": "Intake → Documents",
-  "product/bank-statement-analysis": "Financials",
-  "product/business-verification": "Verification",
-  "product/fraud-signals": "Fraud",
-  "product/policy-engine": "Policy",
-  "product/underwriting-report": "Report"
+  "product/document-intelligence": "BUSINESS IDENTITY",
+  "product/bank-statement-analysis": "CASH FLOW",
+  "product/business-verification": "EXISTING OBLIGATIONS",
+  "product/fraud-signals": "FILE INTEGRITY",
+  "product/policy-engine": "POLICY FIT",
+  "product/underwriting-report": "HUMAN REVIEW"
 };
 
 const products = sitePages
@@ -84,22 +84,22 @@ const problems = [
 
 /** The eight stages of one file. Swap `image`/`imageAlt` for a real export at 10:3. */
 const stages = [
-  { title: "Intake", body: "A deal arrives as whatever the broker sent — mixed PDFs, photos, and forms — and lands in one queue with nothing set aside.", href: "/platform", image: "/media/Steps/intake.png", imageAlt: "Intake view: mixed borrower files arriving and queued for review" },
-  { title: "Extract", body: "Fields are read off each document and keep pointing back to the page and line they came from, so nothing is retyped.", href: "/product/document-intelligence", image: "/media/Steps/Cevrynt Extract.png", imageWidth: 1600, imageHeight: 760, canvas: "#2a4742", imageAlt: "Extract view: values read from the original bank statement into normalized underwriting fields, each keeping a page and line reference back to its source" },
-  { title: "Analysis", body: "Deposits, balances, cash-flow rhythm, and transaction patterns are read as one view instead of six spreadsheets.", href: "/product/bank-statement-analysis", image: "/media/Steps/analysis.png", imageWidth: 1080, imageHeight: 850, canvas: "#0e2d2b", imageAlt: "Financial analysis view: six bank statements unified into one cash-flow rhythm, transaction pattern and quality read" },
-  { title: "KYB/KYC", body: "Business identity, entity standing, and officer records are checked against what the application actually claims.", href: "/product/business-verification", image: "/media/Steps/KYB KYC.png", imageAlt: "Verification view: application record set against the verified record" },
-  { title: "Fraud Detection", body: "Document integrity, duplicate submissions, and conflicting signals are raised for a person to resolve, never auto-declined.", href: "/product/fraud-signals", image: "/media/Steps/Fraud Detection.png", imageAlt: "Fraud view: signals converging with one raised for a reviewer to resolve" },
-  { title: "Policy Engine", body: "Your own review criteria are applied to the deal, with exceptions and documented overrides kept visible rather than buried.", href: "/product/policy-engine", image: "/media/Steps/Policy Engine.png", imageAlt: "Policy view: lender criteria applied with an exception and a recorded override" },
-  { title: "Reanalysis", body: "New statements or a corrected document re-run the file, and whatever moved since the last pass is called out.", href: "/platform", image: "/media/Steps/Reanalysis.png", imageAlt: "Reanalysis view: the file re-run against new evidence with changes called out" },
-  { title: "Deal Memo", body: "Findings, sources, notes, and policy outcomes arrive as one memo — and the final call stays with your team.", href: "/product/underwriting-report", image: "/media/placeholder/stage-deal-memo.webp", imageAlt: "Deal memo view: findings assembled with their evidence attached" },
+  { title: "Intake", body: "Whatever arrives — applications, statements, IDs, agreements or supporting files — lands against the same deal. Cevrynt keeps the package together before underwriting begins.", href: "/platform", image: "/media/Steps/intake.png", imageAlt: "Intake view: mixed borrower files arriving and queued for review" },
+  { title: "Extract", body: "The file is read and structured into the fields underwriting actually needs. Names, dates, balances, deposits and other key values stay linked to the page they came from.", href: "/product/document-intelligence", image: "/media/Steps/Cevrynt Extract.png", imageWidth: 1600, imageHeight: 760, canvas: "#2a4742", imageAlt: "Extract view: values read from the original bank statement into normalized underwriting fields, each keeping a page and line reference back to its source" },
+  { title: "Analysis", body: "Bank activity becomes something an underwriter can reason through: revenue behaviour, cash flow, negative days, unusual deposits, existing obligations and the patterns behind the numbers.", href: "/product/bank-statement-analysis", image: "/media/Steps/analysis.png", imageWidth: 1080, imageHeight: 850, canvas: "#0e2d2b", imageAlt: "Financial analysis view: six bank statements unified into one cash-flow rhythm, transaction pattern and quality read" },
+  { title: "KYB/KYC", body: "What the application says about the business and its people is checked against available identity, entity and verification evidence. Differences are surfaced instead of quietly reconciled.", href: "/product/business-verification", image: "/media/Steps/KYB KYC.png", imageAlt: "Verification view: application record set against the verified record" },
+  { title: "Fraud Detection", body: "Cevrynt looks for things worth a second look — altered documents, duplicate submissions, conflicting details and signals that do not line up across the file. It flags the issue; your team makes the call.", href: "/product/fraud-signals", image: "/media/Steps/Fraud Detection.png", imageAlt: "Fraud view: signals converging with one raised for a reviewer to resolve" },
+  { title: "Policy Engine", body: "Your underwriting rules are applied to the deal as written — including limits, conditions and exceptions. When something falls outside policy, the reason stays visible rather than disappearing into a score.", href: "/product/policy-engine", image: "/media/Steps/Policy Engine.png", imageAlt: "Policy view: lender criteria applied with an exception and a recorded override" },
+  { title: "Reanalysis", body: "A corrected statement or newly received document should not mean starting again. Cevrynt reruns the affected analysis and shows what changed from the previous review.", href: "/platform", image: "/media/Steps/Reanalysis.png", imageAlt: "Reanalysis view: the file re-run against new evidence with changes called out" },
+  { title: "Deal Memo", body: "The important findings, supporting evidence, verification results, policy outcomes and reviewer notes come together in one record — ready for the underwriter’s final decision.", href: "/product/underwriting-report", image: "/media/Steps/Deal Memo.png", imageAlt: "Deal memo view: findings assembled with their evidence attached" },
 ];
 
 const benefits = [
   {
     label: "Outcome 01",
-    title: "Stop re-reading the same bank statement three times.",
-    body: "Statement activity is structured once, then stays structured for everyone who touches the file afterwards.",
-    points: ["Deposits, balances, and cash-flow rhythm in one view", "Negative days and unusual patterns surfaced, not buried", "Every figure still linked to the page it came from"],
+    title: "Read the bank statement once. Keep the analysis for everyone.",
+    body: "Cevrynt structures bank statement activity at the deal level, so the next reviewer does not have to reconstruct deposits, balances and cash-flow behaviour from the original PDFs again.",
+    points: ["Deposits, balances, negative days and cash-flow patterns in one view","Unusual activity surfaced with the underlying transaction or statement", "Every important figure traceable back to its original source"],
     href: "/product/bank-statement-analysis",
     linkLabel: "Bank statement analysis",
     figure: "financials",
@@ -109,9 +109,9 @@ const benefits = [
   },
   {
     label: "Outcome 02",
-    title: "Find the conflict before the funder does.",
-    body: "Identity, entity, and document signals are checked against the file, and disagreements are raised for a person to resolve rather than silently scored.",
-    points: ["Entity and officer records compared to the application", "Document integrity and duplicate submissions flagged", "Nothing auto-declined on a signal alone"],
+    title: "Catch the mismatch before it becomes someone else's problem.",
+    body: "Application details, business records, identity checks and document signals are compared while the file is being reviewed. When something does not line up, Cevrynt shows the conflict instead of quietly smoothing it over.",
+    points: ["Business and officer records checked against the application", "Duplicate, conflicting and suspicious document signals surfaced", "KYB/KYC and fraud findings stay visible for human review"],
     href: "/product/fraud-signals",
     linkLabel: "Fraud signals",
     figure: "verification",
@@ -121,9 +121,9 @@ const benefits = [
   },
   {
     label: "Outcome 03",
-    title: "Hand the next reviewer a decision they can defend.",
-    body: "Findings, sources, notes, and policy outcomes arrive as one review that can be retraced months later by someone who wasn't in the room.",
-    points: ["Every finding linked to supporting evidence", "Exceptions and overrides recorded, not hidden", "Final approve, decline, or counter stays with your team"],
+    title: "Leave the next reviewer the reason — not just the result.",
+    body: "An underwriting decision should carry more than an approve, decline or counter. Cevrynt keeps the findings, source evidence, policy results and reviewer judgment together in the same deal record.",
+    points: ["Findings linked directly to supporting evidence", "Exceptions, notes and human overrides preserved with the file", "Past decisions can be retraced without rebuilding the underwriting"],
     href: "/product/underwriting-report",
     linkLabel: "Underwriting report",
     figure: "report",
@@ -133,8 +133,8 @@ const benefits = [
   },
   {
     label: "Outcome 04",
-    title: "Settle the policy question before the meeting starts.",
-    body: "Every deal is measured against your own criteria, with exceptions raised and overrides recorded, so the conversation begins from the same set of facts.",
+    title: "Know where the deal breaks policy before the credit conversation starts.",
+    body: "Cevrynt evaluates the file against your own MCA or SMB lending criteria, so the team can see what passed, what failed and what needs judgment before discussing the deal.",
     points: ["Your thresholds, not a generic scorecard", "Exceptions surfaced with the reasoning attached", "Overrides recorded against the file, not lost in chat"],
     href: "/product/policy-engine",
     linkLabel: "Policy engine",
@@ -366,8 +366,8 @@ export default function Home() {
           index="05"
           id="benefits-heading"
           kicker="What changes"
-          heading="Outcomes underwriting teams can feel by the second file."
-          lede="Not a feature list. These are the three things reviewers notice first."
+          heading="The difference shows up in the work your underwriters stop repeating."
+          lede="For MCA funders and alternative lenders, the payoff is practical: less re-reading, earlier conflict detection, more consistent policy review, and a decision record that still makes sense months later."
         />
         <div className="eg bs-body">
           <div className="bs-full">
@@ -375,7 +375,7 @@ export default function Home() {
           </div>
         </div>
         <div className="eg sec-cta">
-          <p className="eg-head t-lede">See these run against your own files.</p>
+          <p className="eg-head t-lede">See how Cevrynt handles your own underwriting files.</p>
           <a className="inline-cta" href={calendlyUrl} target="_blank" rel="noreferrer">
             Book a walkthrough <ArrowUpRight />
           </a>
@@ -387,9 +387,9 @@ export default function Home() {
         <SectionHead
           index="06"
           id="capabilities-heading"
-          kicker="The platform"
-          heading="One route from intake to a decision your team owns."
-          lede="Six capabilities, in the order a file moves through them."
+          kicker="THE UNDERWRITING VIEW"
+          heading="Six questions every deal should answer before your team makes the call."
+          lede="Cevrynt brings the answers into one review — financial behaviour, business identity, existing obligations, file integrity and policy fit — with the evidence behind each one."
         />
         <div className="eg pf-body">
           <div className="pf-full">
@@ -404,8 +404,8 @@ export default function Home() {
           index="07"
           id="worked-heading"
           kicker="A worked example"
-          heading="One deal, and the record it leaves behind."
-          lede="The same eight stages, applied to a single illustrative file. This record is the product."
+          heading="A deal should leave behind more than a status."
+          lede="Here's one illustrative MCA underwriting file after Cevrynt has worked through it — the numbers, conflicts, policy exceptions and source evidence are still there when it reaches the underwriter."
           invert
         />
         <ParallaxLayers />

@@ -205,7 +205,7 @@ export function RoadmapTrack({ stations }) {
 
       <p className="rd-end hx-mono">
         <span className="rd-end-dot" aria-hidden="true" />
-        Ends with a human decision — always your team
+        EVERY ANSWER STAYS CONNECTED TO THE EVIDENCE BEHIND IT
       </p>
     </div>
   );

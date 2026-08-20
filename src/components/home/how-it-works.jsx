@@ -155,12 +155,11 @@ export function HowItWorks({ deal, stages }) {
         <div className="eg-head">
           <p className="hx-kicker">How it works</p>
           <h2 className="t-display-2" id="how-heading">
-            One file, walked from intake to a decision that can be retraced.
+            One deal. Eight steps. Nothing important gets lost between them.
           </h2>
         </div>
         <p className="eg-lede t-lede">
-          Each stage hands the next one structured evidence instead of a fresh pile of PDFs. Nothing is
-          discarded along the way.
+          A file moves through Cevrynt as one continuous underwriting record — from the documents that came in to the evidence, checks, policy calls and final memo your team reviews.
         </p>
       </div>
 

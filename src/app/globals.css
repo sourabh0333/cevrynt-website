@@ -106,8 +106,8 @@ body:has(.page-hero) .site-header { background: transparent; }
   content: "";
   opacity: 0;
   transition: opacity 320ms ease;
-  /* Both of these animate paint properties — background-position and
-     background-color — across the fixed bar that sits over the hero. This
+  /* Both of these animate paint properties â background-position and
+     background-color â across the fixed bar that sits over the hero. This
      surface is invisible until the header compacts, but opacity:0 does not stop
      an animation, so they were repainting continuously behind the hero for
      nothing. Paused until the bar is actually shown; identical once it is. */
@@ -375,7 +375,7 @@ body:has(.page-hero) .site-header { background: transparent; }
   border-bottom-left-radius: 64px;
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--hero-bottom-fold)), calc(100% - var(--hero-bottom-fold)) 100%, 0 100%);
   /* Was `animation: hero-tone-shift 16s infinite`, which animated
-     background-color across the whole 957px hero forever — a full repaint every
+     background-color across the whole 957px hero forever â a full repaint every
      frame for a tone shift the aurora below now carries for free. */
   background-color: var(--hero-chrome);
 }
@@ -385,7 +385,7 @@ body:has(.page-hero) .site-header { background: transparent; }
    Three pre-painted gradient fields that only ever move. The gradients
    themselves never animate: the browser rasterises each layer once and then
    moves it with transform, which is compositor work rather than paint work.
-   That is the whole difference between this and what it replaced — a shader
+   That is the whole difference between this and what it replaced â a shader
    plus a stack of layers animating background-position and background-color
    across the full hero, with a requestAnimationFrame pointer glow on top.
    ========================================================================== */
@@ -413,7 +413,7 @@ body:has(.page-hero) .site-header { background: transparent; }
   animation: hero-drift-b 32s ease-in-out infinite alternate;
 }
 /* A whisper of the brand secondary, low enough to read as light rather than
-   colour — this is what keeps the band from going flat green. */
+   colour â this is what keeps the band from going flat green. */
 .hero-aurora-c {
   bottom: -32%;
   left: 20%;
@@ -516,7 +516,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .walkthrough-band p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
 
 /* ==========================================================================
-   Homepage sections — the evidence chain
+   Homepage sections â the evidence chain
    One continuous review pass: light review-surface bands alternate with
    deep-ink system bands, threaded by a hairline rail.
    ========================================================================== */
@@ -560,7 +560,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 
 /* ==========================================================================
-   Homepage — editorial grid, one rhythm, blended bands
+   Homepage â editorial grid, one rhythm, blended bands
    Every section places content on the same 12-column lines: the index sits in
    column 1, headings start at column 2, ledes at column 8. That shared
    alignment is what makes the sections read as one page.
@@ -717,7 +717,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 /* The stage list sits beside the stage panel rather than under it. A column is
    taller than it is wide, which is far closer to the shape a product
-   screenshot actually comes in — the old full-width band was an ultrawide
+   screenshot actually comes in â the old full-width band was an ultrawide
    letterbox no real export could fill.
    Base (no JS) is a plain stack with every stage expanded and readable;
    `.is-ready` upgrades it to the accordion. */
@@ -770,7 +770,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 /* The countdown is a ring drawn around the open card's number, so the timing
    lives on the step it belongs to instead of on a separate control. Hovering
-   the row freezes the sweep in place — the ring is the state indicator. */
+   the row freezes the sweep in place â the ring is the state indicator. */
 .hwc-mark { position: relative; display: grid; width: 26px; height: 26px; flex: 0 0 26px; place-items: center; }
 .hwc-dial { position: absolute; inset: 0; width: 26px; height: 26px; transform: rotate(-90deg); }
 .hwc-dial circle { fill: none; stroke-width: 2; }
@@ -779,7 +779,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 @keyframes hwc-dial { from { stroke-dashoffset: 87.96; } to { stroke-dashoffset: 0; } }
 
 /* Accordion mode. The panel's own ratio sets the row height, and the list
-   stretches to match it — so the box is exactly the shape of the export and no
+   stretches to match it â so the box is exactly the shape of the export and no
    stage sits in bands. The floor stops eight rows being squeezed flat on a
    narrower screen, where the picture is shorter than the list needs. */
 .hw.is-ready .hw-strip {
@@ -800,7 +800,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .hw.is-ready .hwc.is-live { min-height: 208px; background: var(--soft-blue); }
 .hw.is-ready .hwc:not(.is-live):hover { background: var(--background); }
 
-/* `minmax(0, …)` because a bare `0fr` track still keeps its automatic minimum,
+/* `minmax(0, â¦)` because a bare `0fr` track still keeps its automatic minimum,
    which the panel's own padding would hold open. */
 .hw.is-ready .hwc-panel { display: grid; overflow: hidden; grid-template-rows: minmax(0, 0fr); transition: grid-template-rows 640ms cubic-bezier(0.22, 1, 0.36, 1); }
 .hw.is-ready .hwc.is-live .hwc-panel { grid-template-rows: minmax(0, 1fr); }
@@ -817,12 +817,12 @@ body:has(.page-hero) .site-header { background: transparent; }
    list stops sharing the panel's height and each row sizes to its content. */
 @media (max-width: 1200px) {
   /* Eight stacked rows are taller than a phone screen, so the stage panel
-     pins itself and the list scrolls beneath it — opening the last step
+     pins itself and the list scrolls beneath it â opening the last step
      still leaves its view on screen. */
   .hw-stage-col { position: sticky; z-index: 1; top: 84px; }
   .hw-stage-col, .hw-strip { grid-column: 2 / span 11; grid-row: auto; }
   /* Centring only makes sense against the list beside it. Once stacked, the
-     column is a flex item and `center` would shrink it to its content — which
+     column is a flex item and `center` would shrink it to its content â which
      is nothing, because the figures are absolutely positioned. */
   .hw-stage-col { align-self: stretch; }
   .hw-strip { margin-top: clamp(12px, 1.4vw, 18px); }
@@ -1042,7 +1042,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .band-deep .st-meter-fill { background: var(--yellow); }
 
 /* ==========================================================================
-   09 Lender control — the boundary, drawn
+   09 Lender control â the boundary, drawn
    The section is about a line Cevrynt does not cross, so the layout is that
    line. Machine side reads quiet, authority side reads solid; pairs slide in
    from their own side and stop at the divider.
@@ -1085,7 +1085,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .cb-foot { margin: clamp(26px, 3vw, 40px) 0 0; color: var(--label); }
 
 /* ==========================================================================
-   10 Cevrynt × SHOPLINE — two lanes, one question
+   10 Cevrynt Ã SHOPLINE â two lanes, one question
    The heading promises "two teams, one question", so the section draws that:
    a lane from each side merging into a lit node holding the question. Logos are
    small equal chips rather than a large plate, which previously dominated the
@@ -1095,7 +1095,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 /* The middle track must be exactly as wide as the SVG in it. It was pinned at
    130px while .pq-wires grew to 170px, so the paths overflowed their column and
    the two lanes converged 60-odd pixels past the node they are supposed to
-   arrive at — the lines ended in empty space beside the question. */
+   arrive at â the lines ended in empty space beside the question. */
 .pq-merge { display: grid; grid-template-columns: minmax(0, 0.86fr) clamp(110px, 12vw, 170px) minmax(0, 1.14fr); align-items: center; margin-top: clamp(38px, 6vw, 78px); }
 
 .pq-lanes { display: flex; flex-direction: column; gap: clamp(44px, 6.5vw, 88px); }
@@ -1103,8 +1103,8 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 /* Both marks are dark artwork on transparent, so they need light behind them on
    this band. A soft fade-out lens read as a smudge against a page built from
-   flat surfaces, so this is a plain cool-white plate in the site's own token —
-   the same surface the light bands use — sized between the original chip and
+   flat surfaces, so this is a plain cool-white plate in the site's own token â
+   the same surface the light bands use â sized between the original chip and
    the oversized version it replaced. */
 .pq-mark {
   position: relative;
@@ -1143,7 +1143,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .pq-node {
   position: absolute;
   top: 50%;
-  /* Half its own width, so the node centres exactly on this box's left edge —
+  /* Half its own width, so the node centres exactly on this box's left edge â
      which is where the wires now terminate. */
   left: -15px;
   display: grid;
@@ -1227,7 +1227,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 
 /* ==========================================================================
-   11 Founder-led pilot — progress track
+   11 Founder-led pilot â progress track
    A visible track with completion feedback, because this section's job is to
    make committing feel low-risk. Markers are plain language, not numbers.
    ========================================================================== */
@@ -1283,7 +1283,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 :root { interpolate-size: allow-keywords; }
 
 /* ==========================================================================
-   12 Resources — four lines of type
+   12 Resources â four lines of type
    No images, no frames, no rules. Earlier versions put pictures in the layout
    and cost a screen of height for four links, with the frames reading as
    boxes. Interaction is carried by a fill that wipes across the hovered title
@@ -1322,7 +1322,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 /* The sweep: a two-stop gradient slid behind the glyphs. No duplicated text, so
    nothing is announced twice and the line can never reflow. Guarded, because
-   the technique needs transparent text to show the fill — without support that
+   the technique needs transparent text to show the fill â without support that
    would leave the title invisible rather than merely unanimated. */
 @supports ((background-clip: text) or (-webkit-background-clip: text)) {
   .rx-title {
@@ -1361,9 +1361,9 @@ body:has(.page-hero) .site-header { background: transparent; }
 .rx-row:hover .rx-cue { opacity: 1; transform: none; }
 
 /* ==========================================================================
-   13 Before you ask — one lit rail
+   13 Before you ask â one lit rail
    A continuous hairline runs down the left of the list and the open question
-   lights its own segment of it. No numbers, no per-row dividers, no panels —
+   lights its own segment of it. No numbers, no per-row dividers, no panels â
    state is read from a single device instead of four competing ones.
    ========================================================================== */
 .ob-main { grid-column: 2 / span 11; }
@@ -1458,7 +1458,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 .ob-item[open]::details-content { block-size: auto; }
 
-/* Keep reading — one horizontal row underneath, which is what lets the
+/* Keep reading â one horizontal row underneath, which is what lets the
    questions run full width and removes the old two-column misalignment. */
 .ob-more {
   display: flex;
@@ -1792,7 +1792,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 
 /* ==========================================================================
-   Outcomes — sticky card stack
+   Outcomes â sticky card stack
    Each card pins slightly lower than the last so the deck visibly stacks.
    Backgrounds are opaque on purpose: a translucent card shows the deck through.
    ========================================================================== */
@@ -1843,10 +1843,10 @@ body:has(.page-hero) .site-header { background: transparent; }
 @media (max-width: 860px) {
   .bs-full, .rmx-full { grid-column: 1; }
   .br-card { position: static; }
-  /* The 200–380px gap is runway for the sticky deck: it is the distance each
+  /* The 200â380px gap is runway for the sticky deck: it is the distance each
      card holds while the next one climbs over it. Sticky is switched off here,
      so that runway stopped being scroll distance and became literal empty
-     space — a third of a screen between every card, which is why they arrived
+     space â a third of a screen between every card, which is why they arrived
      one at a time with nothing in between. Static cards only need a normal gap.
      Deliberately scoped to this breakpoint; the desktop deck is unchanged. */
   .br-card + .br-card { margin-top: clamp(18px, 5vw, 30px); }
@@ -1859,7 +1859,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 
 /* ==========================================================================
-   Stacking decks — shared rules
+   Stacking decks â shared rules
    Cards must be OPAQUE. A translucent card lets the deck beneath show through,
    which is what made the problem cards read as faint and muddled.
    Both decks also need trailing runway, or every card releases at once when the
@@ -1879,7 +1879,7 @@ body:has(.page-hero) .site-header { background: transparent; }
   color: var(--label);
 }
 /* The deal line, the stage name and the disclaimer each sit on the panel's own
-   light surface, above and below the picture — not over it. They are part of
+   light surface, above and below the picture â not over it. They are part of
    the panel's chrome, and their height is what makes the panel taller than the
    picture alone. */
 .hw-panel-top { padding: 15px 22px 0; }
@@ -1900,10 +1900,10 @@ body:has(.page-hero) .site-header { background: transparent; }
 /* Giving the frame an explicit width AND height takes `aspect-ratio` out of the
    sizing entirely. That matters: with only a max-height, the ratio transfers
    the cap into a max-width too, so a short window did not merely shorten the
-   frame — it narrowed it, stranding the shot in thick side bands. The frame now
+   frame â it narrowed it, stranding the shot in thick side bands. The frame now
    always spans the panel and crops from the bottom instead.
    The height is whatever is left once the header and the card strip have taken
-   theirs, up to 660px — the point where a 2.11:1 export fills the band. */
+   theirs, up to 660px â the point where a 2.11:1 export fills the band. */
 /* The panel is exactly the shape of a step export, so the picture fills it
    edge to edge with nothing left over above or below. Everything inside
    inherits that height. */
@@ -1941,7 +1941,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 
 
 /* ==========================================================================
-   06 Platform — serpentine roadmap
+   06 Platform â serpentine roadmap
    Every step visible at once: three across, a U-turn, three back. The connector
    is drawn by scroll; nothing depends on hover.
    ========================================================================== */
@@ -1991,7 +1991,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .rd-card:hover .rd-cue svg { transform: translate(3px, -3px); }
 
 .rd-end { display: flex; align-items: center; gap: 11px; margin: clamp(34px, 4vw, 56px) 0 0; color: var(--rail); text-transform: uppercase; letter-spacing: 0.12em; }
-.rd-end-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 4px rgba(255, 239, 179, 0.4); }
+.rd-end-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rail); box-shadow: 0 0 0 4px rgba(255, 239, 179, 0.4); }
 
 /* -- 02 Problem: connected row ---------------------------------------------
    Side by side on the same columns as every other section. One hairline runs
@@ -2046,7 +2046,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 .pb-text { margin: 0; max-width: 42ch; color: rgba(234, 243, 240, 0.7); font-size: 0.95rem; line-height: 1.68; }
 
 /* -- 08 Why Cevrynt: editorial definition list ------------------------------
-   A magazine spread rather than a card grid — the principle set at display
+   A magazine spread rather than a card grid â the principle set at display
    size, its explanation in a narrow column beside it. The type system carries
    it: serif display term, mono tabular index, text face for the body.
    ------------------------------------------------------------------------ */
@@ -2328,12 +2328,12 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 .walkthrough-note { font-size: 0.82rem; color: var(--muted); opacity: 0.6; }
 
 /* ==========================================================================
-   Footer — the name as architecture
+   Footer â the name as architecture
    The wordmark is not below the content, it is behind it. Both occupy the same
    grid cell, so the word fills the footer at browser width while the statement,
    navigation and meta sit on their own layer on top. Drawn as a hairline
-   outline rather than a fill — the device the problem section already uses for
-   its numerals — with fill appearing only along the lower edge, so the crop at
+   outline rather than a fill â the device the problem section already uses for
+   its numerals â with fill appearing only along the lower edge, so the crop at
    the page edge lands on the brightest part.
    ========================================================================== */
 .site-footer {
@@ -2410,11 +2410,11 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   overflow: hidden;
   padding-top: 0.12em;
   margin-top: -0.12em;
-  /* No crop — the word shows in full. line-height is 0.86, which is tighter
+  /* No crop â the word shows in full. line-height is 0.86, which is tighter
      than the glyphs need, so this padding gives the descender on the y somewhere
      to sit inside the box that also serves as the reveal mask. */
   /* Pulls the baseline past the bottom of the page. The word is deliberately
-     cut here — the crop is the effect, so there is no descender padding and the
+     cut here â the crop is the effect, so there is no descender padding and the
      y is meant to run off the edge along with the rest of the baseline. */
   margin-bottom: -0.19em;
   /* Natural word lands at ~99% of the viewport; space-between takes the last
@@ -2426,7 +2426,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 }
 .fw-letter-inner {
   display: block;
-  /* Outline, not a fill — so the letters read as structure behind the copy.
+  /* Outline, not a fill â so the letters read as structure behind the copy.
      The gradient adds light only along the lower third, where nothing overlaps
      and the crop happens. */
   -webkit-text-stroke: 1.5px rgba(234, 243, 240, 0.34);
@@ -2546,7 +2546,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   color: rgba(234,243,240,0.44);
 }
 /* The grid line that crosses the type. Full browser width, drawn in front of
-   the letterforms — the layering cue that ties the two planes together. */
+   the letterforms â the layering cue that ties the two planes together. */
 .footer-meta::before {
   position: absolute;
   top: 0;
@@ -2808,7 +2808,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 .faq-list summary { cursor: pointer; color: var(--ink); font-weight: 620; font-size: 0.98rem; list-style: none; }
 .faq-list summary::-webkit-details-marker { display: none; }
 .faq-list summary::after { float: right; content: "+"; color: var(--muted); font-weight: 400; }
-.faq-list details[open] summary::after { content: "–"; }
+.faq-list details[open] summary::after { content: "â"; }
 .faq-list p { margin: 12px 0 0; color: var(--muted); line-height: 1.65; }
 
 .article-header { padding: 170px 0 0; }
@@ -2859,7 +2859,7 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
   [data-reveal] { opacity: 1 !important; transform: none !important; }
   [data-reveal] .hx-word-inner { transform: none !important; }
   .ss-word { --lit: 1; }
-  /* The stage panel still follows the open card — it just cuts rather than
+  /* The stage panel still follows the open card â it just cuts rather than
      crossfades, and the strip never advances on its own. */
   .hw-figure-stack { min-height: 0; }
 }
@@ -2945,4 +2945,504 @@ body:has(.article-header) .nav-use-cases a:hover { color: var(--ink); }
   body:has(.article-header) .mobile-trigger { border-color: var(--border); color: var(--ink); }
   body:has(.blog-page-intro) .site-header[data-compact] .mobile-trigger,
   body:has(.article-header) .site-header[data-compact] .mobile-trigger { background: var(--surface); border-color: var(--border); color: var(--ink); box-shadow: 0 8px 24px rgba(1,62,55,0.1); }
+}
+
+
+/* ==========================================================================
+   Platform page
+   Namespaced `plt-` for sections and short codes per component, all verified
+   unique against the rest of this sheet. Reuses the .eg grid, type scale,
+   band surfaces and spacing tokens â no parallel layout system.
+   ========================================================================== */
+
+/* -- 01 The four layers ------------------------------------------------------
+   A stack, not a track: this page is about what the system is composed of,
+   while the homepage covers the order a deal moves through. The slabs are set
+   in deep green against the light band so they read as solid pieces of the
+   system rather than as cards.
+
+   The resting state below is the readable one â full spacing, no transform.
+   The fanning effect is layered on top by GSAP only when motion is welcome,
+   so no-JS and reduced-motion readers get four legible slabs. */
+.ly {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.6vw, 22px);
+  margin: var(--s-block) 0 0;
+  padding: 0;
+  list-style: none;
+  perspective: 1400px;
+}
+.ly-plane {
+  display: grid;
+  grid-template-columns: clamp(44px, 5vw, 68px) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: clamp(12px, 1.6vw, 24px);
+  row-gap: 6px;
+  border-radius: 18px;
+  padding: clamp(22px, 2.4vw, 34px) clamp(22px, 2.6vw, 38px);
+  background: var(--ink-deeper);
+  color: #eaf3f0;
+  /* Each slab composites on its own plane so the fan stays smooth. */
+  transform-origin: center top;
+  will-change: transform;
+}
+/* Only while the deck is fanning does depth need faking; a flat resting stack
+   with shadows on every slab would read as clutter. */
+.ly[data-stacked] .ly-plane { box-shadow: 0 -1px 0 rgba(234, 243, 240, 0.12), 0 24px 60px rgba(1, 31, 28, 0.28); }
+
+.ly-num { grid-row: 1 / span 2; align-self: start; padding-top: 0.35em; color: var(--yellow); font-size: 0.72rem; letter-spacing: 0.14em; }
+.ly-name {
+  margin: 0;
+  color: #f6fbf9;
+  font-size: clamp(1.5rem, 2.6vw, 2.15rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+.ly-q { margin: 0; color: var(--yellow); font-size: 0.86rem; letter-spacing: -0.005em; }
+.ly-body { grid-column: 2; margin: 10px 0 0; max-width: 66ch; color: rgba(234, 243, 240, 0.62); font-size: 0.94rem; line-height: 1.62; }
+
+@media (max-width: 860px) {
+  .ly-plane { grid-template-columns: minmax(0, 1fr); row-gap: 4px; }
+  .ly-num { grid-row: auto; padding-top: 0; }
+  .ly-body { grid-column: 1; }
+}
+
+
+/* -- 02 Evidence layer: values, and what is underneath them ------------------
+   Built in the layer stack's vocabulary — solid planes, one large typographic
+   element each, one physical transformation — but inverted. 01 is deep slabs
+   on the light band; this is paper-white planes on the deep one, which is what
+   makes the two read as a pair rather than as a repeat.
+
+   The planes are meant to read as paper. That is the job a photograph was
+   being asked to do here, and abstracting it keeps the section explaining the
+   claim rather than decorating the band.
+
+   Resting state is open: the source strip is unclipped and every citation is
+   legible without JS or with reduced motion. */
+.pv { display: flex; flex-direction: column; gap: clamp(16px, 2vw, 26px); margin: var(--s-block) 0 0; padding: 0; list-style: none; }
+.pv-item { position: relative; }
+
+/* The paper. */
+.pv-card {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: clamp(44px, 5vw, 68px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(14px, 2vw, 30px);
+  border-radius: 16px;
+  padding: clamp(24px, 2.8vw, 38px) clamp(22px, 2.6vw, 38px);
+  background: var(--surface);
+  /* Sits above its own source strip, so the lift reads as a lift. */
+  box-shadow: 0 18px 46px rgba(1, 20, 18, 0.44);
+  will-change: transform;
+}
+.pv-index { color: var(--label); font-size: 0.7rem; letter-spacing: 0.14em; }
+.pv-field { color: var(--muted); font-size: clamp(0.9rem, 1.2vw, 1.02rem); letter-spacing: -0.008em; }
+.pv-value {
+  color: var(--ink);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(1.7rem, 3.4vw, 2.9rem);
+  font-weight: 620;
+  letter-spacing: -0.036em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* What the value was read from, unfolding beneath the paper. Height is always
+   reserved and only the clip changes, so nothing reflows as it opens. */
+.pv-source {
+  position: relative;
+  z-index: 0;
+  margin-top: -14px;
+  border-radius: 0 0 16px 16px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(234, 243, 240, 0.14);
+  border-top: none;
+}
+.pv-source-in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px clamp(16px, 2vw, 28px);
+  padding: calc(14px + clamp(14px, 1.6vw, 20px)) clamp(22px, 2.6vw, 38px) clamp(16px, 1.8vw, 22px);
+}
+.pv-source-k { grid-column: 1; color: var(--yellow); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.pv-source-doc { grid-column: 1; margin: 0; color: rgba(234, 243, 240, 0.74); font-size: 0.86rem; line-height: 1.5; }
+.pv-quote {
+  grid-column: 1;
+  margin: 4px 0 0;
+  color: rgba(234, 243, 240, 0.5);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+.pv-conf {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  align-self: center;
+  border: 1px solid rgba(255, 239, 179, 0.36);
+  border-radius: 999px;
+  padding: 5px 12px;
+  color: var(--yellow);
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  /* Single column here: nothing occupies a second track once the value spans,
+     and an auto track collapses to 0 while still paying for its gap. */
+  .pv-card { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .pv-index { grid-column: 1; }
+  .pv-field { grid-column: 1; }
+  .pv-value { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+  .pv-source-in { grid-template-columns: minmax(0, 1fr); }
+  .pv-conf { grid-column: 1; grid-row: auto; justify-self: start; margin-top: 10px; }
+}
+
+
+
+/* -- 03 Analysis layer: the tree that will not close -------------------------
+   The branching idea from the previous version, rebuilt in the layer stack's
+   vocabulary: few, large, solid nodes rather than twelve small cards in two
+   columns. Top to bottom, so the shape can carry the argument — one root fans
+   into three families, the families converge on a single decision, and that
+   last node is an open dashed outline that never fills.
+
+   Edges are measured from real node positions and rebuilt on resize. Below the
+   breakpoint they are dropped and the same markup reads as a plain outline. */
+.tr { margin-top: var(--s-block); }
+.tr-board { display: grid; justify-items: center; gap: clamp(26px, 3.4vw, 52px); }
+.tr-wires { display: none; }
+.tr[data-tree="on"] .tr-board { position: relative; }
+.tr[data-tree="on"] .tr-wires { position: absolute; z-index: 0; inset: 0; display: block; overflow: visible; pointer-events: none; }
+.tr-edge { stroke: var(--rail); stroke-width: 1.2; opacity: 0.4; }
+/* The converging half is drawn lighter — it is heading somewhere that stays
+   deliberately unfinished. */
+.tr-edge-end { stroke-dasharray: 4 5; opacity: 0.3; }
+
+.tr-root, .tr-decision, .tr-family { position: relative; z-index: 1; }
+
+.tr-root {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  border-radius: 16px;
+  padding: clamp(18px, 2vw, 26px) clamp(26px, 3vw, 40px);
+  background: var(--ink-deeper);
+  text-align: center;
+}
+.tr-root-k { color: var(--yellow); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.tr-root-name { color: #f6fbf9; font-size: clamp(1.1rem, 1.7vw, 1.44rem); font-weight: 620; letter-spacing: -0.024em; }
+
+.tr-families {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 26px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tr-family {
+  min-width: 0;
+  border-radius: 16px;
+  padding: clamp(20px, 2.2vw, 30px);
+  background: var(--ink-deeper);
+}
+.tr-family-name {
+  display: block;
+  color: #f6fbf9;
+  font-size: clamp(1.02rem, 1.5vw, 1.28rem);
+  font-weight: 620;
+  letter-spacing: -0.022em;
+  line-height: 1.2;
+}
+.tr-signals { display: flex; flex-direction: column; gap: 9px; margin: clamp(14px, 1.6vw, 20px) 0 0; padding: 0; list-style: none; }
+.tr-signals li {
+  position: relative;
+  padding-left: 15px;
+  color: rgba(234, 243, 240, 0.62);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+.tr-signals li::before {
+  position: absolute;
+  top: 0.58em;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--yellow);
+  opacity: 0.6;
+  content: "";
+}
+
+/* The node that never fills — outlined, never solid, unlike every node above. */
+.tr-decision {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  width: min(520px, 100%);
+  border: 1px dashed var(--rail);
+  border-radius: 16px;
+  padding: clamp(20px, 2.2vw, 30px);
+  background: transparent;
+  text-align: center;
+}
+.tr-decision-k { color: var(--rail); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.tr-decision-name { color: var(--ink); font-size: clamp(1.1rem, 1.7vw, 1.44rem); font-weight: 620; letter-spacing: -0.024em; }
+.tr-note {
+  max-width: 62ch;
+  margin: clamp(18px, 2vw, 26px) auto 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .tr-families { grid-template-columns: minmax(0, 1fr); }
+  .tr-root, .tr-decision { width: 100%; }
+  .tr-note { text-align: left; }
+}
+
+/* -- 04 Control layer: the policy sheet --------------------------------------
+   One sheet rather than a stack of planes. The claim is that this is the
+   lender's own policy document applied as written, and five sections in, the
+   page needs a composition that is not another row of cards.
+
+   The transformation is measurement: each meter fills to its observed value and
+   lands relative to a fixed threshold mark. Direction is stated per rule,
+   because a bar past the mark passes a minimum and fails a maximum.
+
+   Resting state is measured — full bars, outcomes visible — so nothing depends
+   on the scrub having run. */
+.cl { position: relative; margin-top: var(--s-block); padding-bottom: clamp(70px, 8vw, 104px); }
+.cl-sheet {
+  border: 1px solid rgba(234, 243, 240, 0.16);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.035);
+}
+.cl-sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 2vw, 30px);
+  padding: clamp(20px, 2.4vw, 30px) clamp(22px, 2.6vw, 36px);
+  border-bottom: 1px solid rgba(234, 243, 240, 0.13);
+}
+.cl-policy-name { margin: 0; color: #f6fbf9; font-size: clamp(1.02rem, 1.5vw, 1.26rem); font-weight: 620; letter-spacing: -0.022em; }
+.cl-policy-meta { margin: 4px 0 0; color: rgba(234, 243, 240, 0.44); font-size: 0.6rem; letter-spacing: 0.1em; }
+
+.cl-summary { display: flex; flex-wrap: wrap; gap: clamp(16px, 2.4vw, 38px); margin: 0; padding: 0; list-style: none; }
+.cl-stat { display: grid; gap: 2px; }
+.cl-stat-value { color: #f6fbf9; font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: clamp(1.1rem, 1.7vw, 1.44rem); font-weight: 620; letter-spacing: -0.02em; }
+.cl-stat-label { color: rgba(234, 243, 240, 0.42); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; }
+/* The one that matters most on this page. */
+.cl-stat.is-emphasis .cl-stat-value { color: var(--yellow); }
+
+.cl-rules { margin: 0; padding: 0; list-style: none; }
+.cl-rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) auto minmax(180px, 1.15fr) 92px;
+  align-items: center;
+  gap: clamp(14px, 2vw, 30px);
+  padding: clamp(18px, 2vw, 26px) clamp(22px, 2.6vw, 36px);
+  border-bottom: 1px solid rgba(234, 243, 240, 0.07);
+}
+.cl-rule:last-child { border-bottom: none; }
+.cl-rule-name { color: rgba(234, 243, 240, 0.7); font-size: 0.92rem; letter-spacing: -0.008em; }
+.cl-observed {
+  color: #f6fbf9;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(1.16rem, 1.9vw, 1.62rem);
+  font-weight: 620;
+  letter-spacing: -0.026em;
+  white-space: nowrap;
+}
+
+/* The disallowed side of each threshold, hatched. Direction is part of the
+   rule, so it is drawn rather than left to colour: on a minimum rule the zone
+   sits below the mark, on a maximum rule above it, and an exception is a bar
+   that ends inside the hatching. */
+.cl-zone {
+  position: absolute;
+  top: 13px;
+  height: 3px;
+  border-radius: 999px;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(234, 243, 240, 0.22) 0 2px,
+    transparent 2px 5px
+  );
+}
+.cl-zone[data-dir="min"] { left: 0; width: var(--mark); }
+.cl-zone[data-dir="max"] { left: var(--mark); right: 0; }
+
+/* The meter: a track, a fixed threshold mark, and a fill that measures to it. */
+.cl-meter { position: relative; height: 30px; }
+.cl-track { position: absolute; top: 13px; left: 0; right: 0; height: 3px; border-radius: 999px; background: rgba(234, 243, 240, 0.12); }
+.cl-fill {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  width: var(--fill);
+  height: 3px;
+  border-radius: 999px;
+  background: var(--rail);
+  transform-origin: left center;
+}
+.cl-rule.is-exception .cl-fill { background: var(--yellow); }
+.cl-mark { position: absolute; top: 6px; left: var(--mark); width: 1px; height: 17px; background: rgba(234, 243, 240, 0.55); transform-origin: center top; }
+.cl-threshold {
+  position: absolute;
+  top: 0;
+  left: var(--mark);
+  color: rgba(234, 243, 240, 0.45);
+  font-size: 0.54rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transform: translateX(-50%);
+}
+.cl-outcome {
+  justify-self: start;
+  border: 1px solid rgba(10, 92, 80, 0.5);
+  border-radius: 999px;
+  padding: 4px 11px;
+  color: rgba(234, 243, 240, 0.74);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.cl-rule.is-exception .cl-outcome { border-color: rgba(255, 239, 179, 0.45); color: var(--yellow); }
+
+/* A person, on top of the machine output — overlapping the sheet on purpose. */
+.cl-override {
+  position: absolute;
+  right: clamp(16px, 3vw, 48px);
+  bottom: 0;
+  width: min(560px, calc(100% - clamp(32px, 6vw, 96px)));
+  border: 1px solid rgba(255, 239, 179, 0.34);
+  border-radius: 16px;
+  padding: clamp(18px, 2vw, 26px);
+  background: #07211e;
+  box-shadow: 0 24px 60px rgba(1, 20, 18, 0.55);
+}
+.cl-override-k { color: var(--yellow); font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.cl-override-line { margin: 9px 0 0; color: #f6fbf9; font-size: 0.92rem; }
+.cl-override-line strong { font-weight: 640; }
+.cl-override-reason { margin: 7px 0 0; color: rgba(234, 243, 240, 0.6); font-size: 0.86rem; line-height: 1.55; }
+.cl-override-code { display: inline-block; margin-top: 11px; color: rgba(234, 243, 240, 0.4); font-size: 0.55rem; letter-spacing: 0.08em; }
+
+@media (max-width: 980px) {
+  .cl-rule { grid-template-columns: minmax(0, 1fr) auto; row-gap: 12px; }
+  .cl-rule-name { grid-column: 1; }
+  .cl-observed { grid-column: 1; }
+  .cl-outcome { grid-column: 2; grid-row: 1; justify-self: end; }
+  .cl-meter { grid-column: 1 / -1; }
+}
+@media (max-width: 860px) {
+  .cl { padding-bottom: 0; }
+  .cl-override { position: static; width: auto; margin-top: 16px; }
+}
+
+/* -- 05 Record layer: what moved --------------------------------------------
+   The transformation is the change itself: each reading rolls from its previous
+   value to its current one inside a clipped window, and the delta arrives after
+   it lands. Audit convention keeps the previous value beside the new one rather
+   than replacing it silently, so "was" stays on the card.
+
+   A grid, not another stack — the rhythm has to change by the fifth section,
+   and the roll needs a compact box to read as a mechanism. */
+.rc { margin-top: var(--s-block); }
+
+.rc-versions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(18px, 2.4vw, 36px);
+  padding-bottom: clamp(22px, 2.6vw, 34px);
+}
+.rc-track { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 80px); flex: 1 1 420px; margin: 0; padding: 0; list-style: none; }
+.rc-track-line { position: absolute; top: 5px; left: 6px; right: 6px; height: 1px; background: var(--border); }
+.rc-track-fill { display: block; width: 100%; height: 100%; background: var(--rail); transform-origin: left center; }
+.rc-version { position: relative; padding-top: 20px; }
+.rc-version::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  content: "";
+}
+.rc-version.is-current::before { border-color: var(--rail); background: var(--rail); }
+.rc-version-label { display: block; color: var(--label); font-size: 0.6rem; letter-spacing: 0.1em; }
+.rc-version.is-current .rc-version-label { color: var(--rail); }
+.rc-version-note { display: block; margin-top: 4px; color: var(--muted); font-size: 0.86rem; line-height: 1.45; }
+
+.rc-summary { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.rc-summary-item {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 13px;
+  color: var(--label);
+  font-size: 0.58rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.rc-changes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 20px); margin: 0; padding: 0; list-style: none; }
+.rc-change {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(18px, 2vw, 26px);
+  background: var(--surface);
+}
+.rc-name { display: block; color: var(--muted); font-size: 0.8rem; letter-spacing: -0.004em; }
+
+/* The window is exactly one reading tall and holds two, so the roll shifts by
+   half its own height: the previous leaves as the current arrives. */
+.rc-window { display: block; overflow: hidden; height: 1.12em; margin-top: 12px; font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+.rc-roll { display: block; }
+.rc-reading {
+  display: block;
+  height: 1.12em;
+  color: var(--ink);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: inherit;
+  font-weight: 620;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+.rc-reading-prev { color: var(--neutral-depth); }
+
+.rc-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 14px; }
+.rc-was { color: var(--label); font-size: 0.56rem; letter-spacing: 0.08em; }
+.rc-delta {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--muted);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+}
+.rc-delta.is-better { border-color: rgba(10, 92, 80, 0.4); color: var(--rail); }
+
+@media (max-width: 1080px) {
+  .rc-changes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .rc-changes { grid-template-columns: minmax(0, 1fr); }
+  .rc-track { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .rc-track-line { display: none; }
 }
