@@ -32,11 +32,11 @@ export function ObjectionBlock({ items, links }) {
         <div className="eg-head">
           <p className="hx-kicker">Before you ask</p>
           <h2 className="t-display-2" id="objections-heading">
-            The questions underwriting teams actually open with.
+            The questions underwriting teams ask before they put real files through Cevrynt.
           </h2>
         </div>
         <p className="eg-lede t-lede">
-          Short answers here. The full set, including security and integration scope, lives on the FAQ.
+          Short answers to the questions that usually come before a pilot. Security, data handling, deployment, and deeper integration questions are covered in the full FAQ.
         </p>
       </div>
 

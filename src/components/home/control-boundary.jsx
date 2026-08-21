@@ -104,7 +104,7 @@ export function ControlBoundary({ rows }) {
     <div className="cb" ref={scope}>
       <div className="cb-heads" aria-hidden="true">
         <span className="hx-mono cb-head-machine">Cevrynt does</span>
-        <span className="hx-mono cb-head-human">Your team decides</span>
+        <span className="hx-mono cb-head-human">YOUR TEAM OWNS</span>
       </div>
 
       <span className="cb-divider" aria-hidden="true">
@@ -129,7 +129,7 @@ export function ControlBoundary({ rows }) {
       </ol>
 
       <p className="cb-foot hx-mono">
-        Cevrynt is not a lender. It does not approve, decline, or price a deal.
+        CEVRYNT SUPPORTS UNDERWRITING REVIEW. IT DOES NOT SET YOUR CREDIT POLICY OR MAKE THE FINAL FUNDING DECISION.
       </p>
     </div>
   );

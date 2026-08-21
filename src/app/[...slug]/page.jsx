@@ -5,12 +5,14 @@ import { pageByPath, sitePages } from "@/content/site-pages";
 export const revalidate = 3600;
 export const dynamicParams = false;
 
+/** Paths with their own bespoke route under src/app/. */
+const bespoke = new Set(["platform", "why-cevrynt"]);
+
 export function generateStaticParams() {
-  // "platform" has its own bespoke route at src/app/platform/page.jsx, which
-  // Next always matches first for that path — this only avoids the catch-all
-  // pre-rendering an unreachable duplicate at build time.
+  // Next always matches a literal segment before this catch-all, so filtering
+  // only avoids pre-rendering an unreachable duplicate at build time.
   return sitePages
-    .filter((page) => page.path !== "platform")
+    .filter((page) => !bespoke.has(page.path))
     .map((page) => ({ slug: page.path.split("/") }));
 }
 

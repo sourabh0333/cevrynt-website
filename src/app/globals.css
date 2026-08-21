@@ -1139,7 +1139,7 @@ body:has(.page-hero) .site-header { background: transparent; }
 /* The node sits just outside this box, where the wires land. A 250px indent
    left a void between the two, so the wires appeared to end at nothing and the
    question read as a separate block rather than the thing they arrive at. */
-.pq-question { position: relative; padding-left: clamp(26px, 5vw, 92px); }
+.pq-question { position: relative; padding-left: clamp(26px, 13vw, 250px); }
 .pq-node {
   position: absolute;
   top: 50%;
@@ -3445,4 +3445,819 @@ body:has(.article-header) .nav-use-cases a:hover { color: var(--ink); }
   .rc-changes { grid-template-columns: minmax(0, 1fr); }
   .rc-track { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .rc-track-line { display: none; }
+}
+
+
+/* ==========================================================================
+   Why Cevrynt page
+
+   No boxes on this page. Nothing here has a border on four sides, a filled
+   background or a corner radius — every earlier attempt was containers with
+   text inside, and that is the thing being avoided. Both sections are built
+   from strokes, hairlines, type and space.
+
+   The two are a pair, not a repeat. They share a vocabulary — hairlines, mono
+   micro-labels, rail green for Cevrynt, the secondary held back for whatever
+   survives, one scroll scalar driving everything — and invert each other in
+   every other respect. 01 is wide, sparse and light, and sweeps left to right
+   while one whole thing comes apart across six months. 02 is centred, dense
+   and deep, anchored to a real product export, and gathers four separate
+   readings inward onto one thread.
+   ========================================================================== */
+
+/* -- 01 Five lanes across six months -----------------------------------------
+   A small-multiples field, not a chart. Each of the five things a review leaves
+   behind gets a lane; each lane carries the same three tracks in the same
+   order, so after the key, position alone identifies an approach. A track runs
+   while that approach can still produce that thing, breaks on a tick, and
+   continues as a dotted remnant — the information stopped being retrievable
+   rather than ceasing to exist, and a bare gap would read as a rendering fault
+   instead of a loss.
+
+   A playhead sweeps the whole stack as you scroll, so tracks are cut as it
+   reaches them rather than being revealed already broken.
+   -------------------------------------------------------------------------- */
+
+/* The lane-name column, shared by the lanes, the overlay and the axis so all
+   three agree. Deliberately not in ch units: those resolve against the *using*
+   element's own font, and the axis is mono at 0.56rem while a lane name is the
+   text face at ~0.97rem — the same 21ch came out 74px narrower on the axis and
+   threw the first station a hundred pixels left of where the lanes start. */
+.ln { --ln-label: clamp(140px, 16vw, 246px); --ln-gap: clamp(16px, 2.4vw, 34px); margin: var(--s-block) 0 0; }
+
+.ln-clock-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: clamp(18px, 2.2vw, 26px); }
+.ln-clock-k { color: var(--label); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.ln-clock { color: var(--rail); font-size: 0.72rem; letter-spacing: 0.12em; }
+
+/* -- The key. Named once; the lanes never repeat these labels. -------------- */
+.ln-key { display: flex; flex-wrap: wrap; gap: 10px clamp(18px, 2.4vw, 34px); margin-bottom: clamp(20px, 2.6vw, 30px); }
+.ln-key-item { display: inline-flex; align-items: center; gap: 9px; }
+.ln-key-mark { display: block; width: 26px; height: 8px; overflow: visible; }
+.ln-key-name { color: var(--label); font-size: 0.62rem; letter-spacing: 0.11em; text-transform: uppercase; }
+.ln-key-item.is-lead .ln-key-name { color: var(--ink); }
+
+/* -- The lanes -------------------------------------------------------------- */
+/* Positioned so the playhead overlay has something to be absolute against. */
+.ln-lanes { position: relative; display: flex; flex-direction: column; }
+
+/* The overlay: period rules and the travelling playhead, drawn once for the
+   whole stack so both are continuous lines through all five lanes rather than
+   five segments kept in step. Inset to start exactly where a plot column does. */
+.ln-head {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc(var(--ln-label) + var(--ln-gap));
+  pointer-events: none;
+}
+.ln-period { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--border); }
+
+/* Authored parked at the right — month six, the conclusion — so the resting
+   state without JS is the finished argument. Parked with "left", not a percent
+   transform: this element is 1px wide, so translateX(100%) would move it one
+   pixel. The effect re-anchors it to left 0 and drives "x" in pixels. */
+.ln-head-line {
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  left: 100%;
+  width: 1px;
+  background: var(--rail);
+  will-change: transform;
+}
+/* A tick at each end, so the head reads as an instrument rather than as a stray
+   rule that happens to cross the lanes. */
+.ln-head-line::before,
+.ln-head-line::after {
+  position: absolute;
+  left: -2px;
+  width: 5px;
+  height: 5px;
+  background: var(--rail);
+  content: "";
+}
+.ln-head-line::before { top: 0; }
+.ln-head-line::after { bottom: 0; }
+
+.ln-lane {
+  display: grid;
+  grid-template-columns: minmax(0, var(--ln-label)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ln-gap);
+  border-top: 1px solid var(--border);
+  padding: clamp(9px, 1.1vw, 14px) 0;
+}
+.ln-lanes .ln-lane:last-child { border-bottom: 1px solid var(--border); }
+.ln-lane-name { margin: 0; color: var(--ink); font-size: clamp(0.86rem, 1vw, 0.97rem); letter-spacing: -0.012em; line-height: 1.32; text-wrap: balance; }
+
+/* Stretched to the column, so strokes must opt out of the distortion. Every
+   mark in here is a line element for that reason — a circle would squash. */
+.ln-lane-plot { display: block; width: 100%; height: 46px; overflow: visible; }
+.ln-lane-plot line { vector-effect: non-scaling-stroke; }
+
+.ln-held { stroke: var(--neutral-depth); stroke-width: 1.5; stroke-linecap: butt; }
+.ln-gone { stroke: var(--neutral-depth); stroke-width: 1; stroke-dasharray: 2 6; opacity: 0.45; }
+.ln-stopmark { stroke: var(--neutral-depth); stroke-width: 1.5; }
+.ln-key-line { stroke: var(--neutral-depth); stroke-width: 1.5; }
+
+/* Three tracks that have to be told apart at a hairline weight. Position in the
+   lane is the primary cue, but position alone left the first two identical, so
+   they are graded light to heavy — which is also the order of how much each one
+   keeps. */
+.ln-t0.ln-held, .ln-t0.ln-key-line { stroke-width: 1.2; opacity: 0.5; }
+.ln-t0.ln-stopmark { opacity: 0.5; }
+.ln-t1.ln-held, .ln-t1.ln-key-line { stroke-width: 1.7; opacity: 0.85; }
+.ln-t1.ln-stopmark { opacity: 0.85; }
+/* The track this page argues for, weighted without dimming the others into
+   strawmen. */
+.ln-t2.ln-held, .ln-t2.ln-key-line { stroke: var(--rail); stroke-width: 3; }
+.ln-t2.ln-stopmark { stroke: var(--rail); }
+
+/* Every period is named and sits under its own rule, so the sweep has stations
+   rather than only two ends. Inset by the same label column the overlay uses,
+   which is what keeps a mark and its rule on the same pixel. */
+.ln-axis {
+  position: relative;
+  height: 1.5em;
+  margin: clamp(9px, 1.2vw, 13px) 0 0;
+  margin-left: calc(var(--ln-label) + var(--ln-gap));
+  color: var(--label);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+}
+.ln-axis-mark { position: absolute; top: 0; white-space: nowrap; transform: translateX(-50%); }
+/* The outer two would hang off the plot if they were centred like the rest. */
+.ln-axis-mark:first-child { transform: none; }
+.ln-axis-mark:last-child { transform: translateX(-100%); }
+
+/* -- The count, which is what the old chart ended on ------------------------ */
+.ln-score {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.6vw, 40px);
+  margin: clamp(30px, 3.8vw, 52px) 0 0;
+  border-top: 1px solid var(--border);
+  padding-top: clamp(18px, 2.2vw, 26px);
+}
+.ln-score-item { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 8px; margin: 0; }
+.ln-score-value {
+  color: var(--neutral-depth);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(2rem, 3.6vw, 3.1rem);
+  font-weight: 620;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.ln-score-of { color: var(--label); font-size: 0.8rem; }
+.ln-score-name { flex: 1 0 100%; margin-top: 8px; color: var(--label); font-size: 0.62rem; letter-spacing: 0.11em; text-transform: uppercase; }
+.ln-score-item.is-lead .ln-score-value { color: var(--rail); }
+.ln-score-item.is-lead .ln-score-name { color: var(--ink); }
+
+.ln-note { max-width: 62ch; margin: clamp(26px, 3.2vw, 42px) 0 0; color: var(--muted); font-size: 0.92rem; line-height: 1.62; }
+
+@media (max-width: 860px) {
+  /* The lane name moves above its own plot: a label column beside the plot
+     leaves it too narrow to show where a track stops. */
+  .ln-lane { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 6px; padding: clamp(12px, 3vw, 16px) 0; }
+  .ln-lane-plot { height: 40px; }
+  /* The label column is gone, so the overlay and the axis both start at the
+     lane own left edge. */
+  .ln-head { left: 0; }
+  .ln-axis { margin-left: 0; }
+  .ln-score { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .ln-score-name { flex: 1 1 auto; margin-top: 0; }
+}
+
+/* -- 02 Four readings of one page -------------------------------------------
+   Deliberately the inverse of the section above it. That one is wide, sparse,
+   on a light band, and sweeps left to right while one whole thing comes apart
+   over six months. This one is centred, dense, on a deep band, anchored to a
+   real product export, and gathers four separate readings inward onto a single
+   thread. Same vocabulary, opposite motion.
+
+   The export already carries its own dark ground, close to the band it sits on,
+   so the picture reads as part of the page rather than as something pasted onto
+   it. No frame, no radius, no shadow: the only things drawn over it are four
+   markers and the thread that eventually joins them.
+   -------------------------------------------------------------------------- */
+.rv { margin: var(--s-block) 0 0; }
+
+.rv-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(26px, 3.6vw, 58px);
+}
+
+/* -- The page everyone is reading ------------------------------------------ */
+.rv-shot { min-width: 0; }
+/* The ratio is reserved before the picture arrives, so the markers never land
+   on a collapsed box and nothing shifts while it loads. */
+.rv-frame { position: relative; aspect-ratio: 1600 / 760; overflow: hidden; }
+.rv-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+.rv-overlay { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* The four markers. Circles rather than strokes because they have to carry a
+   letter that ties them to the list beside the picture — that tie is what makes
+   leader lines unnecessary, and leader lines across a screenshot are what make
+   this kind of figure unreadable on a phone. */
+.rv-node-halo { fill: rgba(1, 31, 28, 0.72); stroke: rgba(234, 243, 240, 0.24); stroke-width: 1.5; }
+.rv-node-dot { fill: var(--rail); }
+.rv-node-key {
+  fill: #f6fbf9;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 20px;
+  font-weight: 620;
+  text-anchor: middle;
+}
+
+/* The gather. The only secondary on the band, and it arrives last. */
+.rv-thread {
+  stroke: var(--yellow);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.85;
+}
+
+.rv-shot-note {
+  margin: 10px 0 0;
+  border-top: 1px solid rgba(234, 243, 240, 0.14);
+  padding-top: 9px;
+  color: rgba(234, 243, 240, 0.42);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* -- What each of them keyed on -------------------------------------------- */
+.rv-list { margin: 0; padding: 0; list-style: none; }
+.rv-row {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  align-items: baseline;
+  gap: clamp(10px, 1.2vw, 16px);
+  border-top: 1px solid rgba(234, 243, 240, 0.14);
+  padding: clamp(13px, 1.6vw, 20px) 0;
+  opacity: 1;
+  transition: opacity 460ms ease;
+}
+.rv-list .rv-row:last-child { border-bottom: 1px solid rgba(234, 243, 240, 0.14); }
+/* Dimming is what the effect adds. The markup ships every row lit, so a reader
+   without JS gets four legible rows rather than four faint ones. */
+.rv-row.is-dim { opacity: 0.32; }
+.rv-row-key { color: var(--yellow); font-size: 0.78rem; font-weight: 620; }
+.rv-row-body { display: block; min-width: 0; }
+.rv-row-read {
+  display: block;
+  color: #f6fbf9;
+  font-size: clamp(0.94rem, 1.1vw, 1.04rem);
+  letter-spacing: -0.016em;
+  line-height: 1.36;
+  text-wrap: balance;
+}
+.rv-row-at {
+  display: block;
+  margin-top: 6px;
+  color: rgba(234, 243, 240, 0.46);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+/* -- The acts, and the residue --------------------------------------------- */
+.rv-marks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin: clamp(22px, 3vw, 40px) 0 0;
+  border-top: 1px solid rgba(234, 243, 240, 0.14);
+  padding-top: clamp(12px, 1.6vw, 18px);
+  font-size: 0.56rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.rv-mark { color: rgba(234, 243, 240, 0.72); transition: color 420ms ease; }
+.rv-marks .rv-mark:last-child { color: var(--yellow); }
+.rv-mark.is-dim, .rv-marks .rv-mark:last-child.is-dim { color: rgba(234, 243, 240, 0.26); }
+
+.rv-note {
+  max-width: 62ch;
+  margin: clamp(24px, 3.2vw, 40px) 0 0;
+  color: rgba(234, 243, 240, 0.62);
+  font-size: 0.96rem;
+  line-height: 1.68;
+}
+
+@media (max-width: 900px) {
+  /* The list drops under the picture. The letters are what tie a row to its
+     marker, so nothing is lost by separating the two. */
+  .rv-stage { grid-template-columns: minmax(0, 1fr); gap: clamp(18px, 4vw, 28px); }
+  .rv-node-key { font-size: 30px; }
+  .rv-thread { stroke-width: 3; }
+  .rv-marks { justify-content: flex-start; gap: 8px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Neither effect runs, so both authored states stand: every track drawn to
+     its own end with the playhead parked at month six, and the picture whole
+     with all four markers showing and the thread drawn. */
+  .ln-stopmark { opacity: 1; }
+  .rv-frame { clip-path: none !important; }
+  .rv-node { opacity: 1 !important; visibility: visible !important; transform: none !important; }
+  .rv-thread { stroke-dashoffset: 0 !important; }
+  .rv-row { opacity: 1 !important; }
+}
+
+
+/* -- 03 One file, two policies ----------------------------------------------
+   A third geometry rather than a third instance of one. 01 runs horizontally
+   across time and comes apart; 02 is centred on a product export and gathers
+   inward; this descends and divides.
+
+   The deal's own facts hold the centre column the whole way down while the two
+   policy paths kink outward in the margins — the file never moves, the policies
+   do. Paths and text never share space: the outer sixth of the width on each
+   side is path band only, and every column inside that is type only.
+   -------------------------------------------------------------------------- */
+/* One column template for the whole figure. The heads, every criterion row and
+   the two outcomes all sit on it, which is what lets a lender's conclusion land
+   directly beneath that lender's own column of thresholds. */
+.pd { --pd-cols: 16% minmax(0, 1fr) minmax(0, 1.1fr) minmax(0, 1fr) 16%; margin: var(--s-block) 0 0; }
+
+.pd-heads {
+  display: grid;
+  grid-template-columns: var(--pd-cols);
+  align-items: baseline;
+  margin-bottom: clamp(12px, 1.6vw, 18px);
+  color: var(--label);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.pd-head-a { grid-column: 2; }
+.pd-head-file { grid-column: 3; justify-self: center; color: var(--rail); }
+.pd-head-b { grid-column: 4; text-align: right; }
+
+/* The rows are laid out in exactly the pixel values the SVG uses as viewBox
+   units, so a tick authored at a row's centre lands on that row's centre. Break
+   that and the diagram silently drifts out of register with its own labels. */
+.pd-body {
+  position: relative;
+  height: calc(var(--pd-head) + var(--pd-rows) * var(--pd-row) + var(--pd-foot));
+}
+.pd-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.pd-lines path, .pd-lines line { vector-effect: non-scaling-stroke; }
+
+.pd-path { stroke: var(--neutral-depth); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.pd-tick { stroke: var(--neutral-depth); stroke-width: 2.4; transition: opacity 260ms ease; }
+/* Arming is added by the effect, so the server-rendered diagram is complete and
+   only a browser that is actually going to animate ever hides anything. */
+.pd[data-armed] .pd-tick { opacity: 0; }
+.pd[data-armed] .pd-tick.is-on { opacity: 1; }
+/* An exception is the only state worth colouring: it is the one a human has to
+   resolve, and it is what this whole page is about keeping visible. */
+.pd-tick.is-exception { stroke: var(--rail); stroke-width: 3.4; }
+.pd-tick.is-fail { stroke: var(--neutral-depth); stroke-width: 1.2; }
+
+.pd-rows {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  padding: var(--pd-head) 0 0;
+  list-style: none;
+}
+.pd-row {
+  display: grid;
+  grid-template-columns: var(--pd-cols);
+  align-items: center;
+  height: var(--pd-row);
+  border-top: 1px solid var(--border);
+  opacity: 1;
+  transition: opacity 460ms ease;
+}
+.pd-rows .pd-row:last-child { border-bottom: 1px solid var(--border); }
+/* Dimming is what the effect adds; the markup ships every row legible. */
+.pd-row.is-dim { opacity: 0.3; }
+
+.pd-side { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.pd-side-a { grid-column: 2; }
+.pd-side-b { grid-column: 4; text-align: right; }
+.pd-rule { color: var(--muted); font-size: clamp(0.8rem, 0.92vw, 0.9rem); line-height: 1.3; }
+.pd-verdict { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.pd-verdict.is-pass { color: var(--label); }
+.pd-verdict.is-exception { color: var(--rail); }
+.pd-verdict.is-fail { color: var(--neutral-depth); }
+
+/* The constant. Everything else on the row is policy; this is the file. */
+.pd-fact {
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-inline: clamp(12px, 2vw, 30px);
+  text-align: center;
+}
+.pd-crit { color: var(--label); font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.pd-value { color: var(--ink); font-size: clamp(0.95rem, 1.15vw, 1.1rem); font-weight: 560; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+
+/* Was two equal halves spanning the full width, which put Lender A's conclusion
+   hard against the left edge and Lender B's against the right — neither lined up
+   with anything above them. On the shared template each one sits in its own
+   lender's column instead. */
+/* The leaves.
+
+   They sit on the figure's shared column template so each conclusion lands under
+   its own lender's thresholds. And they carry the rule a branch terminates on:
+   the diagram's last coordinate is the outer edge of one of these columns, and a
+   zero top margin is load-bearing for that — it keeps the rule flush against the
+   bottom of the plot, so the line meets it exactly instead of pointing at a gap. */
+/* The footer has its own proportions rather than the table's. Borrowing the
+   five-column template put each conclusion in a narrow inner column and left
+   about half the width empty — dead margins outside both and a dead centre
+   between them. Two halves and a slim gutter fill it, and the branches land on
+   the outer tip of each rule. */
+.pd-outcomes {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(40px, 6vw, 104px) minmax(0, 1fr);
+  align-items: start;
+  margin: 0;
+}
+.pd-outcome-a { grid-column: 1; }
+.pd-outcome-b { grid-column: 3; }
+.pd-outcome {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding-top: clamp(14px, 1.8vw, 22px);
+  transition: opacity 500ms ease, transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 500ms ease;
+}
+/* A branch has just landed on this rule, so it reads as arrival rather than as
+   one more divider. */
+.pd-outcome.is-on { border-top-color: var(--rail); }
+.pd[data-armed] .pd-outcome { opacity: 0; transform: translateY(14px); }
+.pd[data-armed] .pd-outcome.is-on { opacity: 1; transform: none; }
+.pd[data-armed] .pd-outcome-b { transition-delay: 90ms; }
+.pd-outcome-b { text-align: right; }
+.pd-outcome-who { color: var(--rail); font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.pd-outcome-text { color: var(--ink); font-size: clamp(0.95rem, 1.15vw, 1.08rem); line-height: 1.45; letter-spacing: -0.016em; }
+
+/* Indented to the same 16% the criterion text starts at, so the closing note
+   reads as part of the figure rather than as loose copy hanging off its left
+   edge. */
+/* The closing row: the reconciliation on the left, the next step on the right.
+   The note on its own left the whole right-hand side of the footer empty. */
+.pd-foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(20px, 4vw, 72px);
+  margin: clamp(30px, 3.6vw, 50px) 0 0;
+}
+.pd-note {
+  max-width: 68ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+/* The same gesture as the closing link on the deep bands — text, arrow, and a
+   nudge on hover — retoned for a light surface. The rule is drawn on hover
+   rather than held, so the row stays quiet until it is wanted. */
+.pd-cta {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 9px;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 3px;
+  color: var(--rail);
+  font-size: 0.94rem;
+  font-weight: 620;
+  white-space: nowrap;
+  transition: color 260ms ease, border-color 260ms ease;
+}
+.pd-cta svg { transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1); }
+.pd-cta:hover { color: var(--ink); border-bottom-color: currentColor; }
+.pd-cta:hover svg { transform: translate(3px, -3px); }
+
+@media (max-width: 860px) {
+  /* The diagram goes. Two paths kinking apart inside a 360px column says
+     nothing, and the criteria carry the argument on their own. */
+  .pd-heads { display: none; }
+  .pd-lines { display: none; }
+  .pd-body { height: auto; }
+  .pd-rows { padding-top: 0; }
+  .pd-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    height: auto;
+    gap: 10px clamp(14px, 4vw, 24px);
+    padding: clamp(16px, 4vw, 22px) 0;
+  }
+  /* The fact leads, then the two policies read against it side by side. */
+  .pd-fact { grid-column: 1 / -1; padding-inline: 0; text-align: left; }
+  .pd-side-a { grid-column: 1; }
+  .pd-side-b { grid-column: 2; text-align: right; }
+  .pd-outcomes { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 26px; }
+  .pd-outcome-a, .pd-outcome-b { grid-column: 1; }
+  .pd-outcome-b { text-align: left; }
+  /* Stacked: a nowrap link and a paragraph will not share a phone's width. */
+  .pd-foot { flex-direction: column; align-items: flex-start; gap: 22px; }
+  /* The text alone is a 26px target. The project floor for a tap is 44. */
+  .pd-cta { min-height: 44px; }
+}
+
+
+/* -- 04 When the file changes -----------------------------------------------
+   This section performs the re-run rather than describing it.
+
+   The first version was a product view across the top with two columns of prose
+   underneath — the brochure pattern, where the picture sits being looked at
+   while the words work somewhere else. What replaced it is the delta the product
+   itself produces: every signal, its value at version one, its value at version
+   two, and what moved. The figures count from old to new as the version stamp
+   flips, which is motion answering the one question the section exists to answer.
+
+   Argument first, proof second. The export comes after the table, not before it,
+   so the section opens on the thing that moves rather than on a static image.
+
+   A real table, because this is genuinely two versions compared row by row.
+   Ruled with hairlines, never boxed.
+   -------------------------------------------------------------------------- */
+.fr { margin: var(--s-block) 0 0; }
+
+/* -- Which pass you are looking at ----------------------------------------- */
+.fr-versions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 3vw, 54px);
+  margin: 0 0 clamp(22px, 2.8vw, 34px);
+  padding: 0;
+  list-style: none;
+}
+.fr-stamp { display: flex; flex-direction: column; gap: 5px; opacity: 0.42; transition: opacity 460ms ease; }
+.fr-stamp.is-live { opacity: 1; }
+.fr-stamp-label { color: var(--label); font-size: 0.64rem; letter-spacing: 0.13em; text-transform: uppercase; transition: color 460ms ease; }
+.fr-stamp.is-live .fr-stamp-label { color: var(--rail); }
+.fr-stamp-note { color: var(--muted); font-size: 0.86rem; line-height: 1.4; }
+
+/* -- The delta -------------------------------------------------------------- */
+/* Fixed layout with declared column widths. Left to itself the signal column
+   absorbed every spare pixel, which pushed the names to the far right of a very
+   wide cell and left the whole left-hand side of the table empty. */
+.fr-delta { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.fr-delta col.fr-c-signal { width: 44%; }
+.fr-delta col.fr-c-was { width: 15%; }
+.fr-delta col.fr-c-now { width: 19%; }
+.fr-delta col.fr-c-moved { width: 22%; }
+.fr-delta thead th {
+  border-bottom: 1px solid var(--border);
+  padding: 0 0 clamp(10px, 1.2vw, 14px);
+  color: var(--label);
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-align: right;
+  text-transform: uppercase;
+}
+.fr-delta thead th:first-child { text-align: left; }
+
+.fr-row { border-bottom: 1px solid var(--border); }
+.fr-row td, .fr-row th {
+  padding: clamp(14px, 1.7vw, 21px) 0;
+  text-align: right;
+  vertical-align: baseline;
+}
+
+/* Scoped to out-specify `.fr-row th`, which sets every cell right. Without the
+   extra class the signal name inherited that and sat at the far edge of its own
+   column with nothing to its left. */
+.fr-row th.fr-signal {
+  color: var(--ink);
+  font-size: clamp(0.94rem, 1.1vw, 1.04rem);
+  font-weight: 540;
+  letter-spacing: -0.016em;
+  text-align: left;
+}
+
+/* Both figures are mono and tabular so the column cannot jitter while a value is
+   counting — the whole effect falls apart if the digits change width. */
+.fr-prev, .fr-num {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.fr-prev { color: var(--neutral-depth); font-size: clamp(0.92rem, 1.1vw, 1.02rem); }
+.fr-num { color: var(--ink); font-size: clamp(1.02rem, 1.35vw, 1.24rem); font-weight: 620; }
+
+.fr-moved {
+  color: var(--label);
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* The only colour in the table. Every row here moved in the borrower's favour,
+   which is a property of this particular file rather than a claim about the
+   product, so it stays a quiet rail green and not a success green. */
+.fr-moved.is-up { color: var(--rail); }
+
+/* Armed by the effect, so the server-rendered table is already settled. */
+.fr[data-armed] .fr-row { opacity: 0; transform: translateY(10px); }
+.fr-row { transition: opacity 460ms ease, transform 460ms cubic-bezier(0.16, 1, 0.3, 1); }
+.fr[data-armed] .fr-row.is-on { opacity: 1; transform: none; }
+
+/* -- The proof -------------------------------------------------------------- */
+.fr-shot { margin: clamp(34px, 4.2vw, 60px) 0 0; }
+/* Ratio reserved before the picture arrives, so nothing shifts as it loads and
+   the wipe has a stable box to clip against. */
+.fr-frame { position: relative; aspect-ratio: 1600 / 760; overflow: hidden; }
+.fr-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.fr-caption {
+  margin: 10px 0 0;
+  border-top: 1px solid var(--border);
+  padding-top: 9px;
+  color: var(--label);
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fr-note {
+  max-width: 66ch;
+  margin: clamp(30px, 3.6vw, 50px) 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.62;
+}
+
+@media (max-width: 860px) {
+  /* Four columns will not fit a phone, so each row becomes a small block: the
+     signal on its own line, then was / now / moved beneath it. The header row
+     goes, since each cell carries its own label here. */
+  .fr-delta thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
+  .fr-delta, .fr-delta tbody, .fr-row { display: block; width: 100%; }
+  .fr-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: 6px 14px;
+    padding: clamp(15px, 4vw, 20px) 0;
+  }
+  .fr-row td, .fr-row th { padding: 0; text-align: left; }
+  .fr-row th.fr-signal { grid-column: 1 / -1; text-align: left; }
+  .fr-prev::after { content: " \\2192"; color: var(--neutral-depth); }
+  .fr-moved { justify-self: end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The effect never runs, so the authored state stands: every figure already at
+     its version-two value and the picture whole. */
+  .fr-row { opacity: 1 !important; transform: none !important; }
+  .fr-frame { clip-path: none !important; }
+  .fr-stamp { opacity: 1; }
+}
+
+/* -- 05 What it will not do -------------------------------------------------
+   No diagram. Three graphic sections precede this one, and a fourth would have
+   made the page monotonous however good it was — rhythm comes from varying
+   density and tone, not from repeating the strongest idea.
+
+   The one drawn element is the rule that strikes each assumption out, which is
+   how this stays part of a page built from strokes while changing register
+   completely: the line draws through a sentence instead of through data.
+   -------------------------------------------------------------------------- */
+.bd { --bd-idx: clamp(30px, 3.2vw, 46px); --bd-gap: clamp(18px, 2.8vw, 52px); margin: var(--s-block) 0 0; }
+
+/* The boundary. One continuous hairline the height of the list, present from the
+   first frame — a limit is not something that gets drawn while you watch, and
+   this is the only section on the page whose defining mark does not animate.
+   Its x is the exact middle of the gap between the claim and answer columns,
+   derived from the same two custom properties the grid uses. */
+.bd-list { position: relative; margin: 0; padding: 0; list-style: none; }
+.bd-list::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% + var(--bd-idx) / 2 + var(--bd-gap) / 2);
+  width: 1px;
+  background: rgba(234, 243, 240, 0.3);
+  content: "";
+}
+
+/* Assumption on the left pressing against the line, correction on the right.
+   Nothing crosses it. */
+.bd-row {
+  display: grid;
+  grid-template-columns: var(--bd-idx) minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--bd-gap);
+  align-items: baseline;
+  border-top: 1px solid rgba(234, 243, 240, 0.14);
+  padding: clamp(26px, 3.6vw, 48px) 0;
+}
+.bd-list .bd-row:last-child { border-bottom: 1px solid rgba(234, 243, 240, 0.14); }
+
+.bd-index {
+  grid-column: 1;
+  color: rgba(234, 243, 240, 0.34);
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  transition: color 620ms ease;
+}
+.bd-row.is-struck .bd-index { color: var(--yellow); }
+
+.bd-claim { position: relative; grid-column: 2; margin: 0; text-align: right; }
+.bd-claim-text {
+  color: #f6fbf9;
+  font-size: clamp(1.5rem, 3.3vw, 2.85rem);
+  font-weight: 400;
+  letter-spacing: -0.036em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+/* The section's whole idea in one typographic move: the thing people believe is
+   literally hollow, and the correction beneath it is the only solid text on the
+   row. Reuses the outlined-numeral treatment the design system already has
+   rather than importing a new one.
+
+   Guarded, because without text-stroke a transparent fill is invisible type
+   rather than outline type. */
+@supports (-webkit-text-stroke: 1px currentColor) {
+  .bd-claim-text {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(234, 243, 240, 0.66);
+    transition: -webkit-text-stroke-color 620ms ease;
+  }
+  .bd-row.is-struck .bd-claim-text { -webkit-text-stroke-color: rgba(234, 243, 240, 0.26); }
+}
+/* Sits on the text's own optical middle. Scaled from the left rather than drawn
+   with a dash array, so it stays a compositor transform.
+
+   It runs half the gutter past the claim column so it terminates exactly on the
+   boundary — the strike travels toward the line and is stopped by it, which is
+   the section's argument rendered as one piece of timing. */
+.bd-strike {
+  position: absolute;
+  top: 52%;
+  right: calc(var(--bd-gap) / -2);
+  left: 0;
+  height: 2px;
+  background: var(--yellow);
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.bd-answer {
+  grid-column: 3;
+  max-width: 46ch;
+  margin: 0;
+  color: rgba(234, 243, 240, 0.74);
+  font-size: clamp(0.95rem, 1.15vw, 1.06rem);
+  line-height: 1.62;
+}
+
+.bd-note {
+  max-width: 62ch;
+  margin: clamp(30px, 3.6vw, 48px) 0 0;
+  color: var(--yellow);
+  font-size: 0.96rem;
+  line-height: 1.66;
+}
+
+@media (max-width: 860px) {
+  /* Two columns either side of a boundary needs width neither side has here, so
+     the line goes and the rows stack. The strike still stops where the claim
+     ends, which is the same gesture at a smaller scale. */
+  .bd-list::before { display: none; }
+  .bd-row { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .bd-index { display: none; }
+  .bd-claim, .bd-answer { grid-column: 1; }
+  .bd-claim { grid-row: 1; text-align: left; }
+  .bd-answer { grid-row: 2; max-width: none; }
+  .bd-strike { right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Neither effect runs, so both authored states stand: every policy path drawn
+     with its verdicts showing, and every assumption already struck through. */
+  .pd-path { stroke-dashoffset: 0 !important; }
+  .pd-tick { opacity: 1 !important; visibility: visible !important; }
+  .pd-row, .pd-outcome { opacity: 1 !important; transform: none !important; }
+  .bd-strike { transform: scaleX(1) !important; }
+  .bd-claim, .bd-answer { opacity: 1 !important; transform: none !important; }
+  .bd-index { color: var(--yellow); }
 }

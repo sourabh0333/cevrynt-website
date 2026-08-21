@@ -122,11 +122,10 @@ export function PartnerQuestion({ question, scope, href }) {
               referral partnership", so that sentence is not repeated here.
               Every required negation is kept. */}
           <p className="pq-limits">
-            This partnership does not imply a generally available live integration, automatic data sharing,
-            universal merchant eligibility, or guaranteed funding.
+            Development and referral partnership. Product availability, data access and underwriting workflows depend on implementation, merchant authorization, applicable permissions, lender requirements and market availability. Cevrynt is not a lender and does not guarantee approval or funding.
           </p>
           <Link className="pq-link" href={href}>
-            Read the partnership context <ArrowUpRight />
+            Explore e-commerce merchant underwriting <ArrowUpRight />
           </Link>
         </div>
       </div>

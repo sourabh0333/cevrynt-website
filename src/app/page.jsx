@@ -146,38 +146,38 @@ const benefits = [
 ];
 
 const ledger = [
-  ["Intake", "Broker submission received with 10 files attached", "10 files"],
-  ["Documents", "Classified and structured; nothing left unidentified", "10 linked"],
-  ["Financials", "Six months of statements read as one cash-flow view", "6 statements"],
-  ["Verification", "Entity active; registered address disagrees with the application", "1 conflict"],
-  ["Fraud", "Document integrity checked; no duplicate submission found", "0 flags"],
-  ["Policy", "Meets deposit and time-in-business criteria; negative-day exception raised", "1 exception"],
-  ["Report", "Findings, notes, and sources assembled into one review", "12 findings"],
-  ["Human decision", "Returned to the underwriter with the exception documented", "With lender"],
+  ["Intake", "BrokBroker package received and opened as one underwriting file.", "10 files received"],
+  ["Extract", "Application, six bank statements, identity documents, bank proof and existing MCA agreement were classified and mapped.", "10 / 10 files mapped"],
+  ["Analysis", "Six months of bank activity were reviewed together. Average monthly deposits were $84,613, ending balance was $31,240, and a recurring $1,550/day MCA debit was surfaced.", "6 statements analysed"],
+  ["KYB/KYC", "Business entity is active and the legal name matches. The registered address does not match the address on the application.", "1 conflict open"],
+  ["Fraud Detection", "Duplicate-submission and document-integrity checks produced no separate fraud flag. The address conflict remains visible rather than being treated as fraud automatically.", "0 fraud flags"],
+  ["Policy Engine", "Deposit volume and core business criteria pass. Negative-day activity falls outside the lender-defined threshold and needs reviewer judgment.", "1 policy exception"],
+  ["Reanalysis", "Additional address evidence was added and the affected verification checks were rerun. Financial findings remained unchanged, and the revised evidence was preserved against the same deal.", "1 change recorded"],
+  ["Deal Memo", "Financial findings, verification results, fraud review, policy exception, source evidence and reviewer notes were assembled into one underwriting memo.", "Ready for human review"],
 ];
 
 const principles = [
   {
-    term: "Consistent",
-    detail: "Bring every reviewer onto one shared review path instead of four private ones.",
+    term: "Traceable",
+    detail: "Every important number and finding keeps the source behind it — the statement, page, transaction or verification result your underwriter can go back and inspect.",
     image: "/media/placeholder/why-consistent.webp",
     imageAlt: "One shared review path applied across a queue of files",
   },
   {
-    term: "Explainable",
-    detail: "Findings stay attached to the document that produced them.",
+    term: "Policy-led",
+    detail: "Cevrynt works from your underwriting criteria, thresholds and exceptions. It does not replace your credit policy with a universal score that your team has to work around.",
     image: "/media/placeholder/why-explainable.webp",
     imageAlt: "A finding shown with the source document it was drawn from",
   },
   {
-    term: "Configurable",
-    detail: "Your credit policy and your exceptions, not a fixed box.",
+    term: "Exception-aware",
+    detail: "A mismatch should look like a mismatch. An out-of-policy condition should look like an exception. Cevrynt surfaces the gray areas instead of quietly turning them into a clean answer.",
     image: "/media/placeholder/why-configurable.webp",
     imageAlt: "Lender-defined policy criteria with an exception recorded",
   },
   {
-    term: "Human-led",
-    detail: "Notes, overrides, and final authority stay with your team.",
+    term: "Human-owned",
+    detail: "The system prepares the review; your team makes the credit decision. Notes, overrides and the reasoning behind the call stay with the deal instead of disappearing into chat, spreadsheets or memory.",
     image: "/media/placeholder/why-human.webp",
     imageAlt: "A reviewer override recorded against a policy outcome",
   },
@@ -186,54 +186,54 @@ const principles = [
 const boundaries = [
   {
     topic: "Policy",
-    machine: "Evaluates each deal against the criteria your team defined, and shows the outcome with its reasoning.",
-    human: "You override any outcome. The override is recorded against the file with its reasoning, not applied quietly.",
+    machine: "Cevrynt evaluates each deal against the underwriting rules, thresholds and conditions your team has defined, and shows what passed, what failed and why.",
+    human: "You decide the risk appetite, thresholds, conditions and who has authority to approve an exception.",
   },
   {
     topic: "Evidence",
-    machine: "Keeps every finding attached to the document and page it came from, and records notes and changes as they happen.",
-    human: "You own the audit trail. A file can be reconstructed after the fact by someone who was not in the room.",
+    machine: "Cevrynt structures the borrower file and keeps important figures, findings and risk signals connected to the document, page or transaction behind them.",
+    human: "An underwriter can inspect the source, correct a finding, request more information or decide that the evidence needs a different interpretation.",
   },
   {
     topic: "Access",
-    machine: "Proposes an access model, data-handling approach, and deployment shape for review.",
-    human: "You approve access, data handling, and deployment requirements before any pilot begins.",
+    machine: "Cevrynt surfaces policy exceptions, conflicting information and unresolved signals instead of quietly turning them into a clean answer.",
+    human: "You decide whether an exception is acceptable, whether conditions are needed, whether the deal should be escalated and why an override was made.",
   },
   {
     topic: "Decision",
-    machine: "Surfaces signals, conflicts, and policy outcomes for a person to weigh.",
-    human: "You approve, decline, or price. Cevrynt never does, and is not a lender.",
+    machine: "Cevrynt assembles the financial analysis, verification results, policy outcomes, open issues and supporting evidence into a reviewable underwriting record.",
+    human: "Approval, decline, counteroffer, pricing, structure and final sign-off remain with the lender or funder.",
   },
 ];
 
 const partnershipScope = [
-  "Exploring merchant-underwriting workflows for e-commerce sellers",
-  "Coordinated development between the two teams",
-  "Qualified referrals, with lender eligibility decided independently",
+  "Where permitted and implemented, commerce activity can add operating context around the merchant instead of asking the lender to understand the business from borrower documents alone.",
+  "Cevrynt is being built to evaluate relevant merchant context alongside bank activity, borrower documents, business verification and lender-defined underwriting policy.",
+  "Eligibility, pricing, structure, exceptions and the final funding decision remain independently controlled by the participating lender or funder.",
 ];
 
 const pilotStages = [
   {
-    marker: "First call",
-    title: "Scope one workflow",
-    body: "Pick a bounded, representative use case — usually one product and one file type — rather than the whole book.",
+    marker: "First",
+    title: "Choose the workflow worth testing.",
+    body: "Start with a real bottleneck — bank statement review, document intake, verification, policy review, or the full underwriting file. We keep the scope narrow enough to learn something useful quickly.",
   },
   {
-    marker: "Before we start",
-    title: "Agree how it is judged",
-    body: "Define what a good result looks like up front, so the evaluation runs against your criteria and not a demo script.",
+    marker: "BEFORE WE RUN A FILE ",
+    title: "Decide what “better” actually means.",
+    body: "Agree on the measures before seeing the results: review time, manual touches, extraction quality, missed conflicts, policy consistency, or how often an underwriter needs to correct the output.",
   },
   {
     marker: "In the pilot",
-    title: "Work through real files",
-    body: "Use files that look like your actual submissions, including the messy ones that break rules of thumb.",
+    title: "Compare Cevrynt with the review you already trust.",
+    body: "Run a representative set of historical files — including the messy ones and edge cases. Compare what Cevrynt surfaces with what your team found, inspect the evidence behind it, and decide whether it belongs in the workflow.",
   },
 ];
 
 const resources = [
   {
     kind: "Article",
-    title: "From documents to decision-ready underwriting",
+    title: "Bank statement analysis for MCA underwriting: what the cash flow actually tells you",
     href: "/blog/from-documents-to-decision-ready-underwriting",
     image: "/media/placeholder/res-article.webp",
     imageAlt: "Article preview: borrower documents turned into an evidence-linked review",
@@ -241,7 +241,7 @@ const resources = [
   },
   {
     kind: "Guide",
-    title: "Evidence-focused underwriting workflows",
+    title: "Existing MCA positions and stacking risk: what recurring debits can reveal",
     href: "/resources",
     image: "/media/placeholder/res-guide.webp",
     imageAlt: "Guide preview: workflow stages with evidence attached at each step",
@@ -249,7 +249,7 @@ const resources = [
   },
   {
     kind: "Platform",
-    title: "How the workflow connects end to end",
+    title: "SMB lending fraud is changing. Here's what deserves a second look.",
     href: "/platform",
     image: "/media/placeholder/res-platform.webp",
     imageAlt: "Platform preview: intake through to a decision-ready report",
@@ -257,7 +257,7 @@ const resources = [
   },
   {
     kind: "Security",
-    title: "Access, data handling, and audit requirements",
+    title: "What a useful underwriting audit trail should preserve",
     href: "/security",
     image: "/media/placeholder/res-security.webp",
     imageAlt: "Security preview: access controls and audit history requirements",
@@ -266,11 +266,11 @@ const resources = [
 ];
 
 const objections = [
-  ["Does Cevrynt replace human underwriters?", "No. Cevrynt gives underwriters a more complete, evidence-linked picture of a deal faster. Every workflow keeps a human decision-maker in the loop for the final approve, decline, or counter-offer call."],
-  ["Is Cevrynt a lender?", "No. Cevrynt is not a lender and does not make or guarantee funding offers. Lenders retain final approval authority in every case."],
-  ["Can Cevrynt work with our existing credit policy?", "Cevrynt evaluates deals against your own policy, including specific exceptions and override rules, rather than imposing a generic scoring model. Policy configuration is discussed during a walkthrough or pilot."],
-  ["Do you publish approval rates or accuracy metrics?", "No. Cevrynt does not publish approval rates, accuracy percentages, or performance guarantees, and does not guarantee universal borrower eligibility. Fit is best assessed against your own file mix during a walkthrough."],
-  ["Is the Cevrynt × SHOPLINE partnership a live integration?", "No. It is a documented development and referral partnership exploring e-commerce merchant-underwriting workflows. It does not imply a generally available live integration, automatic data sharing, universal merchant eligibility, or guaranteed funding."],
+  ["Does Cevrynt make credit decisions or replace underwriters?", "No. Cevrynt prepares the underwriting work — structuring documents, analysing bank activity, checking business and fraud signals, applying lender-defined policy, and keeping the evidence together. Your team reviews the exceptions and makes the final approval, decline, counter, pricing, or structuring decision."],
+  ["Can Cevrynt work with our existing underwriting policy?", "Yes. Cevrynt is designed around the rules your team already uses, including thresholds, conditions, document requirements, and exception paths. It shows where a deal fits policy, where it does not, and why. If an underwriter overrides the result, that judgment stays recorded with the file."],
+  ["Do we need an LOS or API integration before we can test Cevrynt?", "No. A pilot can start with a bounded workflow and representative historical files, without turning the first evaluation into an integration project. If the results justify moving forward, the production workflow and integrations can be scoped around the systems your team already uses."],
+  ["How do you measure whether Cevrynt is accurate enough for our workflow?", "We do not treat approval rate as an accuracy metric — approval depends on your policy and risk appetite. In a pilot, we compare Cevrynt against files your underwriters already know and measure things that can actually be checked: extracted values, financial calculations, source links, conflicts surfaced, policy results, false or missed flags, and how often a reviewer needs to correct the output."],
+  ["Is the Cevrynt × SHOPLINE partnership a live integration?", "Not as a universally available, plug-and-play integration today. Cevrynt and SHOPLINE have a development and referral partnership around e-commerce merchant underwriting. Any production data flow depends on the specific implementation, merchant authorization, permitted data access, and lender use case. The partnership should not be read as automatic data sharing, automatic underwriting, or guaranteed funding eligibility."],
 ];
 
 const keepReading = [
@@ -432,8 +432,8 @@ export default function Home() {
           index="08"
           id="why-heading"
           kicker="Why Cevrynt"
-          heading="Decision intelligence that keeps lenders in control."
-          lede="The point is not speed for its own sake. It is a review your team can stand behind."
+          heading="Underwriting automation that shows its work."
+          lede="Cevrynt does the repetitive work around an MCA or SMB underwriting file, but it does not hide how it got there. The evidence, lender policy, exceptions and human judgment remain visible all the way to the final review."
         />
         <div className="eg wy-body">
           <div className="wy-full">
@@ -448,8 +448,8 @@ export default function Home() {
           index="09"
           id="control-heading"
           kicker="Lender control"
-          heading="The line we deliberately did not cross."
-          lede="Cevrynt is AI-assisted infrastructure, not a decision-maker. These boundaries are design choices, not gaps."
+          heading="Automate the review. Keep the credit authority."
+          lede="Cevrynt prepares the underwriting work — structuring evidence, applying lender-defined policy, surfacing exceptions and building the decision record. Your team keeps control of risk appetite, judgment and the final credit or funding decision."
         />
         <div className="eg ct-body">
           <div className="ct-full">
@@ -465,17 +465,17 @@ export default function Home() {
           <span className="eg-rail hx-mono">10</span>
           <div className="eg-head">
             <p className="hx-kicker hx-kicker-invert">Cevrynt × SHOPLINE</p>
-            <RevealLines as="h2" className="t-display-2" id="partner-heading" text="Two teams, one merchant-underwriting question." />
+            <RevealLines as="h2" className="t-display-2" id="partner-heading" text="Bringing underwriting closer to where commerce actually happens." />
           </div>
           <p className="eg-lede t-lede pt-lede">
-            A documented development and referral partnership exploring how e-commerce merchants are
-            underwritten.
+            Cevrynt and SHOPLINE are working through a development and referral partnership around a simple question: how can e-commerce merchant underwriting use real operating context without taking the credit decision away from the lender?
           </p>
         </div>
         <div className="eg pt-body">
           <div className="pt-full">
+           
             <PartnerQuestion
-              question="How should an e-commerce merchant be underwritten when the signals live on a commerce platform?"
+              question="What changes when the underwriting file can understand the business behind it?"
               scope={partnershipScope}
               href="/partners/shopline"
             />
@@ -489,8 +489,8 @@ export default function Home() {
           index="11"
           id="pilot-heading"
           kicker="Founder-led pilot"
-          heading="Three steps, and no procurement theatre."
-          lede="Pilots are scoped directly with the founder. The goal is a decision about fit, quickly."
+          heading="Test Cevrynt on files your underwriters already know."
+          lede="A pilot starts small on purpose. Pick one underwriting workflow, agree what a useful result looks like, then run Cevrynt against representative historical files your team has already reviewed."
         />
         <div className="eg pl-body">
           <div className="pl-full">
@@ -500,7 +500,7 @@ export default function Home() {
           </div>
         </div>
         <div className="eg sec-cta">
-          <p className="eg-head t-lede">Scope a pilot with the founder.</p>
+          <p className="eg-head t-lede">Bring a workflow and a small set of representative files.</p>
           <a className="inline-cta" href="mailto:arin@cevrynt.com">
             arin@cevrynt.com <ArrowUpRight />
           </a>
@@ -513,8 +513,8 @@ export default function Home() {
           index="12"
           id="resources-heading"
           kicker="Resources"
-          heading="Practical thinking for underwriting teams."
-          lede="Longer reads on the workflow, the platform, and how data is handled."
+          heading="Practical guidance for MCA and SMB underwriting teams."
+          lede="Deep dives on bank statement analysis, existing positions, fraud signals and the evidence an underwriting decision should leave behind."
         />
         <div className="eg rs-body">
           <div className="rs-full">
