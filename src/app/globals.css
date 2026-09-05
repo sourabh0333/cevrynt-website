@@ -3082,119 +3082,457 @@ body:has(.error-404) .nav-feature-copy span.nav-feature-more { color: #0f6e5e; }
 .ig-memo > * { position: relative; z-index: 1; }
 
 /* ===========================================================================
-   Security page — three paired sections
+   Security page
 
-   No cards. Every pair is two columns split by one hairline, the same
-   editorial language the rest of the site already uses for a split argument
-   (see ControlBoundary, WhyList, BoundaryLines) — rules, a margin and type,
-   not bordered/shadowed/radiused boxes. The one genuinely new piece is the
-   custody diagram: a single SVG path that draws itself down the margin as the
-   reader scrolls, rather than another list.
-
-   Entrances stay plain fades/rises triggered on scroll, same as everywhere
-   else — nothing hides real text before revealing it, nothing plays on load.
+   Both figures here are measurements rather than illustrations. 01 is drawn at
+   one mark per page, so the field's size is the package's size. 02 is drawn one
+   stratum per entry at a fixed thickness, so the column's height is the entry
+   count — which is what makes the refusal legible when the reader tries to
+   shorten it and the height does not move.
    ======================================================================== */
 
-.sec-pair { display: grid; grid-template-columns: minmax(0, 0.94fr) 1px minmax(0, 1.06fr); align-items: start; gap: clamp(28px, 3.6vw, 52px); }
-.sec-pair-seam { align-self: stretch; width: 1px; min-height: 100%; background: var(--border); transform: scaleY(0); transform-origin: top center; }
-.band-deep .sec-pair-seam { background: rgba(234, 243, 240, 0.16); }
-.sec-eyebrow { display: block; margin-bottom: clamp(16px, 1.8vw, 20px); color: var(--rail); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; }
-.band-deep .sec-eyebrow { color: var(--yellow); }
+/* -- 01 Access — a hundred and forty-three pages -------------------------------
+   Each mark reads its own index against --reveal and --release on the field, so
+   a hundred and forty-three marks cost two custom-property writes per frame
+   instead of a hundred and forty-three style writes. Both defaults resolve to
+   the finished field, which is what ships without JavaScript.
+   -------------------------------------------------------------------------- */
+.pg { margin-top: var(--s-block); }
 
-@media (max-width: 900px) {
-  .sec-pair { grid-template-columns: minmax(0, 1fr); gap: clamp(36px, 6vw, 48px); }
-  .sec-pair-seam { display: none; }
+.pg-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(18px, 3vw, 44px); margin-bottom: clamp(20px, 2.6vw, 30px); }
+.pg-count { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.pg-count-n {
+  min-width: 2.6ch;
+  color: var(--ink);
+  font-size: clamp(2.6rem, 5.4vw, 4.2rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+}
+.pg-count-k { max-width: 11ch; color: var(--label); font-size: 0.58rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.pg-readout-rule { width: 1px; height: clamp(34px, 4vw, 48px); background: var(--border); }
+/* The figure that never moves. */
+.pg-count-nil .pg-count-n { color: var(--neutral-depth); }
+.pg-count-nil .pg-count-k { color: var(--neutral-depth); }
+
+.pg-field {
+  --reveal: 999;
+  --release: 0;
+  position: relative;
+  padding: clamp(16px, 2.2vw, 26px);
+}
+.pg-marks {
+  display: grid;
+  grid-template-columns: repeat(26, minmax(0, 1fr));
+  gap: clamp(3px, 0.42vw, 5px);
+}
+.pg-mark {
+  height: clamp(15px, 1.9vw, 24px);
+  border-radius: 1.5px;
+  background: var(--neutral-depth);
+  /* Arrived, minus released. Both clamps resolve to the finished mark when the
+     field is unarmed, so the package is complete with no JavaScript. */
+  opacity: calc(
+    clamp(0, calc(var(--reveal) - var(--i)), 1) *
+    (1 - clamp(0, calc(var(--release) - var(--i)), 1))
+  );
+  transition: background 520ms ease calc(var(--i) * 1.6ms);
+}
+/* Classified into the five documents the product identified. */
+.pg-field.is-sorted .pg-mark[data-g="0"] { background: var(--rail); }
+.pg-field.is-sorted .pg-mark[data-g="1"] { background: var(--ink); }
+.pg-field.is-sorted .pg-mark[data-g="2"] { background: var(--muted); }
+.pg-field.is-sorted .pg-mark[data-g="3"] { background: var(--neutral-depth); }
+.pg-field.is-sorted .pg-mark[data-g="4"] { background: var(--yellow); box-shadow: inset 0 0 0 1px rgba(1, 62, 55, 0.28); }
+
+.pg-bound { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.pg-bound-rect {
+  fill: none;
+  stroke: var(--rail);
+  stroke-width: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  vector-effect: non-scaling-stroke;
 }
 
-/* -- 01 Access ---------------------------------------------------------------
-   Left: the one deal in reach, named at display size over its own screenshot.
-   Right: what is never reachable, and the standing rules under it — one ruled
-   list, not two.
-   -------------------------------------------------------------------------- */
-.as-deal { margin: 0; color: var(--ink); font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(1.7rem, 3.1vw, 2.35rem); font-weight: 620; letter-spacing: -0.032em; line-height: 1.1; }
-.as-deal-line { display: block; height: 2px; margin-top: clamp(14px, 1.6vw, 18px); background: var(--rail); transform: scaleX(0); transform-origin: left center; }
-.as-deal-ref { display: block; margin-top: clamp(14px, 1.6vw, 18px); color: var(--label); font-size: 0.58rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.pg-groups {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(12px, 1.8vw, 24px);
+  margin: clamp(22px, 2.8vw, 32px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.pg-group {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 10px;
+  padding-top: clamp(12px, 1.4vw, 15px);
+  border-top: 1px solid var(--border);
+  transition: opacity 460ms ease;
+}
+.pg-group.is-dim { opacity: 0.3; }
+.pg-group-swatch { width: 10px; height: 10px; margin-top: 3px; border-radius: 2px; }
+.pg-group[data-g="0"] .pg-group-swatch { background: var(--rail); }
+.pg-group[data-g="1"] .pg-group-swatch { background: var(--ink); }
+.pg-group[data-g="2"] .pg-group-swatch { background: var(--muted); }
+.pg-group[data-g="3"] .pg-group-swatch { background: var(--neutral-depth); }
+.pg-group[data-g="4"] .pg-group-swatch { background: var(--yellow); box-shadow: inset 0 0 0 1px rgba(1, 62, 55, 0.28); }
+.pg-group-name { color: var(--ink); font-size: 0.9rem; font-weight: 600; letter-spacing: -0.018em; line-height: 1.3; }
+.pg-group-meta { grid-column: 2; display: flex; flex-wrap: wrap; gap: 3px 10px; color: var(--label); font-size: 0.55rem; letter-spacing: 0.11em; text-transform: uppercase; }
+.pg-group-pages { color: var(--rail); }
 
-.as-frame { position: relative; overflow: hidden; aspect-ratio: 2000 / 950; margin-top: clamp(24px, 2.8vw, 34px); border-radius: 10px; background: var(--ink-deeper); clip-path: inset(0 0 0 0); }
-.as-frame img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left center; }
-.as-meta { display: block; margin-top: 14px; color: var(--label); font-size: 0.57rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.pg-closing { display: block; margin-top: clamp(18px, 2.2vw, 26px); color: var(--rail); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; }
 
-.as-out-list, .as-rules { margin: 0; padding: 0; list-style: none; }
-.as-out-row, .as-rule { display: flex; align-items: flex-start; gap: 13px; padding: clamp(13px, 1.5vw, 16px) 0; border-bottom: 1px solid var(--border); }
-.as-out-icon { flex: none; margin-top: 1px; color: var(--neutral-depth); }
-.as-out-row span:last-child { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
-
-.as-rules-k { display: block; margin: clamp(26px, 3vw, 36px) 0 clamp(2px, 0.6vw, 6px); color: var(--rail); font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; }
-.as-rule-icon { flex: none; margin-top: 1px; color: var(--rail); }
-.as-rule span:last-child { color: var(--ink); font-size: 0.92rem; line-height: 1.5; }
-
-/* -- 02 Evidence ---------------------------------------------------------------
-   Left: the questionnaire as a status list — a number that ticks up, then the
-   rows. Right: one override, written the way a correction actually reads —
-   struck, then replaced, at size.
-   -------------------------------------------------------------------------- */
-.ev-tally { display: flex; align-items: baseline; gap: 10px; margin: 0 0 clamp(20px, 2.4vw, 28px); padding-bottom: clamp(16px, 2vw, 20px); border-bottom: 1px solid rgba(234, 243, 240, 0.14); }
-.ev-tally-n { color: var(--yellow); font-size: clamp(2.1rem, 3.8vw, 2.9rem); font-weight: 640; font-variant-numeric: tabular-nums; line-height: 1; }
-.ev-tally-t { max-width: 15ch; color: rgba(234, 243, 240, 0.5); font-size: 0.57rem; letter-spacing: 0.12em; line-height: 1.5; text-transform: uppercase; }
-
-.ev-list { margin: 0; padding: 0; list-style: none; }
-.ev-row { display: flex; gap: 12px; padding: clamp(14px, 1.7vw, 18px) 0; border-bottom: 1px solid rgba(234, 243, 240, 0.1); }
-.ev-icon { flex: none; margin-top: 2px; }
-.ev-row.is-set .ev-icon { color: var(--yellow); }
-.ev-row.is-open .ev-icon { color: rgba(234, 243, 240, 0.4); }
-.ev-q { margin: 0; color: rgba(234, 243, 240, 0.58); font-size: 0.87rem; line-height: 1.4; }
-.ev-a { margin: 4px 0 0; color: #f7fcfa; font-size: 0.98rem; font-weight: 560; letter-spacing: -0.01em; line-height: 1.4; }
-.ev-when { margin: 4px 0 0; color: rgba(234, 243, 240, 0.5); font-size: 0.85rem; }
-.ev-when-k { color: var(--yellow); }
-
-.ev-field { display: inline-flex; align-items: center; gap: 8px; color: var(--yellow); font-size: 0.57rem; letter-spacing: 0.14em; text-transform: uppercase; }
-.ev-field::before { width: 6px; height: 6px; border-radius: 50%; background: var(--yellow); content: ""; }
-
-.ev-was { position: relative; display: inline-block; margin: clamp(22px, 2.6vw, 30px) 0 0; color: rgba(234, 243, 240, 0.44); font-size: clamp(1.15rem, 1.9vw, 1.45rem); font-weight: 500; letter-spacing: -0.012em; line-height: 1.3; }
-.ev-was-line { position: absolute; top: 52%; right: 0; left: 0; height: 1px; background: rgba(234, 243, 240, 0.55); transform: scaleX(0); transform-origin: left center; }
-.ev-now { margin: clamp(12px, 1.6vw, 16px) 0 0; color: #f7fcfa; font-size: clamp(1.45rem, 2.5vw, 1.95rem); font-weight: 640; letter-spacing: -0.024em; line-height: 1.16; }
-.ev-by { display: block; margin-top: clamp(16px, 2vw, 20px); color: var(--yellow); font-size: 0.57rem; letter-spacing: 0.12em; text-transform: uppercase; }
-
-.ev-reason { margin-top: clamp(24px, 2.8vw, 34px); padding-top: clamp(18px, 2.2vw, 24px); border-top: 1px solid rgba(234, 243, 240, 0.14); }
-.ev-reason-k { display: block; margin-bottom: 8px; color: rgba(234, 243, 240, 0.42); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; }
-.ev-reason p { margin: 0; color: rgba(234, 243, 240, 0.8); font-size: 0.93rem; line-height: 1.58; }
-
-/* -- 03 Data lifecycle ---------------------------------------------------------
-   Left: the four surfaces, as a ruled register with a clock trailing each row.
-   Right: the custody chain, drawn as one line down the margin that extends as
-   you scroll — the diagram is the argument, not a fourth list.
-   -------------------------------------------------------------------------- */
-.dl-surfaces-list { margin: 0; padding: 0; list-style: none; }
-.dl-row { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 13px; padding: clamp(17px, 2vw, 22px) 0; border-bottom: 1px solid var(--border); }
-.dl-surfaces-list li:last-child.dl-row { border-bottom: 0; }
-.dl-row-n { padding-top: 3px; color: var(--rail); font-size: 0.6rem; letter-spacing: 0.1em; }
-.dl-row-name { margin: 0; color: var(--ink); font-size: 0.98rem; font-weight: 600; letter-spacing: -0.02em; }
-.dl-row-what { max-width: 50ch; margin: 6px 0 0; color: var(--muted); font-size: 0.87rem; line-height: 1.48; }
-.dl-row-clock { display: block; margin-top: 8px; color: var(--rail); font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; }
-
-.dl-custody { position: relative; }
-.dl-svg { position: absolute; top: 8px; left: 0; width: 15px; height: calc(100% - 16px); overflow: visible; }
-.dl-svg .dl-svg-base { fill: none; stroke: var(--border); stroke-width: 1.5; }
-.dl-svg .dl-svg-draw { fill: none; stroke: var(--rail); stroke-width: 1.5; stroke-dasharray: 1 1; stroke-dashoffset: 1; }
-
-.dl-chain-list { margin: 0; padding: 0 0 0 38px; list-style: none; }
-.dl-chain-row { position: relative; padding: clamp(15px, 1.8vw, 20px) 0; }
-.dl-chain-dot { position: absolute; top: 24px; left: -38px; width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%; background: var(--border); transition: background 320ms ease; }
-.dl-chain-dot.is-lit { background: var(--rail); }
-.dl-chain-n { color: var(--rail); font-size: 0.58rem; letter-spacing: 0.12em; }
-.dl-chain-name { margin: 4px 0 0; color: var(--ink); font-size: 0.96rem; font-weight: 600; letter-spacing: -0.02em; }
-.dl-chain-what { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; line-height: 1.46; }
-
-.dl-terminus { margin: clamp(26px, 3vw, 36px) 0 0 38px; padding-left: clamp(18px, 2vw, 22px); border-left: 2px solid var(--yellow); }
-.dl-terminus-k { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; color: var(--rail); font-size: 0.57rem; letter-spacing: 0.15em; text-transform: uppercase; }
-.dl-terminus-icon { width: 14px; height: 14px; color: var(--rail); }
-.dl-terminus-name { margin: 0; color: var(--ink); font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: clamp(1.25rem, 2.1vw, 1.55rem); font-weight: 620; letter-spacing: -0.024em; }
-.dl-terminus-what { max-width: 46ch; margin: 8px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.54; }
-
+@media (max-width: 900px) {
+  .pg-marks { grid-template-columns: repeat(18, minmax(0, 1fr)); }
+  .pg-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 @media (max-width: 560px) {
-  .dl-chain-list { padding-left: 30px; }
-  .dl-chain-dot { left: -30px; }
-  .dl-terminus { margin-left: 30px; }
+  .pg-marks { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .pg-groups { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* -- 02 The record — a column that is its own count ----------------------------
+   Every stratum is the same thickness, so height counts entries. The refusal is
+   a lift that returns to exactly the height it left from.
+   -------------------------------------------------------------------------- */
+.rec { margin-top: var(--s-block); }
+
+.rec-body { display: grid; grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr); align-items: start; gap: clamp(24px, 3.4vw, 54px); }
+
+.rec-stack { position: relative; }
+.rec-strata { margin: 0; padding: 0; list-style: none; }
+.rec-stratum {
+  position: relative;
+  border: 1px solid rgba(234, 243, 240, 0.13);
+  border-bottom: 0;
+  background: linear-gradient(180deg, rgba(234, 243, 240, 0.07), rgba(234, 243, 240, 0.03));
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), background 320ms ease, border-color 320ms ease;
+}
+.rec-stratum:last-child { border-bottom: 1px solid rgba(234, 243, 240, 0.13); }
+.rec-stratum:first-child { border-radius: 8px 8px 0 0; }
+.rec-stratum:last-child { border-radius: 0 0 8px 8px; }
+/* The lit top edge of each layer. */
+.rec-stratum::before {
+  position: absolute;
+  top: -1px;
+  right: 12px;
+  left: 12px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(234, 243, 240, 0.28), transparent);
+  content: "";
+}
+.rec-stratum:hover { background: linear-gradient(180deg, rgba(234, 243, 240, 0.11), rgba(234, 243, 240, 0.05)); }
+.rec-stratum.is-live { border-color: rgba(255, 239, 179, 0.42); background: linear-gradient(180deg, rgba(255, 239, 179, 0.13), rgba(255, 239, 179, 0.05)); }
+
+/* Accretion: the column builds from the bottom up as it is reached. */
+.rec.is-ready .rec-stratum { opacity: 0; transform: translateY(14px); }
+.rec.is-built .rec-stratum {
+  opacity: 1;
+  transform: none;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1) calc((var(--rec-n, 6) - var(--i)) * 70ms),
+    opacity 420ms ease calc((var(--rec-n, 6) - var(--i)) * 70ms), background 320ms ease, border-color 320ms ease;
+}
+
+/* The refusal. It lifts, and comes back to exactly where it was. */
+.rec.is-refusing .rec-stratum.is-top { transform: translateY(-13px) rotate(-0.5deg); border-color: rgba(255, 239, 179, 0.6); }
+
+.rec-stratum-btn {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(12px, 1.5vw, 16px) clamp(13px, 1.6vw, 18px);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.rec-stratum-n { color: rgba(234, 243, 240, 0.42); font-size: 0.58rem; letter-spacing: 0.1em; }
+.rec-stratum.is-live .rec-stratum-n { color: var(--yellow); }
+.rec-stratum-what { color: rgba(234, 243, 240, 0.82); font-size: 0.92rem; letter-spacing: -0.014em; }
+.rec-stratum.is-live .rec-stratum-what { color: #f7fcfa; }
+.rec-stratum-at { color: rgba(234, 243, 240, 0.34); font-size: 0.56rem; letter-spacing: 0.08em; }
+
+/* The ruler, saying what the height is. */
+.rec-height { display: flex; align-items: baseline; gap: 9px; margin: clamp(12px, 1.5vw, 16px) 0 0; }
+.rec-height-n { color: var(--yellow); font-size: 1.4rem; font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
+.rec-height-k { color: rgba(234, 243, 240, 0.42); font-size: 0.56rem; letter-spacing: 0.13em; text-transform: uppercase; }
+
+.rec-detail { position: sticky; top: clamp(96px, 12vh, 132px); }
+.rec-detail-k { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 10px; color: var(--yellow); font-size: 0.56rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.rec-detail-at { color: rgba(234, 243, 240, 0.4); }
+.rec-detail-t {
+  margin: 0;
+  color: #f7fcfa;
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: clamp(1.2rem, 2.1vw, 1.6rem);
+  font-weight: 620;
+  letter-spacing: -0.028em;
+  line-height: 1.16;
+}
+.rec-detail-b { max-width: 52ch; margin: clamp(12px, 1.5vw, 16px) 0 0; color: rgba(234, 243, 240, 0.66); font-size: 0.92rem; line-height: 1.58; }
+
+.rec-diff { margin-top: clamp(14px, 1.8vw, 20px); padding-left: clamp(13px, 1.5vw, 16px); border-left: 2px solid rgba(255, 239, 179, 0.34); }
+.rec-diff-row { display: grid; grid-template-columns: 46px minmax(0, 1fr); align-items: baseline; gap: 12px; margin: 0; }
+.rec-diff-row + .rec-diff-row { margin-top: 8px; }
+.rec-diff-k { color: rgba(234, 243, 240, 0.36); font-size: 0.55rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.rec-diff-was { color: rgba(234, 243, 240, 0.46); font-size: 0.93rem; line-height: 1.4; text-decoration: line-through; text-decoration-color: rgba(234, 243, 240, 0.34); }
+.rec-diff-now { color: #f7fcfa; font-size: 0.96rem; font-weight: 560; line-height: 1.4; }
+
+.rec-tally {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: clamp(18px, 2.6vw, 40px);
+  margin-top: clamp(26px, 3.2vw, 40px);
+  padding-top: clamp(18px, 2.2vw, 24px);
+  border-top: 1px solid rgba(234, 243, 240, 0.16);
+}
+.rec-tally-item { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+.rec-tally-n { color: #f7fcfa; font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.045em; line-height: 1; }
+.rec-tally-k { max-width: 10ch; color: rgba(234, 243, 240, 0.46); font-size: 0.55rem; letter-spacing: 0.12em; line-height: 1.5; text-transform: uppercase; }
+/* The figure the control cannot change. */
+.rec-tally-nil .rec-tally-n { color: var(--yellow); text-shadow: 0 0 24px rgba(255, 239, 179, 0.26); }
+.rec-tally-tries .rec-tally-n { color: rgba(234, 243, 240, 0.6); }
+
+.rec-try {
+  margin-left: auto;
+  padding: 10px 18px;
+  border: 1px solid rgba(234, 243, 240, 0.28);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(234, 243, 240, 0.82);
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 240ms ease, color 240ms ease, background 240ms ease;
+}
+.rec-try:hover { border-color: var(--yellow); color: var(--yellow); background: rgba(255, 239, 179, 0.07); }
+.rec:not(.is-ready) .rec-try { display: none; }
+
+.rec-note { max-width: 66ch; margin: clamp(14px, 1.8vw, 18px) 0 0; color: rgba(234, 243, 240, 0.56); font-size: 0.88rem; line-height: 1.55; }
+
+@media (max-width: 900px) {
+  .rec-body { grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 5vw, 32px); }
+  .rec-detail { position: static; }
+  .rec-try { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rec-stratum, .rec.is-built .rec-stratum { transition: none; }
+  .rec.is-ready .rec-stratum { opacity: 1; transform: none; }
+}
+
+/* -- 03 Retention — four rings that do not close -------------------------------
+   Cevrynt has no durations to draw; they are agreed before anything is sent. So
+   each ring is drawn as far as the truth goes — that the surface exists, has a
+   clock, and who sets it — and the remaining arc stays dashed, because that arc
+   is the duration and it is not ours to fill in.
+   -------------------------------------------------------------------------- */
+.rd { margin-top: var(--s-block); }
+
+.rd-dials {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(20px, 2.8vw, 44px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rd-dial { transition: opacity 460ms ease; }
+.rd-dial.is-dim { opacity: 0.34; }
+
+.rd-face { position: relative; width: clamp(96px, 11vw, 132px); margin-bottom: clamp(16px, 2vw, 22px); }
+.rd-face svg { display: block; width: 100%; height: auto; overflow: visible; transform: rotate(-90deg); }
+.rd-track { fill: none; stroke: var(--border); stroke-width: 5; }
+.rd-held {
+  fill: none;
+  stroke: var(--rail);
+  stroke-width: 5;
+  stroke-linecap: round;
+  /* Drawn to its stop by default, so the finished state ships without JS. */
+  stroke-dasharray: 0.72 1;
+  stroke-dashoffset: 0;
+}
+.rd-dial.is-quiet .rd-held { stroke: var(--ink); }
+/* The duration: an arc that occupies only the gap the ring stopped short of,
+   and is never drawn solid. */
+.rd-open {
+  fill: none;
+  stroke: var(--neutral-depth);
+  stroke-width: 5;
+  stroke-dasharray: 3 5;
+  stroke-linecap: round;
+  opacity: 1;
+}
+.rd-face-n {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--ink);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  letter-spacing: -0.02em;
+  transform: translate(-50%, -108%);
+}
+.rd-face-k {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--neutral-depth);
+  font-size: 0.5rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: translate(-50%, 34%);
+}
+
+.rd-name { margin: 0; color: var(--ink); font-size: 0.98rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.rd-what { max-width: 34ch; margin: 7px 0 0; color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
+.rd-clock { display: block; margin: 11px 0 0; color: var(--rail); font-size: 0.55rem; letter-spacing: 0.11em; line-height: 1.5; text-transform: uppercase; }
+.rd-flag { display: inline-block; margin: 9px 0 0; padding: 4px 9px; border: 1px solid rgba(1, 62, 55, 0.26); border-radius: 999px; color: var(--ink); font-size: 0.5rem; letter-spacing: 0.11em; text-transform: uppercase; }
+
+.rd-note { max-width: 76ch; margin: clamp(26px, 3.2vw, 40px) 0 0; color: var(--muted); font-size: 0.94rem; line-height: 1.6; }
+
+@media (max-width: 900px) { .rd-dials { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .rd-dials { grid-template-columns: minmax(0, 1fr); } }
+
+/* -- 04 Custody — the register, and the line left blank ------------------------
+   One column template shared by the head and all five rows, so the ledger lines
+   up down its whole height at any width. Every row resolves to its written
+   state by default, which is what ships without JavaScript; --rule, --seal and
+   --on are the only things the scrub writes.
+   -------------------------------------------------------------------------- */
+.cr { margin-top: var(--s-block); }
+.cr-field { position: relative; }
+
+.cr-sheet {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(234, 243, 240, 0.13);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(10, 92, 80, 0.15), rgba(1, 31, 28, 0.4));
+  box-shadow: 0 30px 66px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(234, 243, 240, 0.08);
+  padding: clamp(20px, 2.6vw, 34px) clamp(18px, 2.4vw, 32px) clamp(18px, 2.2vw, 26px);
+}
+.cr-ambient {
+  position: absolute;
+  inset: -28% -10%;
+  background: radial-gradient(ellipse 40% 48% at 18% 14%, rgba(10, 124, 106, 0.32), transparent 62%),
+    radial-gradient(ellipse 38% 46% at 86% 86%, rgba(255, 239, 179, 0.09), transparent 64%);
+  animation: pkDrift 26s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform;
+}
+.cr-key {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(360px circle at var(--px, 50%) var(--py, 26%), rgba(255, 239, 179, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.cr-sheet-top { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: clamp(14px, 1.8vw, 20px); }
+.cr-title { margin: 0; color: var(--yellow); font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; }
+.cr-ref { margin: 0; color: rgba(234, 243, 240, 0.4); font-size: 0.56rem; letter-spacing: 0.11em; text-transform: uppercase; }
+
+/* The one grid the whole register is set on. */
+.cr-table { position: relative; z-index: 2; }
+.cr-head,
+.cr-row {
+  display: grid;
+  grid-template-columns: 22px 34px minmax(0, 0.82fr) minmax(0, 1.5fr) minmax(0, 0.72fr);
+  align-items: baseline;
+  column-gap: clamp(10px, 1.6vw, 22px);
+}
+.cr-head {
+  --on: 1;
+  padding-bottom: 11px;
+  border-bottom: 1px solid rgba(234, 243, 240, 0.24);
+  opacity: var(--on);
+}
+.cr-h { color: rgba(234, 243, 240, 0.42); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.cr-h-end { text-align: right; }
+
+.cr-row {
+  --rule: 1;
+  --seal: 1;
+  --on: 1;
+  position: relative;
+  padding: clamp(13px, 1.7vw, 18px) 0;
+}
+/* The ruling, drawn before anything is written on it. */
+.cr-rule {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: rgba(234, 243, 240, 0.13);
+  transform: scaleX(var(--rule));
+  transform-origin: left center;
+}
+.cr-seal {
+  align-self: center;
+  width: 11px;
+  height: 11px;
+  border: 1.5px solid var(--yellow);
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 16px rgba(255, 239, 179, 0.32);
+  opacity: var(--seal);
+  transform: scale(calc(0.55 + var(--seal) * 0.45));
+}
+/* The fifth seal is open, because nothing has been signed onto that line. */
+.cr-seal-open { background: transparent; border-style: dashed; border-color: rgba(234, 243, 240, 0.42); box-shadow: none; }
+
+.cr-cell { opacity: var(--on); transform: translateY(calc((1 - var(--on)) * 7px)); }
+.cr-n { color: rgba(234, 243, 240, 0.38); font-size: 0.57rem; letter-spacing: 0.1em; }
+.cr-who { color: #f4faf8; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.cr-what { color: rgba(234, 243, 240, 0.62); font-size: 0.88rem; line-height: 1.48; }
+.cr-named { color: var(--yellow); font-size: 0.53rem; letter-spacing: 0.11em; line-height: 1.5; text-align: right; text-transform: uppercase; }
+
+/* The blank line: ruled where the writing would go, and never written on. */
+.cr-blank-line {
+  align-self: center;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, rgba(234, 243, 240, 0.26) 0 8px, transparent 8px 15px);
+}
+.cr-blank-note { color: rgba(234, 243, 240, 0.5); }
+.cr-row-blank .cr-n { color: rgba(234, 243, 240, 0.26); }
+
+.cr-foot { position: relative; z-index: 2; max-width: 70ch; margin: clamp(16px, 2vw, 22px) 0 0; color: rgba(234, 243, 240, 0.6); font-size: 0.88rem; line-height: 1.56; }
+
+.cr-tally { display: flex; flex-wrap: wrap; gap: clamp(18px, 2.6vw, 40px); margin-top: clamp(22px, 2.8vw, 32px); }
+.cr-tally-item { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+.cr-tally-n { color: #f7fcfa; font-size: clamp(1.4rem, 2.4vw, 1.9rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.045em; line-height: 1; }
+.cr-tally-k { max-width: 13ch; color: rgba(234, 243, 240, 0.46); font-size: 0.54rem; letter-spacing: 0.12em; line-height: 1.5; text-transform: uppercase; }
+.cr-tally-nil .cr-tally-n { color: var(--yellow); text-shadow: 0 0 24px rgba(255, 239, 179, 0.26); }
+
+.cr-open { margin-top: clamp(28px, 3.4vw, 44px); padding-top: clamp(18px, 2.2vw, 26px); border-top: 1px solid rgba(234, 243, 240, 0.16); }
+.cr-open-k { display: flex; align-items: baseline; gap: 10px; margin: 0 0 clamp(14px, 1.8vw, 20px); color: rgba(234, 243, 240, 0.5); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.cr-open-n { color: var(--yellow); font-size: 1.15rem; letter-spacing: -0.03em; }
+.cr-open-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.2vw, 34px); margin: 0; padding: 0; list-style: none; }
+.cr-open-row { padding-top: clamp(12px, 1.4vw, 15px); border-top: 1px solid rgba(234, 243, 240, 0.14); transition: opacity 460ms ease; }
+.cr-open-row.is-dim { opacity: 0.32; }
+.cr-open-q { margin: 0; color: #f4faf8; font-size: 0.93rem; letter-spacing: -0.016em; line-height: 1.4; }
+.cr-open-when { display: block; margin: 8px 0 0; color: var(--yellow); font-size: 0.54rem; letter-spacing: 0.12em; line-height: 1.5; text-transform: uppercase; }
+
+@media (max-width: 860px) {
+  /* The register keeps its ruling and its seals, but the two prose columns
+     stack rather than being squeezed to nothing. */
+  .cr-head { display: none; }
+  .cr-row { grid-template-columns: 22px 34px minmax(0, 1fr); row-gap: 5px; }
+  .cr-what, .cr-named { grid-column: 3; }
+  .cr-named { text-align: left; }
+  .cr-row-blank .cr-blank-line:nth-of-type(2) { display: none; }
+  .cr-open-list { grid-template-columns: minmax(0, 1fr); gap: clamp(14px, 4vw, 20px); }
+}
+@media (pointer: coarse) {
+  .cr-ambient { animation: none; }
+  .cr-key { display: none; }
 }
 
 @media (pointer: coarse) {
@@ -6208,4 +6546,1036 @@ body:has(.article-header) .nav-use-cases a:hover {
   .hl-thumb, .hl-step, .hl-step-card {
     transition: none !important;
   }
+}
+
+/* ===========================================================================
+   Merchant cash advance page
+
+   Two figures, both of them arithmetic on the figures this deal is described by
+   elsewhere on the site. 01 gathers six statements into one series; 02 takes a
+   single day and divides it. Opposite motions on purpose, so the pair reads as
+   a pair rather than as one idea done twice.
+   ======================================================================== */
+
+/* -- 01 Six statements, one series ---------------------------------------------
+   --seam is the only thing the scrub writes: 1 is six separate documents, 0 is
+   one continuous run. The panels share their end points, so at 0 the line is
+   genuinely continuous rather than looking continuous.
+   -------------------------------------------------------------------------- */
+.fs { margin-top: var(--s-block); }
+
+.fs-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 28px); }
+.fs-count { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.fs-count-n {
+  min-width: 2.4ch;
+  color: var(--ink);
+  font-size: clamp(2.3rem, 4.8vw, 3.6rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+}
+.fs-count-k { max-width: 12ch; color: var(--label); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.fs-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: var(--border); }
+.fs-count-quiet .fs-count-n { color: var(--rail); }
+
+.fs-plot {
+  --seam: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: calc(var(--seam) * clamp(10px, 1.6vw, 22px));
+  padding: clamp(14px, 2vw, 22px) 0 0;
+}
+.fs-panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  /* Separated, each statement sits at its own slight offset, the way six
+     documents do. Joined, they drop onto one baseline. */
+  transform: translateY(calc(var(--seam) * (var(--i) - 2.5) * 3.4px));
+}
+.fs-panel svg { display: block; width: 100%; height: clamp(96px, 12vw, 128px); overflow: visible; }
+.fs-base { stroke: var(--border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.fs-line {
+  fill: none;
+  stroke: var(--rail);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+/* The frame each statement arrives in, gone once they are one series. */
+.fs-panel::before {
+  position: absolute;
+  inset: -8px -6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  opacity: var(--seam);
+  content: "";
+  pointer-events: none;
+}
+.fs-panel svg, .fs-panel-k { position: relative; z-index: 1; }
+.fs-panel-k {
+  display: block;
+  margin-top: 9px;
+  color: var(--label);
+  font-size: 0.53rem;
+  letter-spacing: 0.13em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: color 400ms ease;
+}
+.fs-plot.is-joined .fs-panel-k { color: var(--neutral-depth); }
+
+.fs-note { max-width: 74ch; margin: clamp(20px, 2.6vw, 30px) 0 0; color: var(--muted); font-size: 0.93rem; line-height: 1.6; }
+
+@media (max-width: 700px) {
+  .fs-panel svg { height: clamp(74px, 20vw, 96px); }
+  .fs-panel-k { font-size: 0.46rem; letter-spacing: 0.08em; }
+}
+
+/* -- 02 One day, already spoken for --------------------------------------------
+   The bar is the two published figures at their true proportions. The control
+   stacks a second position on the first and recomputes; it never returns a
+   verdict, because the threshold belongs to the lender's policy.
+   -------------------------------------------------------------------------- */
+.ds { margin-top: var(--s-block); }
+
+.ds-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 28px); }
+.ds-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.ds-fig-n {
+  color: #f7fcfa;
+  font-size: clamp(2.3rem, 4.8vw, 3.6rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.86;
+}
+.ds-fig-k { max-width: 13ch; color: rgba(234, 243, 240, 0.5); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.ds-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: rgba(234, 243, 240, 0.2); }
+.ds-fig-quiet .ds-fig-n { color: var(--rail); color: #9fd9c9; }
+.ds.is-over .ds-fig-quiet .ds-fig-n { color: var(--yellow); }
+
+.ds-day {
+  --existing: 55%;
+  --proposed: 0%;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  height: clamp(66px, 8vw, 92px);
+  border: 1px solid rgba(234, 243, 240, 0.16);
+  border-radius: 8px;
+  background: rgba(234, 243, 240, 0.05);
+}
+.ds-seg {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  overflow: hidden;
+  padding: 0 clamp(9px, 1.2vw, 14px);
+  white-space: nowrap;
+  transition: width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Drawn from nothing as the section is reached, then held at true width. */
+.ds-seg-existing { width: 0; background: linear-gradient(180deg, rgba(255, 239, 179, 0.24), rgba(255, 239, 179, 0.12)); box-shadow: inset -1px 0 0 rgba(255, 239, 179, 0.5); }
+.ds.is-drawn .ds-seg-existing { width: var(--existing); }
+.ds:not(.is-ready) .ds-seg-existing { width: var(--existing); }
+.ds-seg-proposed { width: var(--proposed); background: linear-gradient(180deg, rgba(10, 124, 106, 0.5), rgba(10, 124, 106, 0.28)); box-shadow: inset -1px 0 0 rgba(159, 217, 201, 0.5); }
+.ds-seg-left { flex: 1 1 auto; }
+
+.ds-seg-k { color: rgba(234, 243, 240, 0.62); font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.ds-seg-existing .ds-seg-k { color: var(--yellow); }
+.ds-seg-v { color: #f7fcfa; font-size: clamp(0.74rem, 1vw, 0.88rem); letter-spacing: -0.01em; }
+/* A segment too narrow for its own label simply drops it. */
+.ds-seg-proposed { container-type: inline-size; }
+@container (max-width: 78px) { .ds-seg-proposed .ds-seg-k { display: none; } }
+
+/* Where the day runs out. */
+.ds-edge { position: absolute; top: 0; bottom: 0; left: 100%; width: 1px; background: rgba(234, 243, 240, 0.3); }
+.ds.is-over .ds-day { border-color: rgba(255, 239, 179, 0.5); }
+
+.ds-axis { display: flex; justify-content: space-between; margin: 9px 0 0; color: rgba(234, 243, 240, 0.4); font-size: 0.53rem; letter-spacing: 0.11em; text-transform: uppercase; }
+
+.ds-control { display: flex; flex-wrap: wrap; align-items: center; gap: clamp(12px, 2vw, 22px); margin-top: clamp(22px, 2.8vw, 32px); }
+.ds-control-k { color: rgba(234, 243, 240, 0.55); font-size: 0.55rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.ds-range { flex: 1 1 240px; min-width: 180px; accent-color: #9fd9c9; }
+.ds-control-v { color: #f7fcfa; font-size: clamp(1rem, 1.5vw, 1.2rem); font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.ds-control-u { color: rgba(234, 243, 240, 0.45); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ds:not(.is-ready) .ds-control { display: none; }
+
+.ds-note { max-width: 74ch; margin: clamp(18px, 2.4vw, 26px) 0 0; color: rgba(234, 243, 240, 0.58); font-size: 0.9rem; line-height: 1.58; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-seg { transition: none; }
+}
+
+/* -- 03 Policy margins ---------------------------------------------------------
+   Deviation from one centre line, which is the lender's threshold. Each row
+   keeps its own margin at its real length; nothing is combined into a score.
+   --grow is the only thing the scrub writes.
+   -------------------------------------------------------------------------- */
+.pm { margin-top: var(--s-block); }
+
+.pm-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 28px); }
+.pm-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.pm-fig-n { color: var(--ink); font-size: clamp(2.2rem, 4.6vw, 3.4rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.86; }
+.pm-fig-k { max-width: 13ch; color: var(--label); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.pm-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: var(--border); }
+.pm-fig-flag .pm-fig-n { color: var(--rail); }
+
+.pm-head,
+.pm-row {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 0.52fr) minmax(0, 1.5fr) minmax(0, 0.62fr);
+  align-items: center;
+  column-gap: clamp(10px, 1.6vw, 24px);
+}
+.pm-head { padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.pm-h { color: var(--rail); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.pm-h-end { text-align: right; }
+.pm-h-axis { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; color: var(--label); }
+.pm-h-short { text-align: right; }
+.pm-h-line { color: var(--ink); }
+.pm-h-clear { text-align: left; }
+
+.pm-row {
+  --grow: 1;
+  --m: 0;
+  --dir: 1;
+  position: relative;
+  padding: clamp(14px, 1.8vw, 19px) 0;
+  border-bottom: 1px solid var(--border);
+  transition: opacity 420ms ease;
+}
+.pm-row.is-dim { opacity: 0.32; }
+.pm-name { color: var(--ink); font-size: 0.95rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.pm-value { color: var(--muted); font-size: 0.8rem; letter-spacing: -0.01em; }
+.pm-threshold { color: var(--label); font-size: 0.55rem; letter-spacing: 0.1em; text-align: right; text-transform: uppercase; }
+
+/* The axis is the threshold; the bar grows out of it to the real margin. */
+.pm-track { position: relative; height: 34px; }
+.pm-axis { position: absolute; top: 2px; bottom: 2px; left: 50%; width: 1px; background: var(--ink); }
+.pm-bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--m) * var(--grow) * 50%);
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+  background: var(--rail);
+  transform: scaleX(var(--dir));
+  transform-origin: left center;
+}
+.pm-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + var(--dir) * var(--m) * var(--grow) * 50%);
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--rail);
+}
+.pm-margin {
+  position: absolute;
+  top: 50%;
+  left: calc(50% + var(--dir) * var(--m) * var(--grow) * 50%);
+  color: var(--rail);
+  font-size: 0.53rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: var(--grow);
+}
+.pm-row:not(.is-short) .pm-margin { transform: translate(14px, -50%); }
+.pm-row.is-short .pm-margin { transform: translate(calc(-100% - 14px), -50%); }
+
+/* The one that falls short carries the only colour in the figure. */
+.pm-row.is-short .pm-bar, .pm-row.is-short .pm-dot { background: var(--ink); }
+.pm-row.is-short .pm-margin, .pm-row.is-short .pm-name { color: var(--ink); }
+.pm-flag {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 9px;
+  padding: 5px 11px;
+  border: 1px solid rgba(1, 62, 55, 0.28);
+  border-radius: 999px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: var(--grow);
+}
+/* Off the axis: drawn at the edge with a caret, labelled with its real figure. */
+.pm-row.is-off .pm-dot::after {
+  position: absolute;
+  top: 50%;
+  left: 11px;
+  color: var(--rail);
+  font-size: 0.72rem;
+  content: "\203A";
+  transform: translateY(-50%);
+}
+
+.pm-note { max-width: 76ch; margin: clamp(20px, 2.6vw, 30px) 0 0; color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+
+@media (max-width: 860px) {
+  .pm-head { display: none; }
+  .pm-row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 8px; }
+  .pm-track { grid-column: 1 / -1; }
+  .pm-threshold { text-align: right; }
+}
+
+/* -- 04 The address a figure was read from -------------------------------------
+   A locator, not a hierarchy. The ruler puts the page at its true position in
+   the package, and the bracket's height is the number of source lines â€” so a
+   figure summed from a block and a figure copied off one line do not look
+   alike. One fixed line height governs both the numbers column and the
+   bracket, which is what keeps them on the same lines at any width.
+   -------------------------------------------------------------------------- */
+.sa {
+  --sa-lh: clamp(21px, 2.2vw, 26px);
+  --sa-gap: clamp(9px, 1.1vw, 13px);
+  /* Shared by the parent grid and every row, so the amounts share one right
+     edge instead of each row sizing its own column. */
+  --sa-amt: clamp(74px, 9vw, 108px);
+  margin-top: var(--s-block);
+}
+
+.sa-body {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  align-items: start;
+  gap: clamp(22px, 3vw, 46px);
+}
+
+/* -- the memo side -- */
+.sa-memo-k { margin: 0 0 clamp(12px, 1.5vw, 16px); color: rgba(234, 243, 240, 0.45); font-size: 0.53rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.sa-list { margin: 0; padding: 0; list-style: none; }
+.sa-item { border-bottom: 1px solid rgba(234, 243, 240, 0.13); }
+.sa-item-btn {
+  display: grid;
+  width: 100%;
+  gap: 4px;
+  padding: clamp(12px, 1.6vw, 17px) 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sa-item-k { color: rgba(234, 243, 240, 0.48); font-size: 0.52rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.sa-item.is-live .sa-item-k { color: var(--yellow); }
+.sa-item-v { color: rgba(234, 243, 240, 0.72); font-size: 0.98rem; font-weight: 560; letter-spacing: -0.02em; line-height: 1.25; }
+.sa-item.is-live .sa-item-v { color: #f7fcfa; }
+.sa-item-at { color: rgba(234, 243, 240, 0.36); font-size: 0.52rem; letter-spacing: 0.09em; }
+.sa-item.is-live .sa-item-at { color: rgba(234, 243, 240, 0.6); }
+.sa-item-btn:hover .sa-item-v { color: #f7fcfa; }
+
+/* -- the source side -- */
+.sa-viewer {
+  overflow: hidden;
+  border: 1px solid rgba(234, 243, 240, 0.14);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(10, 92, 80, 0.14), rgba(1, 31, 28, 0.42));
+  box-shadow: inset 0 1px 0 rgba(234, 243, 240, 0.07);
+  padding: clamp(14px, 1.8vw, 20px);
+}
+.sa-viewer-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.sa-doc { margin: 0; color: #f4faf8; font-size: 0.92rem; font-weight: 600; letter-spacing: -0.018em; }
+.sa-page { margin: 0; color: rgba(234, 243, 240, 0.45); font-size: 0.53rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.sa-page-n { color: var(--yellow); }
+
+/* Where that page sits in the package, to scale. One flex row, so the ends sit
+   on the track rather than floating under it. */
+.sa-ruler {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: clamp(12px, 1.5vw, 16px) 0 clamp(14px, 1.8vw, 20px);
+}
+.sa-ruler-end { flex: none; color: rgba(234, 243, 240, 0.3); font-size: 0.48rem; letter-spacing: 0.1em; }
+.sa-ruler-track { position: relative; flex: 1 1 auto; height: 2px; border-radius: 1px; background: rgba(234, 243, 240, 0.16); }
+.sa-ruler-mark {
+  position: absolute;
+  top: -5px;
+  width: 2px;
+  height: 12px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: var(--yellow);
+  box-shadow: 0 0 12px rgba(255, 239, 179, 0.5);
+  transition: left 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The excerpt, as the statement line it is: number, label, amount. The amount
+   column is a fixed width shared by the parent grid and every row, so all four
+   columns line up and the panel gets a right edge instead of trailing off.
+   Rows are placed on the parent's own rows, and the bracket is placed on the
+   very rows it brackets, so the two cannot drift apart. */
+.sa-lines {
+  display: grid;
+  grid-template-columns: 3px 24px minmax(0, 1fr) var(--sa-amt);
+  grid-auto-rows: var(--sa-lh);
+  align-items: center;
+  column-gap: var(--sa-gap);
+}
+.sa-line {
+  display: grid;
+  grid-column: 2 / -1;
+  grid-template-columns: 24px minmax(0, 1fr) var(--sa-amt);
+  align-items: center;
+  column-gap: var(--sa-gap);
+  margin: 0;
+  padding: 0 6px 0 0;
+  border-radius: 3px;
+}
+.sa-line-n { color: rgba(234, 243, 240, 0.26); font-size: 0.55rem; letter-spacing: 0.06em; text-align: right; }
+.sa-line-t {
+  overflow: hidden;
+  color: rgba(234, 243, 240, 0.34);
+  font-size: 0.68rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.sa-line-a {
+  color: rgba(234, 243, 240, 0.3);
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  text-align: right;
+  white-space: nowrap;
+}
+/* The bracketed block reads as a block. */
+.sa-line.is-in { background: rgba(255, 239, 179, 0.055); }
+.sa-line.is-in .sa-line-n { color: rgba(234, 243, 240, 0.5); }
+.sa-line.is-in .sa-line-t { color: rgba(234, 243, 240, 0.74); }
+.sa-line.is-in .sa-line-a { color: rgba(234, 243, 240, 0.62); }
+/* The line the value is actually written on. */
+.sa-line.is-hit { background: rgba(255, 239, 179, 0.11); }
+.sa-line.is-hit .sa-line-n, .sa-line.is-hit .sa-line-t { color: var(--yellow); }
+.sa-line.is-hit .sa-line-a { color: var(--yellow); font-weight: 600; }
+
+/* The bracket. Its height is the number of source lines. */
+.sa-bracket {
+  position: relative;
+  grid-column: 1;
+  align-self: stretch;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--yellow);
+  box-shadow: 0 0 16px rgba(255, 239, 179, 0.32);
+  transform-origin: top center;
+}
+/* Closes onto its lines on entry, and again on every selection — the element
+   is keyed by figure, so the draw replays whenever the address changes. */
+@keyframes saClose { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.sa.is-ready .sa-bracket { transform: scaleY(0); }
+.sa.is-drawn .sa-bracket { animation: saClose 560ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* The address lives here rather than over the lines, where it collided with
+   the first line it was labelling. */
+.sa-span {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin: clamp(14px, 1.8vw, 20px) 0 0;
+  padding-top: clamp(11px, 1.4vw, 15px);
+  border-top: 1px solid rgba(234, 243, 240, 0.13);
+  color: rgba(234, 243, 240, 0.45);
+  font-size: 0.53rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.sa-span-n { color: #f7fcfa; font-size: 1.15rem; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.sa-span-k { max-width: 22ch; line-height: 1.45; }
+.sa-span-at { margin-left: auto; color: var(--yellow); white-space: nowrap; }
+
+.sa-note { max-width: 76ch; margin: clamp(20px, 2.6vw, 30px) 0 0; color: rgba(234, 243, 240, 0.58); font-size: 0.9rem; line-height: 1.58; }
+
+@media (max-width: 860px) {
+  .sa-body { grid-template-columns: minmax(0, 1fr); gap: clamp(20px, 5vw, 28px); }
+  .sa { --sa-amt: clamp(62px, 20vw, 86px); }
+  .sa-line-t, .sa-line-a { font-size: 0.62rem; }
+  .sa-span { flex-wrap: wrap; }
+  .sa-span-at { margin-left: 0; flex-basis: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sa-ruler-mark { transition: none; }
+  .sa.is-ready .sa-bracket, .sa.is-drawn .sa-bracket { animation: none; transform: scaleY(1); }
+}
+
+
+/* ===========================================================================
+   Brokers and ISOs page
+
+   Both figures hang off an axis that means something. 01 runs the lender's own
+   review, so a gap's horizontal position is the stage it surfaces at and its
+   return sweeps back to intake. 02 runs a dated window ruled every seven days,
+   so the arc's width is the interval between two submissions rather than an
+   assertion printed beside one.
+   ======================================================================== */
+
+/* -- 01 Where a gap surfaces, and how far back it sends the file --------------- */
+.gr { margin-top: var(--s-block); }
+
+.gr-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+.gr-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.gr-fig-n { color: var(--ink); font-size: clamp(2.2rem, 4.6vw, 3.4rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.86; }
+.gr-fig-k { max-width: 14ch; color: var(--label); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.gr-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: var(--border); }
+.gr-fig-quiet .gr-fig-n { color: var(--rail); }
+
+.gr-route { position: relative; padding: 4px 0 clamp(30px, 3.4vw, 40px); }
+.gr-route svg { display: block; width: 100%; height: clamp(120px, 14vw, 168px); overflow: visible; }
+.gr-line { stroke: var(--ink); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.gr-tick { stroke: var(--border); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* A gap does not detour near the end. It goes back to the beginning. */
+.gr-return {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+  vector-effect: non-scaling-stroke;
+  transition: opacity 420ms ease;
+}
+.gr-dot { fill: var(--yellow); stroke: var(--ink); stroke-width: 1.5; vector-effect: non-scaling-stroke; transition: opacity 360ms ease; }
+.gr-return.is-gone, .gr-dot.is-gone { opacity: 0; }
+
+.gr-stages { position: relative; height: 16px; margin: 6px 0 0; }
+.gr-stage { position: absolute; color: var(--label); font-size: 0.5rem; letter-spacing: 0.11em; text-transform: uppercase; transform: translateX(-50%); white-space: nowrap; }
+.gr-stage.is-hit { color: var(--ink); }
+.gr-origin { position: absolute; bottom: 0; left: 0; color: var(--rail); font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* One grid for the head and every gap row. */
+.gr-head,
+.gr-row {
+  display: grid;
+  /* The action column is a fixed width rather than `auto`: the head holds a
+     label and the rows hold a button, so `auto` sized them differently and the
+     whole track distribution drifted between the two. */
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.7fr) minmax(0, 1.25fr) clamp(86px, 10vw, 112px);
+  align-items: center;
+  column-gap: clamp(12px, 1.8vw, 26px);
+}
+.gr-head { padding-bottom: 11px; border-bottom: 1px solid var(--ink); }
+.gr-h { color: var(--rail); font-size: 0.52rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.gr-h-end { text-align: right; }
+.gr-row { padding: clamp(13px, 1.7vw, 18px) 0; border-bottom: 1px solid var(--border); }
+.gr-row-name { display: flex; align-items: center; gap: 11px; color: var(--ink); font-size: 0.94rem; font-weight: 600; letter-spacing: -0.02em; }
+.gr-row-mark { flex: none; width: 10px; height: 10px; border: 1.5px dashed var(--ink); border-radius: 50%; }
+.gr-row.is-done .gr-row-mark { border-style: solid; border-color: var(--rail); background: var(--rail); }
+.gr-row.is-done .gr-row-name { color: var(--muted); }
+.gr-row-stage { color: var(--ink); font-size: 0.53rem; letter-spacing: 0.11em; text-transform: uppercase; }
+.gr-row.is-done .gr-row-stage { color: var(--label); }
+.gr-row-cost { color: var(--muted); font-size: 0.86rem; line-height: 1.45; }
+.gr-row.is-done .gr-row-cost { color: var(--rail); }
+.gr-row-act { text-align: right; }
+.gr-btn {
+  padding: 7px 14px;
+  border: 1px solid var(--neutral-depth);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 220ms ease, background 220ms ease;
+}
+.gr-btn:hover { border-color: var(--rail); background: var(--soft-blue); }
+.gr-row.is-done .gr-btn { border-color: var(--border); color: var(--label); }
+
+.gr-present { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px clamp(12px, 1.6vw, 20px); margin: clamp(20px, 2.4vw, 28px) 0 0; }
+.gr-present-k { color: var(--rail); font-size: 0.52rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.gr-present-item { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 0.84rem; }
+.gr-present-item::before { width: 5px; height: 5px; border-radius: 50%; background: var(--rail); content: ""; }
+
+.gr-note { max-width: 76ch; margin: clamp(18px, 2.4vw, 28px) 0 0; color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+
+@media (max-width: 860px) {
+  .gr-head { display: none; }
+  .gr-row { grid-template-columns: minmax(0, 1fr) auto; row-gap: 7px; }
+  .gr-row-stage, .gr-row-cost { grid-column: 1; }
+  .gr-row-act { grid-row: 1; grid-column: 2; }
+  .gr-stage { font-size: 0.42rem; letter-spacing: 0.04em; }
+}
+@media (prefers-reduced-motion: reduce) { .gr-return, .gr-dot { transition: none; } }
+
+/* -- 02 The screen the file lands on, lit one signal at a time -----------------
+   The artwork is the product's own fraud view. The only thing added to it is
+   light: everything is dimmed, a soft key travels to the card under discussion
+   and a ring is drawn on that card's real bounds, authored in the export's
+   coordinate space so it lands on the element rather than near it. The light
+   advances itself and stops while the list is being read.
+   -------------------------------------------------------------------------- */
+.sg { margin-top: var(--s-block); }
+
+.sg-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+.sg-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.sg-fig-n { color: #f7fcfa; font-size: clamp(2.2rem, 4.6vw, 3.4rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.86; }
+.sg-fig-k { max-width: 14ch; color: rgba(234, 243, 240, 0.5); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.sg-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: rgba(234, 243, 240, 0.2); }
+.sg-fig-quiet .sg-fig-n { color: var(--yellow); }
+
+.sg-field { position: relative; }
+.sg-stage {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(234, 243, 240, 0.13);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(10, 92, 80, 0.16), rgba(1, 31, 28, 0.44));
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(234, 243, 240, 0.08);
+  padding: clamp(18px, 2.4vw, 30px);
+}
+.sg-ambient {
+  position: absolute;
+  inset: -28% -10%;
+  background: radial-gradient(ellipse 42% 50% at 18% 14%, rgba(10, 124, 106, 0.34), transparent 62%),
+    radial-gradient(ellipse 40% 46% at 84% 84%, rgba(255, 239, 179, 0.1), transparent 62%);
+  animation: pkDrift 24s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform;
+}
+.sg-key {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(380px circle at var(--px, 50%) var(--py, 24%), rgba(255, 239, 179, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+/* Stretch, not start: the plate takes the full height of the list beside it so
+   the two columns share a bottom edge. */
+.sg-body { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); align-items: stretch; gap: clamp(18px, 2.6vw, 36px); }
+
+.sg-list { margin: 0; padding: 0; list-style: none; }
+.sg-item + .sg-item { margin-top: 6px; }
+.sg-item-btn {
+  display: grid;
+  width: 100%;
+  gap: 5px;
+  padding: clamp(11px, 1.4vw, 15px) clamp(12px, 1.5vw, 16px);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 320ms ease, border-color 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sg-item-btn:hover { background: rgba(234, 243, 240, 0.05); }
+.sg-item.is-live .sg-item-btn {
+  border-color: rgba(255, 239, 179, 0.35);
+  background: rgba(255, 239, 179, 0.08);
+  transform: translateX(4px);
+}
+.sg-item-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.sg-item-name { color: rgba(234, 243, 240, 0.78); font-size: 0.92rem; font-weight: 600; letter-spacing: -0.018em; }
+.sg-item.is-live .sg-item-name { color: #f7fcfa; }
+.sg-item-badge { padding: 3px 8px; border: 1px solid rgba(234, 243, 240, 0.2); border-radius: 999px; color: rgba(234, 243, 240, 0.5); font-size: 0.46rem; letter-spacing: 0.11em; text-transform: uppercase; white-space: nowrap; }
+.sg-item.is-live .sg-item-badge { border-color: rgba(255, 239, 179, 0.4); color: var(--yellow); }
+.sg-item-what { color: rgba(234, 243, 240, 0.5); font-size: 0.82rem; line-height: 1.45; }
+.sg-item.is-live .sg-item-what { color: rgba(234, 243, 240, 0.7); }
+.sg-item-src { color: rgba(234, 243, 240, 0.32); font-size: 0.48rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* The screen, as a viewport rather than a shrunken copy. The plate takes the
+   height of the list beside it; the frame inside is sized and panned in script
+   so the card under the light is large enough to actually read. */
+.sg-plate {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  min-height: clamp(300px, 36vw, 470px);
+  border: 1px solid rgba(234, 243, 240, 0.12);
+  border-radius: 12px;
+  background: var(--ink-deeper);
+}
+.sg-cam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  transition: transform 720ms cubic-bezier(0.22, 1, 0.36, 1), width 720ms cubic-bezier(0.22, 1, 0.36, 1), height 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+/* Without script the frame has no measured size, so the export simply fills
+   the plate and nothing is dimmed or ringed. */
+.sg:not(.is-ready) .sg-cam { position: static; width: 100%; }
+.sg-shot { display: block; width: 100%; height: 100%; object-fit: cover; }
+.sg:not(.is-ready) .sg-shot { height: auto; }
+
+.sg-dim { position: absolute; inset: 0; background: rgba(1, 17, 15, 0.5); pointer-events: none; }
+/* The key that sits over the card being talked about. Both this and the ring
+   live inside the frame, so they ride the same pan. */
+.sg-spot {
+  position: absolute;
+  top: calc(var(--sg-y) + var(--sg-h) / 2);
+  left: calc(var(--sg-x) + var(--sg-w) / 2);
+  width: clamp(240px, 30vw, 420px);
+  height: clamp(240px, 30vw, 420px);
+  margin: calc(clamp(240px, 30vw, 420px) / -2) 0 0 calc(clamp(240px, 30vw, 420px) / -2);
+  background: radial-gradient(circle, rgba(255, 239, 179, 0.26) 0%, rgba(255, 239, 179, 0.09) 44%, transparent 70%);
+  pointer-events: none;
+  transition: top 620ms cubic-bezier(0.22, 1, 0.36, 1), left 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Drawn on the card's own bounds, so it lands on the element. */
+.sg-ring {
+  position: absolute;
+  top: var(--sg-y);
+  left: var(--sg-x);
+  width: var(--sg-w);
+  height: var(--sg-h);
+  border: 1.5px solid rgba(255, 239, 179, 0.8);
+  border-radius: 7px;
+  box-shadow: 0 0 30px rgba(255, 239, 179, 0.26), inset 0 0 26px rgba(255, 239, 179, 0.09);
+  pointer-events: none;
+  transition: top 620ms cubic-bezier(0.22, 1, 0.36, 1), left 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 620ms cubic-bezier(0.22, 1, 0.36, 1), height 620ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Without JS nothing is selected, so the screen is simply shown. */
+.sg:not(.is-ready) .sg-dim, .sg:not(.is-ready) .sg-spot, .sg:not(.is-ready) .sg-ring { display: none; }
+
+.sg-answer { margin-top: clamp(18px, 2.2vw, 26px); padding-top: clamp(14px, 1.8vw, 20px); border-top: 1px solid rgba(234, 243, 240, 0.16); }
+.sg-answer-k { margin: 0 0 7px; color: var(--yellow); font-size: 0.53rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.sg-answer-v { max-width: 72ch; margin: 0; color: #f4faf8; font-size: clamp(1rem, 1.5vw, 1.2rem); font-weight: 560; letter-spacing: -0.022em; line-height: 1.35; }
+
+.sg-foot { display: flex; align-items: baseline; gap: 11px; margin: clamp(16px, 2vw, 22px) 0 0; }
+.sg-foot-n { color: var(--yellow); font-size: 1.3rem; font-variant-numeric: tabular-nums; letter-spacing: -0.04em; }
+.sg-foot-k { color: rgba(234, 243, 240, 0.55); font-size: 0.88rem; line-height: 1.5; }
+
+.sg-note { max-width: 76ch; margin: clamp(16px, 2.2vw, 24px) 0 0; color: rgba(234, 243, 240, 0.5); font-size: 0.86rem; line-height: 1.56; }
+
+@media (max-width: 900px) {
+  .sg-body { grid-template-columns: minmax(0, 1fr); gap: clamp(18px, 4vw, 26px); }
+  .sg-plate { order: -1; }
+}
+@media (pointer: coarse) {
+  .sg-ambient { animation: none; }
+  .sg-key { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sg-spot, .sg-ring, .sg-item-btn { transition: none; }
+  .sg-ambient { animation: none; }
+}
+
+
+/* -- 03 The same questions, sorted by who can close them ----------------------
+   Allocation, not enumeration. Seven open items land in the column of whoever
+   can actually close them, and the column heights are the answer: the work a
+   broker is holding is smaller than the pile looked. The sort is the motion —
+   items travel to their owner rather than fading in where they already are.
+   -------------------------------------------------------------------------- */
+.ot { margin-top: var(--s-block); }
+
+.ot-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); padding-bottom: clamp(18px, 2.4vw, 26px); border-bottom: 1px solid var(--border); }
+.ot-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.ot-fig-n { color: var(--primary); font-size: clamp(2.2rem, 4.6vw, 3.4rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.86; }
+.ot-fig-k { max-width: 15ch; color: var(--muted); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.ot-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: var(--border); }
+.ot-fig-quiet .ot-fig-n { color: #0a7c6a; }
+
+/* Equal columns with one gutter width, so the three measures match exactly and
+   the first column stays flush with the rail. No vertical rules: the ruled item
+   rows already line up across all three, which is the structure that matters. */
+.ot-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(26px, 3.4vw, 52px); }
+.ot-col { padding: clamp(20px, 2.6vw, 30px) 0 clamp(14px, 1.8vw, 20px); }
+
+.ot-col-head { display: flex; align-items: flex-start; gap: clamp(10px, 1.2vw, 14px); min-height: clamp(56px, 6vw, 66px); }
+.ot-col-n { color: var(--primary); font-size: clamp(1.5rem, 2.4vw, 2rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.9; }
+.ot-col-t { margin: 0 0 4px; color: var(--primary); font-size: clamp(0.95rem, 1.3vw, 1.08rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+.ot-col-b { margin: 0; color: var(--muted); font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; }
+/* The left-hand column is the one a broker can act on, so it is the lit one. */
+.ot-col-desk .ot-col-n { color: #0a7c6a; }
+
+.ot-items { margin: clamp(14px, 1.8vw, 20px) 0 0; padding: 0; list-style: none; }
+.ot-item { padding: clamp(12px, 1.5vw, 16px) 0; border-top: 1px solid var(--border); }
+.ot-item-n { margin: 0 0 5px; color: var(--primary); font-size: 0.92rem; font-weight: 600; letter-spacing: -0.018em; line-height: 1.3; }
+.ot-item-w { margin: 0; color: var(--muted); font-size: 0.84rem; line-height: 1.5; }
+
+/* Before the sort, everything sits toward the middle; then it travels out. */
+.ot.is-ready .ot-item { transform: translate(var(--from, 0px), 12px); opacity: 0; transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms), opacity 520ms ease var(--d, 0ms); }
+.ot.is-ready.is-sorted .ot-item { transform: translate(0, 0); opacity: 1; }
+
+.ot-note { max-width: 76ch; margin: clamp(18px, 2.4vw, 26px) 0 0; padding-top: clamp(14px, 1.8vw, 20px); border-top: 1px solid var(--border); color: var(--muted); font-size: 0.86rem; line-height: 1.56; }
+
+@media (max-width: 860px) {
+  .ot-cols { grid-template-columns: minmax(0, 1fr); }
+  .ot-cols { gap: 0; }
+  .ot-col { padding: clamp(18px, 4vw, 24px) 0 clamp(10px, 2vw, 14px); }
+  .ot-col + .ot-col { border-top: 1px solid var(--border); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ot.is-ready .ot-item { transform: none; opacity: 1; transition: none; }
+}
+
+/* -- 04 What you hand over, and what they open -------------------------------
+   The real intake export, shown whole, read left to right at the reader's pace.
+   A line travels the plate on scroll and each column of the screen comes up out
+   of the dark as the line reaches it, with its reading lighting alongside. No
+   annotation is drawn on the artwork and nothing is cropped from it; the only
+   thing added is the order it gets read in. Without JavaScript --scan stays at
+   100, which is the finished, fully lit state.
+   -------------------------------------------------------------------------- */
+.ds { --scan: 100; margin-top: var(--s-block); }
+
+.ds-readout { display: flex; flex-wrap: wrap; align-items: flex-end; gap: clamp(16px, 3vw, 42px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+.ds-fig { display: flex; align-items: baseline; gap: 12px; margin: 0; }
+.ds-fig-n { color: #f7fcfa; font-size: clamp(2.2rem, 4.6vw, 3.4rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.86; }
+.ds-fig-k { max-width: 15ch; color: rgba(234, 243, 240, 0.5); font-size: 0.56rem; letter-spacing: 0.13em; line-height: 1.5; text-transform: uppercase; }
+.ds-readout-rule { width: 1px; height: clamp(30px, 3.6vw, 44px); background: rgba(234, 243, 240, 0.2); }
+.ds-fig-quiet .ds-fig-n { color: var(--yellow); }
+
+.ds-field { position: relative; }
+.ds-stage {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(234, 243, 240, 0.13);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(10, 92, 80, 0.16), rgba(1, 31, 28, 0.44));
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(234, 243, 240, 0.08);
+  padding: clamp(14px, 1.8vw, 22px);
+}
+.ds-ambient {
+  position: absolute;
+  inset: -28% -10%;
+  background: radial-gradient(ellipse 44% 52% at 14% 18%, rgba(10, 124, 106, 0.32), transparent 62%),
+    radial-gradient(ellipse 38% 46% at 88% 82%, rgba(255, 239, 179, 0.09), transparent 62%);
+  animation: pkDrift 27s ease-in-out infinite alternate;
+  pointer-events: none;
+  will-change: transform;
+}
+.ds-key { position: absolute; inset: 0; background: radial-gradient(400px circle at var(--px, 50%) var(--py, 30%), rgba(255, 239, 179, 0.09), transparent 70%); pointer-events: none; }
+
+.ds-plate { position: relative; z-index: 2; overflow: hidden; border: 1px solid rgba(234, 243, 240, 0.1); border-radius: 12px; }
+.ds-shot { display: block; width: 100%; height: auto; }
+
+/* One veil per column of the export. It lifts as the line arrives. */
+.ds-veil {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--from) * 1%);
+  width: calc((var(--to) - var(--from)) * 1%);
+  background: rgba(1, 16, 14, 0.72);
+  opacity: clamp(0, calc((var(--a) - var(--scan)) / 9 + 0.5), 1);
+  pointer-events: none;
+}
+/* The line itself, with the light it has already passed trailing behind it. */
+.ds-scan {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--scan) * 1%);
+  width: 2px;
+  background: linear-gradient(180deg, rgba(255, 239, 179, 0.15), rgba(255, 239, 179, 0.85) 22%, rgba(255, 239, 179, 0.85) 78%, rgba(255, 239, 179, 0.15));
+  box-shadow: 0 0 26px rgba(255, 239, 179, 0.4);
+  pointer-events: none;
+}
+.ds-scan::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: clamp(90px, 12vw, 170px);
+  background: linear-gradient(270deg, rgba(255, 239, 179, 0.16), transparent);
+}
+/* Nothing is dimmed and no line is drawn until the scan exists. */
+.ds:not(.is-ready) .ds-veil, .ds:not(.is-ready) .ds-scan { display: none; }
+
+.ds-reads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 34px); margin: clamp(20px, 2.6vw, 30px) 0 0; padding: 0; list-style: none; }
+.ds-read {
+  --on: clamp(0, calc((var(--scan) - var(--a)) / 8), 1);
+  position: relative;
+  padding-left: clamp(14px, 1.6vw, 20px);
+  opacity: calc(0.3 + 0.7 * var(--on));
+  transform: translateY(calc((1 - var(--on)) * 8px));
+}
+.ds-read-rule { position: absolute; top: 3px; bottom: 3px; left: 0; width: 1px; background: var(--yellow); transform: scaleY(var(--on)); transform-origin: top; }
+.ds-read-n { margin: 0 0 8px; color: var(--yellow); font-size: 0.5rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.ds-read-q { margin: 0 0 7px; color: #f7fcfa; font-size: clamp(0.98rem, 1.4vw, 1.14rem); font-weight: 600; letter-spacing: -0.022em; line-height: 1.25; }
+.ds-read-b { margin: 0 0 9px; color: rgba(234, 243, 240, 0.58); font-size: 0.86rem; line-height: 1.5; }
+.ds-read-f { margin: 0; color: rgba(234, 243, 240, 0.42); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.ds-note { max-width: 78ch; margin: clamp(18px, 2.4vw, 26px) 0 0; color: rgba(234, 243, 240, 0.5); font-size: 0.86rem; line-height: 1.56; }
+
+/* Below 700px, and under reduced motion, the scan never runs — so there is no
+   line to draw and nothing is dimmed. The screen simply stands there finished. */
+@media (max-width: 700px) {
+  .ds-reads { grid-template-columns: minmax(0, 1fr); gap: clamp(16px, 4vw, 22px); }
+  .ds-read { opacity: 1; transform: none; }
+  .ds-read-rule { transform: none; }
+  .ds-scan, .ds-veil { display: none; }
+}
+@media (pointer: coarse) {
+  .ds-ambient { animation: none; }
+  .ds-key { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-ambient { animation: none; }
+  .ds-scan, .ds-veil { display: none; }
+  .ds-read { opacity: 1; transform: none; }
+  .ds-read-rule { transform: none; }
+}
+
+/* -- 05 The note that goes on top of the pack ---------------------------------
+   After four figures, a piece of writing. Set as a document rather than drawn
+   as a chart: a numbered rail with a rule that runs down it as the note sets, a
+   single column of serif type, and the provenance of each line held out in the
+   margin against one shared edge. The three columns are fixed widths so the
+   numbers, the measure and the margin line up exactly at every width. No panel,
+   no border, no card — the band is the page it is written on.
+   -------------------------------------------------------------------------- */
+.cn {
+  --cn-no: clamp(38px, 4.4vw, 62px);
+  --cn-margin: clamp(120px, 15vw, 208px);
+  --cn-gap: clamp(18px, 2.6vw, 44px);
+  /* A note is not a full-bleed figure. The block is set to the width its own
+     measure wants — the three columns then fill it exactly, with no void
+     between the prose and its margin — and it keeps the same left rail as
+     every other section, so only the right edge differs. */
+  max-width: clamp(680px, 74vw, 1000px);
+  margin-top: var(--s-block);
+}
+
+.cn-masthead {
+  display: grid;
+  grid-template-columns: var(--cn-no) minmax(0, 1fr) var(--cn-margin);
+  align-items: baseline;
+  column-gap: var(--cn-gap);
+  padding-bottom: clamp(14px, 1.8vw, 20px);
+  border-bottom: 1px solid var(--primary);
+}
+.cn-kind { grid-column: 1 / 3; margin: 0; color: var(--muted); font-size: 0.5rem; letter-spacing: 0.13em; text-transform: uppercase; }
+.cn-re { grid-column: 1 / 3; margin: 6px 0 0; color: var(--primary); font-size: clamp(1rem, 1.5vw, 1.24rem); font-weight: 600; letter-spacing: -0.024em; }
+.cn-pack { grid-column: 3; grid-row: 1 / span 2; margin: 0; color: var(--muted); font-size: 0.5rem; letter-spacing: 0.11em; text-transform: uppercase; }
+
+.cn-lines { position: relative; margin: 0; padding: 0; list-style: none; }
+/* The rule down the rail, drawn as the note sets itself. */
+.cn-rail {
+  position: absolute;
+  top: clamp(20px, 2.4vw, 30px);
+  bottom: clamp(14px, 1.8vw, 22px);
+  left: calc(var(--cn-no) / 2);
+  width: 1px;
+  background: var(--border);
+  transform-origin: top;
+}
+.cn.is-ready .cn-rail { transform: scaleY(0); }
+.cn.is-ready.is-set .cn-rail { transform: scaleY(1); transition: transform 1200ms cubic-bezier(0.33, 1, 0.68, 1); }
+
+.cn-line {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--cn-no) minmax(0, 1fr) var(--cn-margin);
+  column-gap: var(--cn-gap);
+  align-items: start;
+  padding: clamp(18px, 2.2vw, 28px) 0;
+}
+.cn-line + .cn-line { border-top: 1px solid var(--border); }
+
+.cn-no { grid-column: 1; padding-top: 0.42em; color: var(--muted); font-size: 0.56rem; letter-spacing: 0.1em; text-align: center; }
+/* The state of the line, held in the rail so the prose stays undecorated. */
+.cn-mark {
+  position: absolute;
+  top: calc(clamp(18px, 2.2vw, 28px) + 0.34em);
+  left: calc(var(--cn-no) / 2 - 3.5px);
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  background: var(--surface);
+  transition: background 320ms ease, border-color 320ms ease, box-shadow 320ms ease;
+}
+.cn-line.is-answered .cn-mark { border-color: #0a7c6a; background: #0a7c6a; box-shadow: 0 0 0 4px rgba(10, 124, 106, 0.13); }
+.cn-line.is-open .cn-mark { border-color: var(--muted); background: var(--surface); }
+
+/* The note itself. The one place on this page set to be read, not scanned. */
+.cn-text {
+  grid-column: 2;
+  margin: 0;
+  font-family: "Iowan Old Style", Baskerville, "Times New Roman", serif;
+  font-size: clamp(1.08rem, 1.62vw, 1.44rem);
+  font-weight: 400;
+  letter-spacing: -0.014em;
+  line-height: 1.44;
+  color: var(--primary);
+  animation: cnSet 460ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.cn-line.is-open .cn-text { color: var(--muted); }
+@keyframes cnSet {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cn-margin { grid-column: 3; display: flex; flex-direction: column; align-items: flex-start; gap: 9px; padding-top: 0.3em; }
+.cn-src { color: var(--muted); font-size: 0.47rem; letter-spacing: 0.11em; line-height: 1.5; text-transform: uppercase; }
+.cn-toggle {
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: #0a7c6a;
+  font-family: inherit;
+  font-size: 0.47rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 240ms ease, color 240ms ease;
+}
+.cn-line.is-open .cn-toggle { color: var(--muted); }
+/* The whole line is the target; the button keeps the label and the focus ring. */
+.cn-toggle::after { content: ""; position: absolute; inset: 0; }
+.cn-toggle:hover { border-bottom-color: currentColor; }
+.cn-toggle:focus-visible { outline: 2px solid #0a7c6a; outline-offset: 3px; }
+
+.cn-sign {
+  max-width: 54ch;
+  margin: clamp(20px, 2.4vw, 28px) 0 0;
+  padding-left: calc(var(--cn-no) + var(--cn-gap));
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.cn-tally {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  margin: clamp(22px, 2.8vw, 32px) 0 0;
+  padding: clamp(16px, 2vw, 22px) 0 0 calc(var(--cn-no) + var(--cn-gap));
+  border-top: 1px solid var(--primary);
+}
+.cn-tally-n { color: #0a7c6a; font-size: clamp(1.7rem, 3vw, 2.5rem); font-variant-numeric: tabular-nums; font-weight: 500; letter-spacing: -0.05em; line-height: 0.9; }
+.cn-tally-n-quiet { color: var(--primary); }
+.cn-tally-k { color: var(--muted); font-size: 0.86rem; line-height: 1.5; }
+.cn-tally-d { width: 1px; height: clamp(20px, 2.4vw, 28px); margin: 0 clamp(6px, 1.4vw, 18px); background: var(--border); }
+
+.cn-note { max-width: 76ch; margin: clamp(18px, 2.2vw, 26px) 0 0; padding-left: calc(var(--cn-no) + var(--cn-gap)); color: var(--muted); font-size: 0.86rem; line-height: 1.56; }
+
+/* Lines set one after another, top to bottom, as the rule runs past them. This
+   has to sit on the line rather than on its parts: cnSet is an animation, and
+   an animation outranks a normal declaration, so an entrance written onto the
+   prose itself would be silently overridden and never hide anything. */
+.cn.is-ready .cn-line { opacity: 0; transform: translateY(7px); }
+.cn.is-ready.is-set .cn-line { opacity: 1; transform: none; transition: opacity 520ms ease var(--d, 0ms), transform 640ms cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms); }
+
+@media (max-width: 860px) {
+  .cn { --cn-no: 30px; --cn-margin: 0px; --cn-gap: 14px; }
+  .cn-masthead, .cn-line { grid-template-columns: var(--cn-no) minmax(0, 1fr); }
+  .cn-kind, .cn-re { grid-column: 1 / -1; }
+  .cn-pack { grid-column: 1 / -1; grid-row: auto; margin-top: 8px; }
+  .cn-margin { grid-column: 2; flex-direction: row; align-items: center; gap: 12px; margin-top: 10px; padding-top: 0; }
+  .cn-sign, .cn-tally, .cn-note { padding-left: calc(var(--cn-no) + var(--cn-gap)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cn-text { animation: none; }
+  .cn.is-ready .cn-rail, .cn.is-ready.is-set .cn-rail { transform: none; transition: none; }
+  .cn.is-ready .cn-line, .cn.is-ready.is-set .cn-line { opacity: 1; transform: none; transition: none; }
 }

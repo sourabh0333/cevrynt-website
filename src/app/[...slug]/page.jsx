@@ -6,7 +6,14 @@ export const revalidate = 3600;
 export const dynamicParams = false;
 
 /** Paths with their own bespoke route under src/app/. */
-const bespoke = new Set(["platform", "why-cevrynt", "integrations", "security"]);
+const bespoke = new Set([
+  "platform",
+  "why-cevrynt",
+  "integrations",
+  "security",
+  "solutions/merchant-cash-advance",
+  "solutions/brokers-isos",
+]);
 
 export function generateStaticParams() {
   // Next always matches a literal segment before this catch-all, so filtering
