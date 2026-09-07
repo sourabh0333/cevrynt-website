@@ -1,84 +1,188 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import { useHasEntered, useReady } from "@/components/progressive";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { PointerField } from "@/components/home/fx";
+import { useCoarsePointer, useHasEntered, useReady, useReducedMotion } from "@/components/progressive";
+
+/** The dial's own space. Centre, the three boundaries, and the marker orbits. */
+const C = 200;
+const RING = [66, 128, 186];
+const ORBIT = [34, 97, 157];
+/** How wide each band spreads its markers — wider as it gets further out. */
+const SPREAD = [60, 82, 104];
+
+/** How long a question holds before the light moves on. */
+const CYCLE_MS = 2600;
+
+const place = (band, i, n) => {
+  const a = SPREAD[band];
+  const deg = n === 1 ? 0 : -a + (2 * a * i) / (n - 1);
+  const rad = (deg * Math.PI) / 180;
+  return {
+    x: C + ORBIT[band] * Math.sin(rad),
+    y: C - ORBIT[band] * Math.cos(rad),
+  };
+};
 
 /**
- * 03 — The same open questions, sorted by who can actually close them.
+ * 03 — The same open questions, placed by how far the answer is from you.
  *
- * Sections one and two leave a broker with seven open things, and the useful
- * fact about those seven is not how many there are. It is that they do not all
- * cost the same: two of them can be closed at a desk this afternoon, three need
- * one phone call to the borrower, and two are somebody else's judgment and will
- * not be closed by anybody on this side of the file.
+ * The version this replaces was three columns of ruled text, which is a table
+ * pretending to be a figure: it sorted the items correctly and showed you
+ * nothing you could not have read in a sentence. What is actually interesting
+ * about these seven is not which bucket each falls in. It is that they sit at
+ * different distances from the only desk a broker controls, and that two of
+ * them are outside the reach of any amount of work done on this side.
  *
- * So the figure sorts them. Every question starts in one pile and lands in the
- * column of whoever can close it, and the depth of each stack is the answer:
- * the middle one runs deepest because most of this needs the borrower, and the
- * work a broker is actually holding is two rows long.
+ * So the figure is reach. Your desk is the centre. The first boundary is what
+ * you can close alone, the second is what one call to the borrower closes, and
+ * the third is drawn as a broken line because it is not a boundary you can
+ * cross — the two markers past it are the lender's judgment, and they turn
+ * slowly out there whatever anybody here does. Each marker's distance from the
+ * centre is the whole measurement; the counts on the rings are just it, read
+ * back.
  *
- * The geometry is allocation, which nothing else on this site does — the pages
- * around it join, divide, descend, stack, nest and pan. And the sort is the
- * motion: the items travel to their owner rather than fading in where they
- * already were, because watching the pile come apart is the point.
+ * The light walks the seven on its own and stops the moment a reader takes
+ * over, and pointing at any line lights its marker, so the words and the
+ * geometry are never describing different things.
  *
- * Server-rendered already sorted, every item in its column, which is the
- * finished state and what reduced motion is given.
+ * Server-rendered with every marker drawn and every line present, the first one
+ * lit, so the section reads with no JavaScript at all.
  */
 export function OwnerTriage({ owners, items, labels, note }) {
   const scope = useRef(null);
+  const listRef = useRef(null);
+
   const ready = useReady();
-  const sorted = useHasEntered(scope, 0.24);
+  const reduced = useReducedMotion();
+  const coarse = useCoarsePointer();
+  const entered = useHasEntered(scope, 0.24);
 
-  const byOwner = useMemo(
-    () => owners.map((owner) => ({ ...owner, items: items.filter((item) => item.owner === owner.key) })),
-    [owners, items],
-  );
+  const [active, setActive] = useState(0);
+  const [held, setHeld] = useState(false);
 
-  const yours = byOwner.find((o) => o.key === owners[0].key)?.items.length ?? 0;
+  /** Items in ring order, each carrying the point it occupies on the dial. */
+  const plotted = useMemo(() => {
+    const out = [];
+    owners.forEach((owner, band) => {
+      const group = items.filter((item) => item.owner === owner.key);
+      group.forEach((item, i) => {
+        out.push({ ...item, band, ...place(band, i, group.length) });
+      });
+    });
+    return out;
+  }, [owners, items]);
+
+  const counts = owners.map((owner) => items.filter((item) => item.owner === owner.key).length);
+
+  // Reading should stop the light, not race it.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return undefined;
+
+    const hold = () => setHeld(true);
+    const release = () => setHeld(false);
+
+    list.addEventListener("mouseenter", hold);
+    list.addEventListener("mouseleave", release);
+    return () => {
+      list.removeEventListener("mouseenter", hold);
+      list.removeEventListener("mouseleave", release);
+    };
+  }, []);
+
+  const running = ready && entered && !held && !reduced && !coarse;
+
+  useEffect(() => {
+    if (!running) return undefined;
+    const id = window.setTimeout(() => setActive((i) => (i + 1) % plotted.length), CYCLE_MS);
+    return () => window.clearTimeout(id);
+  }, [running, active, plotted.length]);
 
   return (
-    <figure className={`ot${ready ? " is-ready" : ""}${sorted ? " is-sorted" : ""}`} ref={scope}>
-      <div className="ot-readout">
-        <p className="ot-fig">
-          <span className="ot-fig-n">{String(items.length).padStart(2, "0")}</span>
-          <span className="ot-fig-k hx-mono">{labels.total}</span>
+    <figure className={`tg${ready ? " is-ready" : ""}${entered ? " is-in" : ""}`} ref={scope}>
+      <div className="tg-readout">
+        <p className="tg-fig">
+          <span className="tg-fig-n">{String(items.length).padStart(2, "0")}</span>
+          <span className="tg-fig-k hx-mono">{labels.total}</span>
         </p>
-        <span className="ot-readout-rule" aria-hidden="true" />
-        <p className="ot-fig ot-fig-quiet">
-          <span className="ot-fig-n">{String(yours).padStart(2, "0")}</span>
-          <span className="ot-fig-k hx-mono">{labels.yours}</span>
+        <span className="tg-readout-rule" aria-hidden="true" />
+        <p className="tg-fig tg-fig-lit">
+          <span className="tg-fig-n">{String(counts[0]).padStart(2, "0")}</span>
+          <span className="tg-fig-k hx-mono">{labels.yours}</span>
         </p>
       </div>
 
-      <div className="ot-cols">
-        {byOwner.map((owner, col) => (
-          <section className={`ot-col ot-col-${owner.key}`} key={owner.key}>
-            <header className="ot-col-head">
-              <span className="ot-col-n">{String(owner.items.length).padStart(2, "0")}</span>
-              <div>
-                <p className="ot-col-t">{owner.name}</p>
-                <p className="ot-col-b hx-mono">{owner.when}</p>
-              </div>
-            </header>
+      <PointerField className="tg-field" selector=".tg-stage">
+        <div className="tg-stage">
+          <span className="tg-ambient" aria-hidden="true" />
+          <span className="tg-key" aria-hidden="true" />
 
-            <ol className="ot-items">
-              {owner.items.map((item, i) => (
+          <div className="tg-body">
+            <ol className="tg-list" ref={listRef}>
+              {plotted.map((item, i) => (
                 <li
-                  className="ot-item"
+                  className={`tg-item${i === active ? " is-live" : ""}`}
                   key={item.name}
-                  style={{ "--d": `${(col * 3 + i) * 70}ms`, "--from": `${(1 - col) * 40}px` }}
+                  style={{ "--d": `${i * 70}ms` }}
+                  onMouseEnter={() => setActive(i)}
                 >
-                  <p className="ot-item-n">{item.name}</p>
-                  <p className="ot-item-w">{item.action}</p>
+                  <span className="tg-item-tag hx-mono">{owners[item.band].name}</span>
+                  <span className="tg-item-body">
+                    <span className="tg-item-n">{item.name}</span>
+                    <span className="tg-item-w">{item.action}</span>
+                  </span>
                 </li>
               ))}
             </ol>
-          </section>
-        ))}
-      </div>
 
-      <figcaption className="ot-note">{note}</figcaption>
+            <div className="tg-aside">
+              <svg className="tg-dial" viewBox="0 0 400 400" role="img" aria-label={labels.dial}>
+                {/* The two boundaries you can reach, and the one you cannot. */}
+                <circle className="tg-ring" cx={C} cy={C} r={RING[0]} />
+                <circle className="tg-ring" cx={C} cy={C} r={RING[1]} />
+                <circle className="tg-ring tg-ring-open" cx={C} cy={C} r={RING[2]} />
+
+                {plotted.map((item, i) => (
+                  <line
+                    className={`tg-spoke${i === active ? " is-live" : ""}`}
+                    key={`s-${item.name}`}
+                    x1={C}
+                    y1={C}
+                    x2={item.x.toFixed(1)}
+                    y2={item.y.toFixed(1)}
+                  />
+                ))}
+
+                <circle className="tg-core" cx={C} cy={C} r="5" />
+
+                {plotted.map((item, i) => (
+                  <g className={`tg-mark tg-mark-${item.band}${i === active ? " is-live" : ""}`} key={`m-${item.name}`}>
+                    <circle className="tg-halo" cx={item.x.toFixed(1)} cy={item.y.toFixed(1)} r="13" />
+                    <circle className="tg-dot" cx={item.x.toFixed(1)} cy={item.y.toFixed(1)} r="4.5" />
+                  </g>
+                ))}
+              </svg>
+
+              <ol className="tg-legend">
+                {owners.map((owner, band) => (
+                  <li
+                    className={`tg-leg tg-leg-${band}${plotted[active]?.band === band ? " is-live" : ""}`}
+                    key={owner.key}
+                  >
+                    <span className="tg-leg-dot" aria-hidden="true" />
+                    <span className="tg-leg-n">{String(counts[band]).padStart(2, "0")}</span>
+                    <span className="tg-leg-t">{owner.name}</span>
+                    <span className="tg-leg-w hx-mono">{owner.when}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </PointerField>
+
+      <figcaption className="tg-note">{note}</figcaption>
     </figure>
   );
 }

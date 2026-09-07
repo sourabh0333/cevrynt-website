@@ -7,7 +7,7 @@ import { GapRoute } from "@/components/brokers/gap-route";
 import { SignalLight } from "@/components/brokers/signal-light";
 import { OwnerTriage } from "@/components/brokers/owner-triage";
 import { IntakeScan } from "@/components/brokers/intake-scan";
-import { CoverNote } from "@/components/brokers/cover-note";
+import { VersionScrub } from "@/components/brokers/version-scrub";
 import { JsonLd } from "@/components/json-ld";
 import { pageByPath } from "@/content/site-pages";
 import { siteConfig } from "@/config/site";
@@ -200,10 +200,11 @@ const triageItems = [
 const triageLabels = {
   total: "open questions this file leaves behind",
   yours: "of them close without calling anyone",
+  dial: "A reach dial. Your desk is at the centre; two of the seven questions sit inside the first boundary and close without a call, three sit in the second and close with one call to the borrower, and two sit outside a broken third boundary because they are the lender's judgment rather than anything paperwork settles.",
 };
 
 const triageNote =
-  "Seven is not the number that matters. Two of these can be closed at a desk this afternoon, three take one call to the borrower, and two are a judgment no amount of paperwork on this side settles — for those, the pack can only make sure they are answered before they are asked. Illustrative package · synthetic borrower data.";
+  "Distance from the centre is the whole point. Two of these close at a desk this afternoon and three take one call to the borrower — but the outer two sit past a line no amount of work on this side crosses, because they are the lender's judgment. For those the pack cannot supply an answer; it can only make sure they are already named when the question arrives. Illustrative package · synthetic borrower data.";
 
 /* --------------------------------------------------------------------------
    04 — the intake screen the submission becomes, read left to right. The three
@@ -259,82 +260,62 @@ const intakeNote =
   "Nothing is annotated on top of the screen and nothing is cropped out of it — the export is shown whole, and the only thing added is the order it gets read in. A submission does not get read sooner because it is friendlier. It gets read sooner because the reader's first three questions are already answered on the page. Illustrative deal · synthetic borrower data.";
 
 /* --------------------------------------------------------------------------
-   05 — the note a broker writes once the package has been read this way. Seven
-   lines because the file has seven open questions; five can be answered and two
-   can only be named, which is the same five-and-two split section 03 sorted.
+   05 — the product's re-run. Every previous and current value below is read off
+   the screen it sits under; the one row that does not move is on that screen
+   too, held open across both versions rather than dropped.
    -------------------------------------------------------------------------- */
 
-const noteMasthead = {
-  kind: "Cover note · sits on top of the pack",
-  re: "Cedar & Stone LLC · APP-240819-017",
-  pack: "143 pages · 5 documents",
+const rerunShot = {
+  src: "/media/Steps/Reanalysis.png",
+  alt: "The Cevrynt reanalysis screen for this submission: two new documents added to the existing file, the affected signals recomputed instead of the case being rebuilt, and a what-moved panel setting version two against version one with every change called out, including one item that stays unresolved.",
 };
 
-const noteLines = [
+const rerunVersions = [
   {
-    source: "Fraud · cross-application",
-    starts: true,
-    answered:
-      "Account ending 7123 also appears on application APP-240708-092, submitted 42 days earlier. Both files came through this office.",
-    open:
-      "Account ending 7123 also appears on an earlier application. We are confirming the relationship between the two files.",
+    name: "Version 1",
+    at: "10:42 AM",
+    what: "The initial package, analyzed as it was submitted.",
   },
   {
-    source: "Financials · May 14 and May 27",
-    starts: true,
-    answered:
-      "The two May deposits that sit outside the usual rhythm are invoiced work, and both invoices are attached.",
-    open: "The two May deposits that sit outside the usual rhythm are still being sourced from the borrower.",
-  },
-  {
-    source: "Financials · transfers",
-    starts: true,
-    answered: "A second operating account shows up in the transfers. Six statements for it are in the pack.",
-    open:
-      "A second operating account shows up in the transfers. Statements for it are requested and not here yet.",
-  },
-  {
-    source: "Verification · ownership",
-    starts: true,
-    answered:
-      "Ownership percentages are stated on the application, and the operating agreement confirming them is attached.",
-    open: "Ownership percentages are on the application but not yet confirmed by the operating agreement.",
-  },
-  {
-    source: "Verification · premises",
-    starts: true,
-    answered: "Landlord name and number are on the lease, attached.",
-    open: "Landlord name and number are still being obtained from the borrower.",
-  },
-  {
-    source: "Fraud · page 84",
-    starts: false,
-    answered:
-      "A clean export of page 84, pulled from the bank rather than re-scanned, replaces the earlier copy.",
-    open:
-      "Page 84 carries different metadata from the rest of the statement. We are flagging it rather than explaining it away; the export is yours to judge.",
-  },
-  {
-    source: "Verification · KYB record",
-    starts: false,
-    answered:
-      "The current operating address is confirmed by the utility record attached; the registry filing is out of date.",
-    open:
-      "The application address and the registry address differ by street number. Both records are in the pack. Which one governs is your policy, not our judgement.",
+    name: "Version 2",
+    at: "12:14 PM",
+    what: "One new bank statement and one corrected agreement, added to the same file.",
   },
 ];
 
-const noteSign = "Everything above is in the pack. Nothing above is an argument.";
+const rerunSignals = [
+  { name: "Avg monthly deposits", from: 84.6, to: 91.3, prefix: "$", suffix: "K", decimals: 1, badge: "+7.9%" },
+  { name: "Average daily balance", from: 31.2, to: 34.8, prefix: "$", suffix: "K", decimals: 1, badge: "+$3.6K" },
+  { name: "NSF events · 90d", from: 6, to: 4, decimals: 0, badge: "Improved" },
+  { name: "Active MCA positions", from: 2, to: 1, decimals: 0, badge: "Reduced" },
+  { name: "Policy exceptions", from: 2, to: 1, decimals: 0, badge: "−1" },
+  { name: "Debt pressure", from: 63, to: 48, decimals: 0, badge: "Lower risk" },
+];
 
-const noteTally = {
-  answered: "answered outright, in the pack",
-  open: "named and handed over, not argued",
-  answeredWord: "Answered",
-  openWord: "Named open",
+const rerunStill = {
+  name: "Address mismatch",
+  value: "Unresolved",
+  badge: "Still open",
+  said: "The address mismatch does not move, because a new bank statement does not settle an address. The screen keeps it visible across both versions instead of quietly dropping it — which is the part to want, since the alternative is a question that reappears later without warning.",
 };
 
-const coverNote =
-  "The note is seven lines long because the file has seven open questions — a shorter one would mean fewer answers, not a better package. Five of them a broker can answer outright. Two are a judgment no broker settles, so they are named and handed over instead. Change any line to see what the note costs you. Cevrynt does not write this note and does not send it; it is what the package lets you write. Illustrative package · synthetic borrower data.";
+const rerunReadout = {
+  figures: [
+    { n: "02", k: "new inputs" },
+    { n: "07", k: "signals changed" },
+    { n: "01", k: "policy result moved" },
+  ],
+  signal: "Signal",
+  previous: "Previous",
+  movement: "Movement",
+  current: "Current",
+  change: "Change",
+  scrubLabel: "Scrub between analysis version one and version two",
+  tableLabel: "Signals recomputed by the re-run, previous pass against current pass",
+};
+
+const rerunNote =
+  "Every previous and current value here is read off the screen above; none of it is drawn for the drawing. A policy result moving is not an approval and not a decline — Cevrynt issues neither, and the underwriter still decides. What the re-run changes is that the second pass is a comparison rather than a second read, and that what moved is named rather than left to be found. Illustrative deal · synthetic borrower data.";
 
 export default function BrokersIsosPage() {
   const breadcrumbJsonLd = {
@@ -439,8 +420,9 @@ export default function BrokersIsosPage() {
             />
           </div>
           <p className="eg-lede t-lede">
-            Everything the two sections above left open, sorted by who can close it — because a gap you can
-            settle at your desk and a gap that needs the borrower on the phone are not the same problem.
+            Everything the two sections above left open, placed by how far the answer sits from your desk —
+            because a question you settle this afternoon and a question that is the lender&rsquo;s to make are
+            not the same problem.
           </p>
         </div>
 
@@ -487,33 +469,34 @@ export default function BrokersIsosPage() {
         </div>
       </section>
 
-      {/* 05 — the note a broker writes once the package has been read this way */}
-      <section className="iso-cover band-light" aria-labelledby="cover-heading">
+      {/* 05 — what happens when the missing thing finally arrives */}
+      <section className="iso-rerun band-deep" aria-labelledby="rerun-heading">
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker">The cover note</p>
+            <p className="hx-kicker hx-kicker-invert">The re-run</p>
             <RevealLines
               as="h2"
               className="t-display-2"
-              id="cover-heading"
-              text="Seven questions. Seven lines. One of them you write."
+              id="rerun-heading"
+              text="Send what was missing. The file does not start over."
             />
           </div>
           <p className="eg-lede t-lede">
-            This is not a feature — it is a note you put on top of the pack. Five of the seven you can answer
-            outright. Two are a judgment no broker settles, so you name them and hand them over.
+            Two documents go back into the same file. Drag between the two passes to see what the re-run
+            recomputes — and the one thing that stays exactly where it was.
           </p>
         </div>
 
         <div className="eg">
           <div className="eg-full">
-            <CoverNote
-              masthead={noteMasthead}
-              lines={noteLines}
-              sign={noteSign}
-              tally={noteTally}
-              note={coverNote}
+            <VersionScrub
+              shot={rerunShot}
+              versions={rerunVersions}
+              signals={rerunSignals}
+              still={rerunStill}
+              readout={rerunReadout}
+              note={rerunNote}
             />
           </div>
         </div>

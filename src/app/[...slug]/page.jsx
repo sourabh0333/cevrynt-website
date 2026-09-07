@@ -13,6 +13,9 @@ const bespoke = new Set([
   "security",
   "solutions/merchant-cash-advance",
   "solutions/brokers-isos",
+  "solutions/alternative-lenders",
+  "solutions/ecommerce-merchant-underwriting",
+  "about",
 ]);
 
 export function generateStaticParams() {
