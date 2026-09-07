@@ -47,40 +47,71 @@ const packageDocuments = [
     range: "pp. 1–6",
     pages: 6,
     summary:
-      "The claim. Everything here is what the borrower says is true, and every document after it exists to test one part of that against evidence.",
-    reads: ["Legal name", "EIN", "Entity type", "Ownership split", "Amount requested"],
+      "The starting point for the deal. Cevrynt captures the borrower’s stated business details here, then carries those fields forward so later documents and verification checks can confirm or challenge them.",
+    reads: [
+      "Legal name",
+      "EIN",
+      "Entity type",
+      "Ownership split",
+      "Amount requested",
+    ],
   },
+
   {
     name: "Bank statements",
     range: "pp. 7–126",
     pages: 120,
     summary:
-      "Most of the file. Six statements across a hundred and twenty pages is where underwriting actually happens, and it is the part nobody has time to read line by line.",
-    reads: ["Deposits", "Average daily balance", "NSF events", "Negative days", "Inter-account transfers"],
+      "The core financial evidence. Cevrynt structures six months of statement activity so underwriters can review deposits, liquidity, NSF activity, negative days, transfers, and recurring obligations without rebuilding the file manually.",
+    reads: [
+      "Deposits",
+      "Average daily balance",
+      "NSF activity",
+      "Negative days",
+      "Inter-account transfers",
+    ],
   },
+
   {
     name: "Owner identity",
     range: "pp. 127–128",
     pages: 2,
     summary:
-      "Two pages that settle whether the person on the application is the person on the account.",
-    reads: ["Legal name", "Date of birth", "Document expiry", "Match to application"],
+      "Identity evidence is checked against the borrower application so mismatches in names, dates, or document details can be surfaced before the file moves deeper into underwriting.",
+    reads: [
+      "Legal name",
+      "Date of birth",
+      "Document expiry",
+      "Match to application",
+    ],
   },
+
   {
     name: "Bank proof",
     range: "p. 129",
     pages: 1,
     summary:
-      "A single page, and the only thing tying those statements to an account the business actually controls.",
-    reads: ["Account number", "Routing number", "Account holder", "Match to statements"],
+      "Cevrynt uses bank proof to connect the submitted statements to the business and account being underwritten, while keeping the account details available for reviewer verification.",
+    reads: [
+      "Account number",
+      "Routing number",
+      "Account holder",
+      "Match to statements",
+    ],
   },
+
   {
     name: "Existing MCA agreement",
     range: "pp. 130–143",
     pages: 14,
     summary:
-      "The position already on the book. Missing it is how a file gets funded into a stack.",
-    reads: ["Funder", "Outstanding balance", "Remittance amount", "Remittance frequency"],
+      "Existing funding obligations are brought into the same deal record so the underwriter can compare stated positions with recurring bank activity and understand the repayment load already on the business.",
+    reads: [
+      "Funder",
+      "Outstanding balance",
+      "Remittance amount",
+      "Remittance frequency",
+    ],
   },
 ];
 
@@ -102,15 +133,46 @@ const intakeShot = {
  * half of this argument that matters most.
  */
 const dealTrail = [
-  { actor: "Broker", text: "Sends the package to a submissions inbox." },
-  { actor: "Operations", text: "Downloads five files, renames them and uploads them to wherever the review happens.", manual: true },
-  { actor: "Cevrynt", text: "Classifies and structures the package, linking every field back to its page." },
-  { actor: "Operations", text: "Opens the CRM and finds or creates the deal record for this submission.", manual: true },
-  { actor: "Operations", text: "Copies the deal reference across so the review and the record can be matched later.", manual: true },
-  { actor: "Cevrynt", text: "Runs financial analysis, verification, fraud signals and the lender’s own policy." },
-  { actor: "Underwriter", text: "Reviews the findings, adds notes and records any override." },
-  { actor: "Operations", text: "Retypes the findings, exceptions and figures into the system of record.", manual: true },
-  { actor: "Underwriter", text: "Approves, declines or sends the file back for more information." },
+  {
+    actor: "Intake",
+    text: "A broker submission arrives through the existing inbox, form, CRM, or portal.",
+  },
+  {
+    actor: "Operations",
+    text: "Downloads the borrower package and adds the files to Cevrynt.",
+    manual: true,
+  },
+  {
+    actor: "Cevrynt",
+    text: "Classifies the files, structures the underwriting data, and keeps material findings linked to their source.",
+  },
+  {
+    actor: "Operations",
+    text: "Creates or locates the matching deal in the CRM or LOS.",
+    manual: true,
+  },
+  {
+    actor: "Operations",
+    text: "Matches borrower details, deal references, and workflow status between the two systems.",
+    manual: true,
+  },
+  {
+    actor: "Cevrynt",
+    text: "Runs bank analysis, KYB/KYC, fraud review, and lender-defined policy checks against the same deal.",
+  },
+  {
+    actor: "Underwriter",
+    text: "Reviews the findings, source evidence, policy exceptions, and anything that still requires judgment.",
+  },
+  {
+    actor: "Operations",
+    text: "Enters key findings, memo details, and status back into the system of record.",
+    manual: true,
+  },
+  {
+    actor: "Credit team",
+    text: "Approves, declines, counters, requests more information, or escalates the file.",
+  },
 ];
 
 /**
@@ -120,20 +182,20 @@ const dealTrail = [
  */
 const accessTerms = [
   {
-    asks: "Read access, scoped to the deals you name",
-    never: "Standing access to your whole book",
+    asks: "Deal-scoped access to borrower data and submitted files",
+    never: "Broad access to your entire customer or loan book",
   },
   {
-    asks: "A deal identifier, so one file stays one file",
-    never: "Borrower data moved anywhere you have not approved",
+    asks: "A stable deal or borrower identifier",
+    never: "Administrative control of your CRM or LOS",
   },
   {
-    asks: "A destination for the finished record",
-    never: "Writing back into your systems without a person approving it",
+    asks: "An approved destination for underwriting outputs",
+    never: "Authority over credit policy or funding decisions",
   },
   {
-    asks: "An agreed retention and deletion period",
-    never: "Holding a file after the period you set",
+    asks: "Agreed access, retention, and deletion rules",
+    never: "Indefinite access to data after the agreed purpose ends",
   },
 ];
 
@@ -183,19 +245,22 @@ const memoShot = {
 
 const scopeSteps = [
   {
-    marker: "First call",
-    title: "Name the systems that actually touch the file",
-    body: "Usually fewer than a team expects, and often only one of them matters for a first pilot.",
+    marker: "Map the workflow",
+    title: "Follow one deal through the systems it already touches",
+    body:
+      "Identify where the package arrives, where the deal record lives, which files and fields move between systems, and where underwriters review and record the outcome.",
   },
   {
-    marker: "Before anything is built",
-    title: "Agree the access and the destination",
-    body: "What is read, what is written, where it goes, how long it is kept — written down before a line of it exists.",
+    marker: "Prove the underwriting",
+    title: "Test Cevrynt before turning the pilot into an integration project",
+    body:
+      "Run representative files through the agreed workflow and validate extraction, bank analysis, verification, policy results, exceptions, and review outputs before automating the handoffs.",
   },
   {
-    marker: "During the pilot",
-    title: "Run it without the connection first",
-    body: "The workflow has to stand up on files moved by hand before a connection is worth building for it.",
+    marker: "Connect what matters",
+    title: "Build the smallest connection that removes a real handoff",
+    body:
+      "Once the workflow is proven, connect only the approved inputs and outputs through the appropriate API, webhook, CRM, LOS, inbox, or file-source path.",
   },
 ];
 
@@ -235,17 +300,18 @@ export default function IntegrationsPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">What arrives</p>
+            <p className="hx-kicker">START WITH THE FILE</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="arrive-heading"
-              text="Nothing has to be connected for this to work."
+              text="Start with the borrower package you already receive."
             />
           </div>
           <p className="eg-lede t-lede">
-            Cevrynt takes the package a broker already sends, in whatever shape it arrives. Here is one of them,
-            every page of it — and none of this needs a single system wired to anything.
+            Cevrynt can begin from the files already entering your underwriting process. 
+            Applications, bank statements, identity documents, bank proof, and existing
+             MCA agreements are grouped into one deal and structured before any deeper system integration is required.
           </p>
         </div>
 
@@ -261,17 +327,18 @@ export default function IntegrationsPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Where a connection helps</p>
+            <p className="hx-kicker hx-kicker-invert">WHERE CONNECTIONS HELP</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="points-heading"
-              text="Four of these nine steps exist only because systems do not speak."
+              text="Connect the handoffs. Keep the underwriting judgment."
             />
           </div>
           <p className="eg-lede t-lede">
-            One submission and every step it takes through a lender today. Switch the control to drop the steps
-            a connection would answer for, and see which ones survive.
+           Cevrynt can sit between the systems that receive a deal and the system your team uses to manage it. 
+           A scoped connection can remove file moving, duplicate entry, and result re-keying — while review, exceptions,
+            and the final decision stay with your underwriters.
           </p>
         </div>
 
@@ -279,7 +346,7 @@ export default function IntegrationsPage() {
           <div className="eg-full">
             <HandoffLog
               steps={dealTrail}
-              caveat="No connection here exists today. This is the trail one would produce, not something you can switch on."
+              caveat="Illustrative workflow. The exact connection depends on your existing systems and implementation scope."
             />
           </div>
         </div>
@@ -290,16 +357,16 @@ export default function IntegrationsPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Access</p>
+            <p className="hx-kicker">ACCESS & CONTROL</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="access-heading"
-              text="What a connection would ask for, and what it never would."
+              text="Connect only what the underwriting workflow needs."
             />
           </div>
           <p className="eg-lede t-lede">
-            Worth reading before a walkthrough rather than during one.
+            A Cevrynt connection is scoped around a defined job — receive the deal, read the approved evidence, return agreed underwriting outputs, and nothing broader than the workflow requires.
           </p>
         </div>
 
@@ -316,7 +383,7 @@ export default function IntegrationsPage() {
                 </caption>
                 <thead>
                   <tr>
-                    <th scope="col"><span className="ac-h">Would ask for</span></th>
+                    <th scope="col"><span className="ac-h">CEVRYNT MAY NEED</span></th>
                     <th scope="col"><span className="ac-h ac-h-never">Would never</span></th>
                   </tr>
                 </thead>
@@ -339,17 +406,17 @@ export default function IntegrationsPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">How it gets decided</p>
+            <p className="hx-kicker hx-kicker-invert">HOW CEVRYNT CONNECTS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="scope-heading"
-              text="No logos on this page, and that is deliberate."
+              text="We don’t start with the API. We start with the workflow."
             />
           </div>
           <p className="eg-lede t-lede">
-            A wall of marks would tell you a connection exists. Cevrynt does not claim one it has not built and
-            agreed with you, so instead here is how one gets scoped.
+            Before anything is integrated, Cevrynt maps where the deal enters, what underwriting data is actually needed,
+             where the reviewed output belongs, and which system remains the source of truth.
           </p>
         </div>
 
@@ -380,8 +447,8 @@ export default function IntegrationsPage() {
               </ol>
 
               <p className="sc-note">
-                If a connection you need is not possible yet, the walkthrough is where you find that out — not
-                three weeks into a pilot.
+                If a connection does not remove a real handoff, preserve the source of truth, or
+                 improve the review, there is no reason to build it.
               </p>
             </div>
           </div>

@@ -42,24 +42,24 @@ export function generateMetadata() {
  */
 const layers = [
   {
-    name: "Evidence",
-    question: "What it knows, and where that came from",
-    body: "Mixed borrower files are classified and structured, and every captured value keeps a pointer back to the document, page and line it was read from.",
+    name: "Source Evidence",
+    question: "Every finding can be traced back.",
+    body: "Documents, statement pages, transactions and verification results stay linked to the values and findings derived from them.",
   },
   {
-    name: "Analysis",
-    question: "What it concludes, and who decides",
-    body: "Cash-flow behaviour, business identity and risk signals are derived from that evidence and surfaced for a reviewer. Nothing is auto-declined on a signal alone.",
+    name: "Underwriting Context",
+    question: "The deal stays one story, not eight separate reviews.",
+    body: "Cash flow, business identity, existing obligations, fraud signals and reviewer notes remain connected as the file moves through underwriting.",
   },
   {
-    name: "Control",
-    question: "Whose rules apply, and who has final say",
-    body: "Your criteria are applied as written, with exceptions raised and overrides recorded. The approve, decline or counter stays with your team.",
+    name: "Lender Policy",
+    question: "Your rules travel with the deal.",
+    body: "Thresholds, conditions and exception rules stay attached to the review. Cevrynt shows where the file fits policy, where it does not, and where human judgment is still needed.",
   },
   {
-    name: "Record",
-    question: "What survives, and what happens when things change",
-    body: "Findings stay attached to their sources, and new evidence re-runs the file against the previous version instead of starting it over.",
+    name: "Decision Record",
+    question: "What happened stays with the file.",
+    body: "Findings, evidence, policy results, corrections, reanalysis, notes and overrides remain in the same record so another reviewer can understand what changed and why.",
   },
 ];
 
@@ -72,22 +72,22 @@ const provenance = [
   {
     field: "Average monthly deposits",
     value: "$84,613",
-    document: "First Harbor Bank Statement · April 2026 · p.4 · lines 12–14",
-    quote: "“Deposit — ACH Credit · $18,700.00 · Balance $31,150.00”",
+    document: "First Harbor Bank Statement · Apr 2026 · pages 4–12",
+    quote: "Calculated from qualifying deposit activity · internal transfers excluded",
     confidence: "99%",
   },
   {
-    field: "Ending balance",
-    value: "$31,240.19",
-    document: "First Harbor Bank Statement · April 2026 · p.4 · lines 28–31",
-    quote: "“Deposit — Card Settlement · $24,850.00 · Balance $47,060.00”",
-    confidence: "98%",
+    field: "Legal business identity",
+    value: "VERIFIED",
+    document: "Borrower application + business verification result",
+    quote: "Cedar & Stone LLC · legal-name match confirmed",
+    confidence: "Verified",
   },
   {
     field: "Recurring MCA debit",
     value: "$1,550 / day",
-    document: "First Harbor Bank Statement · April 2026 · p.4 · lines 44–48",
-    quote: "“Rapid Advance Funding · ACH debit · $1,550.00”",
+    document: "First Harbor Bank Statement · recurring ACH activity",
+    quote: "Rapid Advance Funding · repeated daily debit pattern detected",
     confidence: "95%",
   },
 ];
@@ -98,30 +98,30 @@ const provenance = [
  * on a decision node that is deliberately never filled — the shape carries the
  * claim that Cevrynt issues no automated decision.
  */
-const treeRoot = { kicker: "Derived from", name: "Source-linked evidence" };
+const treeRoot = { kicker: "Derived from", name: "Structured financial evidence" };
 
 const signalFamilies = [
   {
-    key: "cash",
-    name: "Cash flow & balances",
-    signals: ["Average monthly deposits", "Average daily balance", "NSF events · 90 days", "Active MCA positions"],
+    key: "revenue",
+    name: "Revenue & deposits",
+    signals: ["Monthly qualifying deposits", "Deposit consistency and trend", "Large or unusual inflows", "Revenue concentration"],
   },
   {
-    key: "identity",
-    name: "Business identity",
-    signals: ["Entity standing", "Officer records", "Time in business", "Address consistency"],
+    key: "liquidity",
+    name: "Liquidity & cash flow",
+    signals: ["Average and ending balances", "Negative-balance days", "NSF / returned-item activity", "Cash-flow volatility"],
   },
   {
-    key: "risk",
-    name: "Risk & integrity",
-    signals: ["Document integrity", "Duplicate submission", "Conflicting details", "Debt pressure"],
+    key: "obligations",
+    name: "Existing obligations",
+    signals: ["Recurring MCA debits", "Active loan / MCA positions", "Daily or weekly repayment load", "Stacking and repayment pressure"],
   },
 ];
 
 const treeDecision = {
-  kicker: "Left open",
-  name: "Approve · decline · counter",
-  note: "Every branch above ends here, and Cevrynt does not close it. The approve, decline or counter is made by your team.",
+  kicker: "Structured underwriting findings",
+  name: "KYB/KYC → Fraud Detection → Policy Engine → Human Review",
+  note: "Analysis does not make the funding decision. It gives the next stages a structured financial picture with the evidence still attached.",
 };
 
 /**
@@ -139,7 +139,7 @@ const policySummary = [
   { value: "10 / 12", label: "Rules passed" },
   { value: "2", label: "Exceptions" },
   { value: "1", label: "Override" },
-  { value: "No", label: "Auto decline", emphasis: true },
+  { value: "REVIEW", label: "REQUIRED", emphasis: true },
 ];
 
 const policyRules = [
@@ -187,8 +187,8 @@ const policyOverride = {
   role: "Senior Underwriter",
   when: "12:18 PM",
   reason:
-    "Four NSF events occurred more than 60 days ago. Recent cash flow is stable and average daily balance remains above policy.",
-  code: "Reason code · improving cash flow",
+    "NSF activity exceeds policy by one event. Four of the six events occurred more than 60 days ago; recent cash flow and average daily balance remain above policy thresholds.",
+  code: "Reason : Improving recent cash flow",
 };
 
 /**
@@ -197,19 +197,55 @@ const policyOverride = {
  * is why this is a section rather than a footnote.
  */
 const recordVersions = [
-  { label: "Version 1 · 10:42 AM", note: "Initial package analysed" },
-  { label: "Version 2 · 12:14 PM", note: "New statement and corrected agreement included" },
+  { label: "Version 1 · 10:42 AM", note: "Initial underwriting review" },
+  { label: "Version 2 · 12:14 PM", note: "New evidence received" },
 ];
 
-const recordSummary = ["2 new inputs", "7 signals changed", "1 policy result moved"];
+const recordSummary = ["2 NEW INPUTS", "5 FINDINGS CHANGED", "1 POLICY EXCEPTION CLEARED"];
 
 const recordChanges = [
-  { name: "Average monthly deposits", from: "$84.6K", to: "$91.3K", delta: "+7.9%", better: true },
-  { name: "Average daily balance", from: "$31.2K", to: "$34.8K", delta: "+$3.6K", better: true },
-  { name: "NSF events · 90 days", from: "6", to: "4", delta: "Improved", better: true },
-  { name: "Active MCA positions", from: "2", to: "1", delta: "Reduced", better: true },
-  { name: "Policy exceptions", from: "2", to: "1", delta: "−1", better: true },
-  { name: "Debt pressure", from: "63", to: "48", delta: "Lower risk", better: true },
+  {
+    name: "Average monthly deposits",
+    from: "$84.6K",
+    to: "$91.3K",
+    delta: "+7.9%",
+    better: true,
+  },
+  {
+    name: "Average daily balance",
+    from: "$31.2K",
+    to: "$34.8K",
+    delta: "+$3.6K",
+    better: true,
+  },
+  {
+    name: "NSF activity · 90 days",
+    from: "6 events",
+    to: "4 events",
+    delta: "Exception cleared",
+    better: true,
+  },
+  {
+    name: "Existing MCA positions",
+    from: "2 active",
+    to: "1 active",
+    delta: "1 position updated",
+    better: true,
+  },
+  {
+    name: "Policy exceptions",
+    from: "2 open",
+    to: "1 open",
+    delta: "1 cleared",
+    better: true,
+  },
+  {
+    name: "Daily repayment load",
+    from: "$1,550 / day",
+    to: "$775 / day",
+    delta: "Reduced",
+    better: true,
+  },
 ];
 
 
@@ -247,11 +283,11 @@ export default function PlatformPage() {
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
             <p className="hx-kicker">The platform</p>
-            <RevealLines as="h2" className="t-display-2" id="layers-heading" text="Four layers, not eight steps." />
+            <RevealLines as="h2" className="t-display-2" id="layers-heading" text="Four things stay connected through every underwriting step." />
           </div>
           <p className="eg-lede t-lede">
-            A deal moves through Cevrynt in order. The platform underneath it is built in layers — each one
-            answering a different question about how the system actually works.
+            Cevrynt still moves a deal through eight stages. These are not additional steps — they
+            are the four things the platform keeps attached to the file from intake through final review.
           </p>
         </div>
 
@@ -267,12 +303,12 @@ export default function PlatformPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Evidence layer</p>
-            <RevealLines as="h2" className="t-display-2" id="evidence-heading" text="Every value carries its receipt." />
+            <p className="hx-kicker hx-kicker-invert">SOURCE EVIDENCE</p>
+            <RevealLines as="h2" className="t-display-2" id="evidence-heading" text="Every underwriting fact can be checked." />
           </div>
           <p className="eg-lede t-lede">
-            No figure here stands on its own. Lift any one of them and the line it was read from is sitting
-            underneath — document, page, the words themselves.
+            Cevrynt keeps the source behind each material finding — the document, page,
+            transaction, or verification result — so an underwriter can verify what the system found before relying on it.
           </p>
         </div>
 
@@ -289,11 +325,11 @@ export default function PlatformPage() {
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
             <p className="hx-kicker">Analysis layer</p>
-            <RevealLines as="h2" className="t-display-2" id="signals-heading" text="It reasons all the way to the decision, then stops." />
+            <RevealLines as="h2" className="t-display-2" id="signals-heading" text="Turn bank activity into the signals an underwriter actually reviews." />
           </div>
           <p className="eg-lede t-lede">
-            Evidence fans out into twelve signals across three families, and every branch converges on the same
-            node — the one Cevrynt leaves open.
+            Cevrynt reads the financial evidence as a whole — separating inflows, measuring liquidity, identifying cash-flow stress and surfacing recurring debt obligations.
+            Each finding stays connected to the activity behind it and moves forward to verification, fraud and policy review.
           </p>
         </div>
 
@@ -309,12 +345,13 @@ export default function PlatformPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Control layer</p>
-            <RevealLines as="h2" className="t-display-2" id="control-heading" text="Your thresholds. Your override." />
+            <p className="hx-kicker hx-kicker-invert">LENDER POLICY</p>
+            <RevealLines as="h2" className="t-display-2" id="control-heading" text="Your credit policy, applied rule by rule." />
           </div>
           <p className="eg-lede t-lede">
-            The policy applied here is the one your team wrote, at the version it was written in. Where a deal
-            crosses a line, it says so — and a person can overrule it on the record.
+            Cevrynt evaluates the deal against the underwriting criteria your team defines.
+            Every rule shows the borrower value, required threshold, outcome,
+            and exception — while human overrides remain visible in the deal record.
           </p>
         </div>
 
@@ -335,12 +372,12 @@ export default function PlatformPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker">Record layer</p>
-            <RevealLines as="h2" className="t-display-2" id="record-heading" text="New evidence updates the case. It never resets it." />
+            <p className="hx-kicker">REANALYSIS & HISTORY</p>
+            <RevealLines as="h2" className="t-display-2" id="record-heading" text="When the file changes, Cevrynt shows what changed with it." />
           </div>
           <p className="eg-lede t-lede">
-            A corrected agreement and one more statement arrive. Cevrynt re-runs what they touch and shows every
-            reading that moved against the version before it.
+            A new bank statement, corrected agreement, or missing document should not erase the first review. Cevrynt re-runs the updated file,
+            compares it with the previous version, and surfaces which financial findings, risk signals, and policy results actually moved.
           </p>
         </div>
 
@@ -355,9 +392,10 @@ export default function PlatformPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="06"
-          kicker="Founder-led next step"
-          heading="Bring one workflow. We'll map how it fits."
-          lede="Scope a walkthrough or pilot directly with the founder — real files, your own review criteria."
+          kicker="FOUNDER-LED PLATFORM WALKTHROUGH"
+          heading="See exactly where Cevrynt fits."
+          lede="Walk through a real MCA or SMB underwriting process with the founder. We’ll map the documents, analysis, verification, policy rules, exceptions,
+           and reviewer decisions Cevrynt can support — without forcing you to change the workflow first."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

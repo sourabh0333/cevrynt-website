@@ -119,8 +119,8 @@ const corePages = [
   {
     path: "platform",
     group: "Platform",
-    title: "Underwriting intelligence, connected end to end",
-    description: "Cevrynt connects intake, analysis, verification, policy evaluation, and reporting in one lender-controlled workflow.",
+    title: "Every answer, tied back to the file.",
+    description: "Documents, bank analysis, verification, fraud signals, lender policy, and underwriting memos in one evidence-linked workflow.",
     metaTitle: "AI Underwriting Platform for Alternative Lenders",
     metaDescription: "Cevrynt connects intake, document analysis, verification, fraud signals, and policy evaluation into one evidence-backed underwriting workflow.",
     keywords: ["AI underwriting platform", "underwriting workflow software", "decision intelligence lending"],
@@ -139,8 +139,8 @@ const corePages = [
   {
     path: "integrations",
     group: "Platform",
-    title: "Connect the underwriting workflow carefully",
-    description: "Plan data and workflow connections around the systems your team already uses, without implying unverified availability.",
+    title: "Keep your stack. Connect Cevrynt around it.",
+    description: "Cevrynt is designed to fit around the systems already moving your deals — intake, LOS or CRM, document sources, verification providers, and downstream reporting.",
     metaTitle: "Underwriting Workflow Integrations",
     metaDescription: "Plan intake and data connections for your underwriting stack, and discuss integration requirements with the Cevrynt team.",
     keywords: ["lending software integrations", "underwriting workflow integration"],

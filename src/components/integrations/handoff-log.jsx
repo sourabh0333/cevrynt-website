@@ -47,35 +47,41 @@ export function HandoffLog({ steps, caveat }) {
   return (
     <div className={`hl${ready ? " is-ready" : ""}`} data-mode={mode}>
       <div className="hl-control">
-        <div
-          className="hl-seg"
-          ref={groupRef}
-          role={ready ? "radiogroup" : undefined}
-          aria-label={ready ? "Compare the trail today with a connected trail" : undefined}
-          onKeyDown={ready ? onKeyDown : undefined}
-        >
-          <span className="hl-thumb" aria-hidden="true" />
-          <button
-            type="button"
-            className={`hl-opt${connected ? "" : " is-live"}`}
-            role={ready ? "radio" : undefined}
-            aria-checked={ready ? !connected : undefined}
-            tabIndex={ready && connected ? -1 : 0}
-            onClick={() => setConnected(false)}
-          >
-            Today
-          </button>
-          <button
-            type="button"
-            className={`hl-opt${connected ? " is-live" : ""}`}
-            role={ready ? "radio" : undefined}
-            aria-checked={ready ? connected : undefined}
-            tabIndex={ready && !connected ? -1 : 0}
-            onClick={() => setConnected(true)}
-          >
-            If connected
-          </button>
-        </div>
+       <div
+  className="hl-seg"
+  ref={groupRef}
+  role={ready ? "radiogroup" : undefined}
+  aria-label={
+    ready
+      ? "Compare the current underwriting workflow with a connected workflow"
+      : undefined
+  }
+  onKeyDown={ready ? onKeyDown : undefined}
+>
+  <span className="hl-thumb" aria-hidden="true" />
+
+  <button
+    type="button"
+    className={`hl-opt${connected ? "" : " is-live"}`}
+    role={ready ? "radio" : undefined}
+    aria-checked={ready ? !connected : undefined}
+    tabIndex={ready && connected ? -1 : 0}
+    onClick={() => setConnected(false)}
+  >
+    Current workflow
+  </button>
+
+  <button
+    type="button"
+    className={`hl-opt${connected ? " is-live" : ""}`}
+    role={ready ? "radio" : undefined}
+    aria-checked={ready ? connected : undefined}
+    tabIndex={ready && !connected ? -1 : 0}
+    onClick={() => setConnected(true)}
+  >
+    With a connection
+  </button>
+</div>
         <p className="hl-caveat">{caveat}</p>
       </div>
 
@@ -110,8 +116,7 @@ export function HandoffLog({ steps, caveat }) {
       </PointerField>
 
       <p className="hl-close">
-        Every step a connection removes is clerical. The review, the notes and the approval stand in both
-        trails, because those are the ones that are meant to cost a person&rsquo;s time.
+       Connections remove the clerical handoffs. Review, judgment, notes, exceptions, and final approval stay with your team.
       </p>
     </div>
   );
