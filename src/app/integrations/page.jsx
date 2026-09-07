@@ -220,22 +220,30 @@ const memoFigures = [
 const memoFindings = [
   {
     title: "Business & identity",
-    body: "Entity, standing and officer records align. One address detail remains open.",
-    source: "Application p.1–2 · Registry record",
+    body:
+      "Entity is active and the legal business name matches the application. A registered-address discrepancy remains open for reviewer confirmation.",
+    source: "Application pp. 1–2 · Business verification",
   },
   {
-    title: "Financial position",
-    body: "Average monthly deposits of $91.3K against an average daily balance of $34.8K, with recent NSF frequency improving.",
-    source: "Bank statements · 12 months",
+    title: "Cash flow & liquidity",
+    body:
+      "Average monthly deposits are $91.3K with an average daily balance of $34.8K. NSF activity improved to 4 events in the last 90 days after reanalysis.",
+    source: "Bank statements · 6-month review",
   },
   {
-    title: "Debt & risk observations",
-    body: "One active MCA position remains after corrected agreement review. Fraud signals were resolved as review items, not automatic determinations.",
-    source: "Agreement p.1–14 · Fraud queue",
+    title: "Existing obligations & policy",
+    body:
+      "One active MCA position remains. Updated evidence cleared one previous exception, while one lender-defined policy exception still requires underwriter judgment.",
+    source: "MCA agreement pp. 1–14 · Policy v3.4",
   },
 ];
 
-const memoDispositions = ["Approve", "Conditional", "Request info", "Decline"];
+const memoDispositions = [
+  "Approve",
+  "Conditional",
+  "Request info",
+  "Decline",
+];
 
 const memoShot = {
   src: "/media/Steps/Deal Memo.png",
@@ -460,17 +468,17 @@ export default function IntegrationsPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker">What crosses back</p>
+            <p className="hx-kicker">WHAT COMES BACK</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="memo-heading"
-              text="What leaves is a memo, not a decision."
+              text="Return the underwriting record to the system your team already uses."
             />
           </div>
           <p className="eg-lede t-lede">
-            The same file after review: findings consolidated, every conclusion still carrying the document and
-            page it came from, and the call itself left where it belongs.
+            Cevrynt can send structured findings, policy exceptions, evidence references, memo fields, and review status back to the approved CRM, LOS, or system of record. 
+            The underwriting context moves with the result — the credit decision does not.
           </p>
         </div>
 
@@ -530,8 +538,8 @@ export default function IntegrationsPage() {
                     ))}
                   </ul>
                   <p className="mm-decide-note">
-                    No automated approval or decline is issued. The memo is ready for a reviewer to resolve the
-                    open exception and make the final call.
+                    Cevrynt returns the underwriting record and supporting evidence.
+                     Final pricing, structure, approval, decline, and funding authority stay with your team.
                   </p>
                 </div>
               </div>
@@ -543,13 +551,13 @@ export default function IntegrationsPage() {
       <section className="fn band-white" aria-labelledby="cta-heading">
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
-          index="06"
-          kicker="Founder-led walkthrough"
-          heading="Bring the systems the file actually touches."
-          lede="Map the intake you have today, agree what a connection would need, and decide whether one is worth building at all."
-          calendlyUrl={calendlyUrl}
-          email="arin@cevrynt.com"
-        />
+  index="06"
+  kicker="Founder-led integration walkthrough"
+  heading="Bring your underwriting stack. We’ll map where Cevrynt fits."
+  lede="Show us how a deal moves through your intake, CRM or LOS, review process, and system of record. We’ll identify what Cevrynt should receive, what can be returned, and which handoffs are worth connecting."
+  calendlyUrl={calendlyUrl}
+  email="arin@cevrynt.com"
+/>
       </section>
     </main>
   );

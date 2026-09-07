@@ -52,9 +52,9 @@ const timePeriods = [
  * is what identifies them after the key, so this order is load-bearing.
  */
 const approaches = [
-  { key: "hand", name: "By hand" },
-  { key: "bolton", name: "Bolt-on extraction" },
-  { key: "built", name: "Built for this", lead: true },
+  { key: "review", name: "Initial review" },
+  { key: "reanalysis", name: "After reanalysis" },
+  { key: "later", name: "Months later", lead: true },
 ];
 
 /**
@@ -73,16 +73,50 @@ const approaches = [
  * products.
  */
 const artefacts = [
-  { name: "The figures", lost: { hand: null, bolton: null, built: null } },
-  { name: "The page each came from", lost: { hand: 0.58, bolton: null, built: null } },
-  { name: "Who signed it off", lost: { hand: 0.7, bolton: 0.58, built: null } },
-  { name: "Why an exception was allowed", lost: { hand: 0.45, bolton: 0.45, built: null } },
-  { name: "What the reviewer was looking at", lost: { hand: 0.3, bolton: 0.3, built: null } },
+  {
+    name: "Financial facts",
+    lost: {
+      review: null,
+      reanalysis: null,
+      later: null,
+    },
+  },
+  {
+    name: "Source evidence",
+    lost: {
+      review: null,
+      reanalysis: null,
+      later: null,
+    },
+  },
+  {
+    name: "Policy version",
+    lost: {
+      review: null,
+      reanalysis: null,
+      later: null,
+    },
+  },
+  {
+    name: "Exception rationale",
+    lost: {
+      review: null,
+      reanalysis: null,
+      later: null,
+    },
+  },
+  {
+    name: "Reviewer history",
+    lost: {
+      review: null,
+      reanalysis: null,
+      later: null,
+    },
+  },
 ];
 
 const retentionNote =
-  "If your volume is genuinely manageable by hand today, the first number is a perfectly good answer, and we would rather you kept it.";
-
+  "The value is not just preserving the final outcome. Cevrynt keeps the evidence, policy context, exceptions, and reviewer history together so the deal can still explain itself later.";
 /**
  * One page of the illustrative Cedar & Stone file, and four things a reviewer
  * could reasonably key on in it.
@@ -101,29 +135,29 @@ const readingAnchors = [
     key: "A",
     x: 690,
     y: 300,
-    read: "Took the deposit average at face value",
-    at: "Average monthly deposits",
+    read: "Start from the same underwriting facts",
+    at: "Structured findings",
   },
   {
     key: "B",
     x: 300,
     y: 498,
-    read: "Went back to the original statement line",
-    at: "Source document, page 4",
+    read: "Go straight back to the source",
+    at: "Document · page · transaction",
   },
   {
     key: "C",
     x: 690,
     y: 545,
-    read: "Caught the recurring daily debit",
+    read: "Surface the same material signals",
     at: "Recurring MCA debit",
   },
   {
     key: "D",
     x: 1420,
     y: 515,
-    read: "Checked the page and line behind the number",
-    at: "Evidence trace",
+    read: "Apply the same policy context",
+    at: "Evidence + policy trace",
   },
 ];
 
@@ -138,8 +172,12 @@ const readingShot = {
  * mark is deliberate: this narrows disagreement, it does not remove it, and a
  * page claiming otherwise would be claiming something the product does not do.
  */
-const spreadMarks = ["Four reviewers", "One page", "Same four signals", "What is left is the deal"];
-
+const spreadMarks = [
+  "One deal",
+  "Same financial facts",
+  "Same source evidence",
+  "Judgment stays human",
+];
 /**
  * Two lender policies, and the same illustrative Cedar & Stone file read
  * against both. Every value here is the one the rest of the site uses for this
@@ -155,40 +193,70 @@ const policyLenders = [{ key: "a", name: "Lender A" }, { key: "b", name: "Lender
 
 const policyCriteria = [
   {
-    name: "Monthly deposit volume",
-    value: "$84,613",
-    a: { rule: "Minimum $50,000", verdict: "pass" },
-    b: { rule: "Minimum $75,000", verdict: "pass" },
+    name: "Average monthly deposits",
+    value: "$84.6K",
+    a: {
+      rule: "Minimum $50K",
+      verdict: "pass",
+    },
+    b: {
+      rule: "Minimum $75K",
+      verdict: "pass",
+    },
   },
   {
-    name: "Existing position",
-    value: "$1,550 / day",
-    a: { rule: "Second position allowed", verdict: "pass" },
-    b: { rule: "No second position", verdict: "fail" },
+    name: "Active MCA positions",
+    value: "1 active",
+    a: {
+      rule: "Second position allowed",
+      verdict: "pass",
+    },
+    b: {
+      rule: "No second position",
+      verdict: "fail",
+    },
   },
   {
-    name: "Negative days, last 90",
+    name: "Negative days · 90 days",
     value: "6 days",
-    a: { rule: "Maximum 3", verdict: "exception" },
-    b: { rule: "Maximum 8", verdict: "pass" },
+    a: {
+      rule: "Maximum 5",
+      verdict: "exception",
+    },
+    b: {
+      rule: "Maximum 8",
+      verdict: "pass",
+    },
   },
   {
-    name: "Ending balance",
-    value: "$31,240",
-    a: { rule: "Minimum $10,000", verdict: "pass" },
-    b: { rule: "Minimum $25,000", verdict: "pass" },
+    name: "Average daily balance",
+    value: "$31.2K",
+    a: {
+      rule: "Minimum $10K",
+      verdict: "pass",
+    },
+    b: {
+      rule: "Minimum $25K",
+      verdict: "pass",
+    },
   },
   {
     name: "Time in business",
     value: "3 years 2 months",
-    a: { rule: "Minimum 2 years", verdict: "pass" },
-    b: { rule: "Minimum 4 years", verdict: "fail" },
+    a: {
+      rule: "Minimum 2 years",
+      verdict: "pass",
+    },
+    b: {
+      rule: "Minimum 4 years",
+      verdict: "fail",
+    },
   },
 ];
 
 const policyOutcomes = [
-  "Proceeds to a human decision, with the negative-day exception recorded against the file.",
-  "Falls outside policy on two criteria, both of them visible with the reasoning attached.",
+  "4 rules pass · 1 exception. Moves to human review with the exception and supporting evidence attached.",
+  "3 rules pass · 2 outside policy. The failed thresholds remain visible with the supporting evidence attached.",
 ];
 
 /**
@@ -199,7 +267,7 @@ const policyOutcomes = [
 const policyCta = { label: "Book a walkthrough", href: calendlyUrl, external: true };
 
 const policyNote =
-  "Both readings are correct. Nothing about the file changed between them — the policy did. Cevrynt evaluates against whichever one is yours, and leaves the exception on the record either way.";
+   "The borrower evidence did not change — the lender policy did. Cevrynt applies each policy as written and keeps the policy version, threshold, observed value, exception, and reviewer action attached to the deal.";
 
 /**
  * The re-run, read straight off the export rendered beneath it.
@@ -213,46 +281,80 @@ const policyNote =
  * settles on, so rounding cannot leave a value a hair off what the product says.
  */
 const revisionVersions = [
-  { label: "Version 1 · 10:42", short: "Version 1", note: "Initial package analysed" },
-  { label: "Version 2 · 12:14", short: "Version 2", note: "New statement and corrected agreement included" },
+  {
+    label: "Version 1 · 10:42 AM",
+    short: "Initial review",
+    note: "Original borrower package analyzed",
+  },
+  {
+    label: "Version 2 · 12:14 PM",
+    short: "New evidence added",
+    note: "One new bank statement and a corrected MCA agreement added",
+  },
 ];
 
 const revisionRows = [
   {
     signal: "Average monthly deposits",
-    was: "$84.6K", now: "$91.3K",
-    from: 84.6, to: 91.3, decimals: 1, prefix: "$", suffix: "K",
-    moved: "+7.9%", tone: "up",
+    was: "$84.6K",
+    now: "$91.3K",
+    from: 84.6,
+    to: 91.3,
+    decimals: 1,
+    prefix: "$",
+    suffix: "K",
+    moved: "+7.9%",
+    tone: "up",
   },
   {
     signal: "Average daily balance",
-    was: "$31.2K", now: "$34.8K",
-    from: 31.2, to: 34.8, decimals: 1, prefix: "$", suffix: "K",
-    moved: "+$3.6K", tone: "up",
+    was: "$31.2K",
+    now: "$34.8K",
+    from: 31.2,
+    to: 34.8,
+    decimals: 1,
+    prefix: "$",
+    suffix: "K",
+    moved: "+$3.6K",
+    tone: "up",
   },
   {
-    signal: "NSF events, last 90 days",
-    was: "6", now: "4",
-    from: 6, to: 4,
-    moved: "Improved", tone: "up",
+    signal: "NSF activity · 90 days",
+    was: "6 events",
+    now: "4 events",
+    from: 6,
+    to: 4,
+    moved: "Exception cleared",
+    tone: "up",
   },
   {
     signal: "Active MCA positions",
-    was: "2", now: "1",
-    from: 2, to: 1,
-    moved: "Reduced", tone: "up",
+    was: "2 active",
+    now: "1 active",
+    from: 2,
+    to: 1,
+    moved: "Position updated",
+    tone: "up",
   },
   {
     signal: "Policy exceptions",
-    was: "2", now: "1",
-    from: 2, to: 1,
-    moved: "−1", tone: "up",
+    was: "2 open",
+    now: "1 open",
+    from: 2,
+    to: 1,
+    moved: "1 cleared",
+    tone: "up",
   },
   {
-    signal: "Debt pressure",
-    was: "63", now: "48",
-    from: 63, to: 48,
-    moved: "Lower risk", tone: "up",
+    signal: "Daily repayment load",
+    was: "$1,550 / day",
+    now: "$775 / day",
+    from: 1550,
+    to: 775,
+    prefix: "$",
+    suffix: " / day",
+    moved: "Reduced",
+    tone: "up",
   },
 ];
 
@@ -267,8 +369,7 @@ const revisionShot = {
  * not touch stays open — which is the behaviour the rest of the page argues for.
  */
 const revisionNote =
-  "Not everything resolves. The address mismatch verification raised is still open against version two, carried forward rather than cleared by the re-run — because a second pass is meant to update the case, not tidy it.";
-
+  "Not every issue disappears when new evidence arrives. The address discrepancy remains open in Version 2 and is carried forward for reviewer resolution. Reanalysis updates what changed without silently clearing what still needs judgment.";
 /**
  * The limits, stated before anyone has to ask for them. Each claim is something
  * people genuinely assume about AI underwriting, and each answer is a real
@@ -278,35 +379,35 @@ const boundaryItems = [
   {
     claim: "It decides the deal.",
     answer:
-      "It prepares the review. Your team approves, declines or prices, and the call is recorded as theirs.",
+      "It prepares the underwriting review. Approval, decline, counter, pricing, structure, and final sign-off remain with your team.",
   },
   {
     claim: "It replaces your credit policy with a score.",
     answer:
-      "It applies the policy you define, and shows where a deal falls outside it rather than resolving that into a number.",
+      "It applies lender-defined thresholds, conditions, and exception rules, then shows what passed, what failed, and what still needs judgment.",
   },
   {
-    claim: "It is a lender.",
+    claim: "It turns uncertainty into a clean answer.",
     answer:
-      "It is not, and it does not make or guarantee funding offers. Lenders keep final approval authority in every case.",
+      "Conflicting evidence, verification mismatches, low-confidence findings, and policy exceptions remain visible until a reviewer resolves them.",
   },
   {
-    claim: "It publishes accuracy and approval rates.",
+    claim: "It hides the reasoning behind the output.",
     answer:
-      "It does not. Those numbers mean very little across different file mixes, so fit is assessed against your own.",
+      "Material findings stay connected to the document, page, transaction, verification result, or policy rule that supports them.",
   },
   {
-    claim: "It runs without a person in the loop.",
+    claim: "It rewrites the case when new evidence arrives.",
     answer:
-      "Every workflow keeps a human decision-maker. That is a design choice, not a stage we intend to grow out of.",
+      "Reanalysis creates a new review version and shows what changed while preserving previous findings, exceptions, policy results, and reviewer actions.",
   },
 ];
 
 const boundaryNote =
-  "If any of these is the thing you actually needed, we are the wrong fit, and the walkthrough is the fastest way to find that out.";
+  "Cevrynt is built to preserve lender control, visible exceptions, source-linked evidence, and review history. If your workflow needs the system to replace those judgment points, it is probably not the right fit.";
 
 const spreadNote =
-  "It will not make four underwriters agree, and it should not. What it removes is the part of the disagreement that was really about who had read which page.";
+  "Cevrynt does not force underwriters to agree. It removes avoidable disagreement by giving every reviewer the same facts, source evidence, material signals, and lender-policy context.";
 
 export default function WhyCevryntPage() {
   const breadcrumbJsonLd = {
@@ -338,12 +439,12 @@ export default function WhyCevryntPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">The honest comparison</p>
-            <RevealLines as="h2" className="t-display-2" id="retention-heading" text="Six months on, how much of the review do you still hold?" />
+            <p className="hx-kicker">DECISION MEMORY</p>
+            <RevealLines as="h2" className="t-display-2" id="retention-heading" text="Six months later, the file should still explain itself." />
           </div>
           <p className="eg-lede t-lede">
-            Five things a review leaves behind, and how long each approach can still produce them without
-            rebuilding the file. Scroll to move time.
+            Cevrynt keeps the evidence, policy context, exceptions, and reviewer actions with the same deal
+            record — so a future reviewer can understand what was known, what changed, and why the team made the call.
           </p>
         </div>
 
@@ -364,12 +465,12 @@ export default function WhyCevryntPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Consistency</p>
-            <RevealLines as="h2" className="t-display-2" id="spread-heading" text="Four underwriters. One file. Four answers." />
+            <p className="hx-kicker hx-kicker-invert">CONSISTENCY</p>
+            <RevealLines as="h2" className="t-display-2" id="spread-heading" text="Same file. Same evidence. Judgment can still differ." />
           </div>
           <p className="eg-lede t-lede">
-            Some of that gap is the deal. Some of it is that each of them keyed on something different in the
-            same page — and every one of those reads is reasonable on its own.
+           Cevrynt gives every reviewer the same structured financial facts, source evidence, risk signals, and lender-policy context. If two underwriters disagree, the disagreement
+            is about the deal — not because one of them missed a page or rebuilt the numbers differently.
           </p>
         </div>
 
@@ -390,12 +491,12 @@ export default function WhyCevryntPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Lender-specific judgment</p>
-            <RevealLines as="h2" className="t-display-2" id="policy-heading" text="One file. Two policies. Two answers." />
+            <p className="hx-kicker">LENDER-SPECIFIC POLICY</p>
+            <RevealLines as="h2" className="t-display-2" id="policy-heading" text="Same deal. Different credit boxes. Both should be explainable." />
           </div>
           <p className="eg-lede t-lede">
-            The same illustrative deal, read against two different lending policies. Neither lender is being
-            careless, and the paths pull apart only where their own thresholds disagree.
+            Cevrynt evaluates the same borrower evidence against each lender’s own underwriting thresholds,
+             conditions, and exception rules. The facts stay the same; the policy interpretation changes.
           </p>
         </div>
 
@@ -417,12 +518,12 @@ export default function WhyCevryntPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker">When the file changes</p>
-            <RevealLines as="h2" className="t-display-2" id="revision-heading" text="A file is not reviewed once." />
+            <p className="hx-kicker">CHANGE-AWARE REVIEW</p>
+            <RevealLines as="h2" className="t-display-2" id="revision-heading" text="The file can change. The history shouldn’t disappear." />
           </div>
           <p className="eg-lede t-lede">
-            New evidence arrives mid-review — a corrected agreement, a statement that was missing. The
-            case updates rather than resetting, and every signal that moved is named.
+            Borrowers send another statement. An agreement gets corrected. A missing document arrives. Cevrynt re-runs what the new evidence affects, shows what moved,
+             and keeps the previous review visible instead of silently replacing it.
           </p>
         </div>
 
@@ -443,11 +544,11 @@ export default function WhyCevryntPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">What it will not do</p>
-            <RevealLines as="h2" className="t-display-2" id="boundary-heading" text="Five things Cevrynt is assumed to do, and does not." />
+            <p className="hx-kicker hx-kicker-invert">WHAT CEVRYNT DELIBERATELY DOESN’T DO</p>
+            <RevealLines as="h2" className="t-display-2" id="boundary-heading" text="Five shortcuts we chose not to take." />
           </div>
           <p className="eg-lede t-lede">
-            Worth reading before a walkthrough rather than during one.
+           Cevrynt automates the work around an underwriting decision. It does not hide the evidence, replace lender policy, resolve uncertainty silently, or take the final judgment away from your team.
           </p>
         </div>
 
@@ -462,9 +563,9 @@ export default function WhyCevryntPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="06"
-          kicker="Founder-led evaluation"
-          heading="Judge it against your own files."
-          lede="Bring a representative workflow and the review questions your team needs answered. The evaluation runs on your criteria, not a demo script."
+          kicker="FOUNDER-LED EVALUATION"
+          heading="Put Cevrynt against files your team already knows."
+          lede="Bring representative historical deals and the underwriting criteria your team actually uses. Compare Cevrynt’s facts, source evidence, policy results, exceptions, and review history against the work you already trust."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

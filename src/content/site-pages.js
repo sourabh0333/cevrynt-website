@@ -129,8 +129,8 @@ const corePages = [
   {
     path: "why-cevrynt",
     group: "Why Cevrynt",
-    title: "Make every review more consistent and explainable",
-    description: "Give underwriting teams a shared process without forcing every lender into the same credit policy.",
+    title: "Your underwriting rules. Your evidence. Your final call.",
+    description: "Cevrynt prepares the review around lender-defined policy and source-linked evidence, while exceptions and final funding decisions stay with your team.",
     metaTitle: "Why Cevrynt | Explainable AI Underwriting for Lenders",
     metaDescription: "See why alternative lending teams choose Cevrynt for consistent, evidence-backed underwriting that keeps human decision authority in place.",
     keywords: ["explainable AI underwriting", "human in the loop underwriting"],

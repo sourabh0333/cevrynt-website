@@ -225,7 +225,7 @@ export function RetentionLines({ periods, approaches, artefacts, note }) {
   return (
     <figure className="ln" ref={scope}>
       <figcaption className="ln-clock-row">
-        <span className="hx-mono ln-clock-k">Time since the decision</span>
+        <span className="hx-mono ln-clock-k">Decision record timeline</span>
         <span className="hx-mono ln-clock">{periods[periods.length - 1].label}</span>
       </figcaption>
 
