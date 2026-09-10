@@ -37,29 +37,35 @@ export function generateMetadata() {
    debit — or plain arithmetic on those. Nothing here is a new claim.
    -------------------------------------------------------------------------- */
 
-const statements = ["Statement 1", "Statement 2", "Statement 3", "Statement 4", "Statement 5", "Statement 6"];
+const statements = [
+  "Month 1",
+  "Month 2",
+  "Month 3",
+  "Month 4",
+  "Month 5",
+  "Month 6",
+];
 
-const seamsReadout = { series: "series to read, not six", days: "days of activity" };
+const seamsReadout = { series: "BANK STATEMENTS REVIEWED", days: "DAYS OF CASH-FLOW ACTIVITY" };
 
 const seamsNote =
-  "Six statements, one hundred and eighty days. The panels above share their end points, so once the seams close the line is genuinely continuous rather than six shapes lined up to look continuous — which is the same thing Cevrynt does to the file before an underwriter sees it. Illustrative deal · synthetic borrower data, at the average monthly deposits this file is described by throughout the site.";
+  "Cevrynt normalizes the statement period into one reviewable timeline, making it easier to spot changes in deposit volume, liquidity, NSF frequency, negative-balance days, and recurring MCA debits across the full six months.";
 
 /** $84,613 a month across 30 days. */
 const DAY_DEPOSITS = Math.round(84613 / 30);
 
 const dayLabels = {
-  combined: "of an average day already committed",
-  headroom: "left of an average day",
-  over: "past the end of the day",
-  existing: "Existing position",
-  proposed: "Proposed position",
-  day: "An average day of deposits",
-  control: "Proposed daily payment",
+  combined: "of average daily deposits committed",
+  headroom: "remaining daily cash flow",
+  over: "above average daily deposits",
+  existing: "Existing MCA repayment",
+  proposed: "Proposed MCA repayment",
+  day: "Average daily deposits",
+  control: "Proposed daily repayment",
 };
 
 const dayNote =
-  "The existing position collects $1,550 every business day, which is a share of each day's deposits committed before anybody opens a new file. Move the control to stack a second position on top of it. This is arithmetic and nothing more: the threshold that matters is the one in your own credit policy, and Cevrynt issues no approval, decline or funding recommendation on any deal.";
-
+  "Cevrynt shows how much of the merchant’s average daily cash flow is already committed to existing MCA repayments, then models what another proposed payment would add. The calculation stays separate from the decision: your lender policy defines what level is acceptable, and your team makes the final call.";
 /**
  * The same deal against an example lender policy. The deal's own figures are
  * the ones published throughout the site; the thresholds beside them are an
@@ -105,10 +111,13 @@ const policyCriteria = [
   },
 ];
 
-const policyReadout = { measured: "criteria, measured separately", exception: "exception, shown not averaged" };
+const policyReadout = {
+  measured: "policy criteria checked",
+  exception: "exception requires review",
+};
 
 const policyNote =
-  "A score would have turned these five rows into one number, and the only interesting thing on this file — a deal that clears four criteria comfortably and misses the fifth by three days — would have disappeared into it. Nothing here is combined. Thresholds shown are an illustration of one lender's policy; yours replace them, and the line moves when you move it.";
+  "Cevrynt keeps each policy criterion visible instead of collapsing the file into one score. This deal passes four rules and exceeds the negative-day threshold by three days, so the exception stays explicit for human review. The thresholds shown are illustrative — your lender policy replaces them.";
 
 /**
  * Four figures and the addresses the product's own intake screen records for
@@ -118,18 +127,23 @@ const policyNote =
  */
 const sourceFigures = [
   {
-    field: "Average monthly deposits",
+    field: "Monthly deposits · Apr 2026",
     value: "$84,613",
-    doc: "Bank statement · May 2026",
-    address: "p.84 · lines 22–31",
+    doc: "First Harbor Bank statement · Apr 2026",
+    address: "p. 84 · lines 21–31",
     page: 84,
-    from: 22,
+    from: 21,
     to: 31,
     window: [
       { n: 19, text: "CARD SETTLEMENT · 04/28", amount: "2,914.60" },
       { n: 20, text: "ACH CREDIT · 04/29", amount: "1,248.15" },
       { n: 21, text: "— DEPOSIT SUMMARY —", amount: "" },
-      { n: 22, text: "Total deposits and credits", amount: "$84,613.42", hit: true },
+      {
+        n: 22,
+        text: "Total deposits and credits",
+        amount: "$84,613.42",
+        hit: true,
+      },
       { n: 23, text: "Card settlements", amount: "61,204.18" },
       { n: 24, text: "ACH credits", amount: "18,880.06" },
       { n: 25, text: "Cash and cheque", amount: "4,529.18" },
@@ -139,15 +153,63 @@ const sourceFigures = [
       { n: 29, text: "Days with no deposit", amount: "6" },
       { n: 30, text: "Returned items", amount: "1" },
       { n: 31, text: "Statement period", amount: "04/01 – 04/30" },
-      { n: 32, text: "— WITHDRAWAL SUMMARY —", amount: "" },
-      { n: 33, text: "Total withdrawals and debits", amount: "71,902.55" },
     ],
   },
+
+  {
+    field: "Average daily balance · Apr 2026",
+    value: "$31,240",
+    doc: "First Harbor Bank statement · Apr 2026",
+    address: "p. 84 · lines 32–39",
+    page: 84,
+    from: 32,
+    to: 39,
+    window: [
+      { n: 32, text: "— BALANCE SUMMARY —", amount: "" },
+      { n: 33, text: "Opening balance", amount: "$29,415.60" },
+      {
+        n: 34,
+        text: "Average daily balance",
+        amount: "$31,240.19",
+        hit: true,
+      },
+      { n: 35, text: "Lowest daily balance", amount: "$18,904.42" },
+      { n: 36, text: "Highest daily balance", amount: "$47,806.11" },
+      { n: 37, text: "Negative-balance days", amount: "0" },
+      { n: 38, text: "NSF events", amount: "1" },
+      { n: 39, text: "Ending balance", amount: "$34,850.20" },
+    ],
+  },
+
+  {
+    field: "Recurring MCA repayment",
+    value: "$1,550 / day",
+    doc: "First Harbor Bank statement · ACH activity",
+    address: "p. 46 · lines 41–46",
+    page: 46,
+    from: 41,
+    to: 46,
+    window: [
+      { n: 40, text: "— ACH DEBITS —", amount: "" },
+      {
+        n: 41,
+        text: "RAPID ADVANCE FUNDING",
+        amount: "-$1,550.00",
+        hit: true,
+      },
+      { n: 42, text: "RAPID ADVANCE FUNDING", amount: "-$1,550.00" },
+      { n: 43, text: "RAPID ADVANCE FUNDING", amount: "-$1,550.00" },
+      { n: 44, text: "RAPID ADVANCE FUNDING", amount: "-$1,550.00" },
+      { n: 45, text: "RAPID ADVANCE FUNDING", amount: "-$1,550.00" },
+      { n: 46, text: "Observed frequency", amount: "Business daily" },
+    ],
+  },
+
   {
     field: "Legal business name",
     value: "Cedar & Stone LLC",
     doc: "Business application",
-    address: "p.1 · line 4",
+    address: "p. 1 · line 4",
     page: 1,
     from: 4,
     to: 4,
@@ -155,59 +217,30 @@ const sourceFigures = [
       { n: 1, text: "MERCHANT FINANCING APPLICATION", amount: "" },
       { n: 2, text: "Submitted", amount: "19 Aug 2026" },
       { n: 3, text: "— BUSINESS —", amount: "" },
-      { n: 4, text: "Legal Business Name", amount: "Cedar & Stone LLC", hit: true },
+      {
+        n: 4,
+        text: "Legal Business Name",
+        amount: "Cedar & Stone LLC",
+        hit: true,
+      },
       { n: 5, text: "Trading name", amount: "Cedar & Stone" },
       { n: 6, text: "Entity type", amount: "LLC" },
       { n: 7, text: "Jurisdiction", amount: "Florida" },
     ],
   },
-  {
-    field: "Primary bank",
-    value: "First Harbor Bank",
-    doc: "Bank statement · header",
-    address: "p.7 · lines 1–2",
-    page: 7,
-    from: 1,
-    to: 2,
-    window: [
-      { n: 1, text: "First Harbor Bank", amount: "", hit: true },
-      { n: 2, text: "Business Checking", amount: "····7123" },
-      { n: 3, text: "Statement period", amount: "11/01 – 11/30" },
-      { n: 4, text: "CEDAR & STONE LLC", amount: "" },
-      { n: 5, text: "214 Westlake Dr", amount: "" },
-    ],
-  },
-  {
-    field: "Owner",
-    value: "Michael Richards",
-    doc: "Business application",
-    address: "p.2 · line 6",
-    page: 2,
-    from: 6,
-    to: 6,
-    window: [
-      { n: 3, text: "— OWNERSHIP —", amount: "" },
-      { n: 4, text: "Ownership structure", amount: "Single member" },
-      { n: 5, text: "Percentage held", amount: "100%" },
-      { n: 6, text: "Owner", amount: "Michael Richards", hit: true },
-      { n: 7, text: "Role", amount: "Managing member" },
-      { n: 8, text: "Time in role", amount: "6 years" },
-    ],
-  },
 ];
 
 const sourceLabels = {
-  memo: "In the underwriting memo",
-  page: "Page",
+  memo: "In the underwriting review",
+  page: "Source page",
   of: "of",
-  line: "Line",
-  lines: "Lines",
-  spanOne: "source line behind this figure",
-  spanMany: "source lines behind this figure",
+  line: "Source line",
+  lines: "Source lines",
+  spanOne: "source line supporting this finding",
+  spanMany: "source lines supporting this finding",
 };
-
 const sourceNote =
-  "The bracket is the measurement: its height is the number of lines the value was read from, so a deposits total summed from a ten-line block and a business name copied off a single line do not look alike. Every address here is one the product records against the figure. Illustrative deal · synthetic borrower data.";
+  "Cevrynt keeps each material finding connected to the evidence behind it. Some values come from a single field, others from a wider statement range or calculation, and the source trace preserves that difference. Illustrative deal · synthetic borrower data.";
 
 export default function MerchantCashAdvancePage() {
   const breadcrumbJsonLd = {
@@ -239,17 +272,17 @@ export default function MerchantCashAdvancePage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">Bank activity</p>
+            <p className="hx-kicker">BANK STATEMENT ANALYSIS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="seams-heading"
-              text="The file arrives as six PDFs. The rhythm is in all of them at once."
+              text="Six statements become one cash-flow story."
             />
           </div>
           <p className="eg-lede t-lede">
-            Nobody underwrites a statement. They underwrite six months, which is why the first hour of an MCA
-            file usually goes on putting the months back together in a spreadsheet.
+            Cevrynt reads the full statement period together, so your underwriter can see how deposits, balances,
+             NSF activity, negative days, transfers, and recurring obligations behave across the deal — not month by month in isolation.
           </p>
         </div>
 
@@ -265,17 +298,17 @@ export default function MerchantCashAdvancePage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Existing positions</p>
+            <p className="hx-kicker hx-kicker-invert">EXISTING MCA POSITIONS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="day-heading"
-              text="Most of this day was sold before your file was opened."
+              text="See what the merchant is already carrying before you add another position."
             />
           </div>
           <p className="eg-lede t-lede">
-            Stacking is not a policy question until it is an arithmetic one. This is one average day of
-            deposits, and what a position already collecting against it leaves behind.
+            Cevrynt surfaces recurring MCA payments from bank activity, connects them 
+            to the supporting transactions and agreements, and shows how much of the merchant’s daily cash flow is already committed.
           </p>
         </div>
 
@@ -298,17 +331,17 @@ export default function MerchantCashAdvancePage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Policy</p>
+            <p className="hx-kicker">LENDER POLICY</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="policy-heading"
-              text="Four criteria clear. One misses by three days."
+              text="One exception shouldn’t disappear inside a score."
             />
           </div>
           <p className="eg-lede t-lede">
-            That sentence is the whole file, and it is the sentence a single score cannot say. So nothing here
-            is combined — every criterion keeps its own line, its own threshold and its own margin.
+            Cevrynt evaluates each MCA underwriting criterion separately against your own buy
+             box — showing the observed value, required threshold, margin, and exception status before the file reaches human review.
           </p>
         </div>
 
@@ -324,17 +357,17 @@ export default function MerchantCashAdvancePage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Evidence</p>
+            <p className="hx-kicker hx-kicker-invert">SOURCE-LINKED EVIDENCE</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="source-heading"
-              text="Every figure in the memo has an address, not a footnote."
+              text="Every underwriting number should open back to its source."
             />
           </div>
           <p className="eg-lede t-lede">
-            A credit committee does not ask whether the figure is impressive. It asks where it came from — so
-            pick one, and the page it was read from opens at the lines it was read from.
+            Cevrynt keeps material MCA underwriting findings connected to the evidence behind them — statement pages, transactions, application fields, agreements, and verification results — so 
+            your underwriter can check the number instead of taking the system’s word for it.
           </p>
         </div>
 
@@ -354,9 +387,9 @@ export default function MerchantCashAdvancePage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="05"
-          kicker="Founder-led walkthrough"
-          heading="Bring a file your team already argued about."
-          lede="Six statements, an existing position and the one criterion that missed. We will read it the way your underwriters do and show you where Cevrynt would have saved the hour."
+          kicker="FOUNDER-LED MCA WALKTHROUGH"
+          heading="Bring an MCA file your team already knows."
+          lede="Walk through the statements, existing positions, cash-flow signals, lender policy, and exceptions with Cevrynt. Compare what the platform surfaces with the underwriting work your team already trusts."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

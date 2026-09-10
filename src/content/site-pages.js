@@ -76,8 +76,8 @@ const solutionPages = [
   {
     path: "solutions/merchant-cash-advance",
     group: "Solutions",
-    title: "MCA Funders",
-    description: "When files are moving fast, the hard part isn’t opening another application. It’s deciding whether the numbers, business, existing obligations and story behind the deal actually hold together.",
+    title: "Underwrite the whole MCA file - not just the bank statement.",
+    description: "Cevrynt brings borrower documents, cash-flow analysis, existing MCA positions, business verification, fraud review, and your lender policy into one evidence-linked underwriting review.",
     metaTitle: "Merchant Cash Advance Underwriting Software",
     metaDescription: "A decision-intelligence workflow built for the document-heavy realities of MCA underwriting, from intake through human decision.",
     keywords: ["merchant cash advance underwriting software", "MCA underwriting automation", "MCA decision software"],
@@ -149,8 +149,8 @@ const corePages = [
   {
     path: "security",
     group: "Trust",
-    title: "Build underwriting workflows with security in mind",
-    description: "Discuss access, data handling, audit needs, and deployment requirements directly with the Cevrynt team.",
+    title: "Sensitive underwriting data deserves deliberate boundaries.",
+    description: "Cevrynt is designed around scoped access, controlled data handling, traceable activity, and lender-defined retention requirements — so security can be agreed around the underwriting workflow before production use.",
     metaTitle: "Security & Data Handling for Underwriting Teams",
     metaDescription: "Review access controls, data handling, and audit requirements for AI-assisted underwriting before a pilot with the Cevrynt team.",
     keywords: ["underwriting data security", "lending software security"],

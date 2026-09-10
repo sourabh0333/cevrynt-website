@@ -125,15 +125,15 @@ export function RecordColumn({ entries, refusal }) {
       <div className="rec-tally">
         <p className="rec-tally-item">
           <span className="rec-tally-n">{String(entries.length).padStart(2, "0")}</span>
-          <span className="rec-tally-k hx-mono">entries held</span>
+          <span className="rec-tally-k hx-mono">material events recorded</span>
         </p>
         <p className="rec-tally-item rec-tally-nil">
           <span className="rec-tally-n">00</span>
-          <span className="rec-tally-k hx-mono">entries removed</span>
+          <span className="rec-tally-k hx-mono">policy exception raised</span>
         </p>
         <p className="rec-tally-item rec-tally-tries">
           <span className="rec-tally-n">{String(attempts).padStart(2, "0")}</span>
-          <span className="rec-tally-k hx-mono">removals attempted</span>
+          <span className="rec-tally-k hx-mono">reviewer override recorded</span>
         </p>
 
         <button type="button" className="rec-try" onClick={tryRemove}>

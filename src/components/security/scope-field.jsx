@@ -136,12 +136,12 @@ export function ScopeField({ groups, total, closing }) {
       <div className="pg-readout">
         <p className="pg-count">
           <span className="pg-count-n pg-count-live">{total}</span>
-          <span className="pg-count-k hx-mono">pages in reach</span>
+          <span className="pg-count-k hx-mono">pages in approved deal scope</span>
         </p>
         <span className="pg-readout-rule" aria-hidden="true" />
         <p className="pg-count pg-count-nil">
           <span className="pg-count-n">0</span>
-          <span className="pg-count-k hx-mono">pages anywhere else</span>
+          <span className="pg-count-k hx-mono">unrelated pages included</span>
         </p>
       </div>
 

@@ -37,11 +37,31 @@ export function generateMetadata() {
  * they sum to the 143 pages the site quotes for it everywhere else.
  */
 const packageGroups = [
-  { name: "Business application", range: "1–6", pages: 6 },
-  { name: "Bank statements", range: "7–126", pages: 120 },
-  { name: "Identity documents", range: "127–128", pages: 2 },
-  { name: "Bank proof", range: "129", pages: 1 },
-  { name: "Existing MCA agreement", range: "130–143", pages: 14 },
+  {
+    name: "Business application",
+    range: "1–6",
+    pages: 6,
+  },
+  {
+    name: "Bank statements",
+    range: "7–126",
+    pages: 120,
+  },
+  {
+    name: "Owner identity",
+    range: "127–128",
+    pages: 2,
+  },
+  {
+    name: "Bank proof",
+    range: "129",
+    pages: 1,
+  },
+  {
+    name: "Existing MCA agreement",
+    range: "130–143",
+    pages: 14,
+  },
 ];
 const packagePages = packageGroups.reduce((sum, group) => sum + group.pages, 0);
 
@@ -49,50 +69,56 @@ const packagePages = packageGroups.reduce((sum, group) => sum + group.pages, 0);
 const recordEntries = [
   {
     at: "09:14 UTC",
-    who: "Broker",
+    who: "Intake",
     what: "Package received",
-    detail: "Five documents and 143 pages, classified and mapped to their page ranges before anything reached underwriting.",
+    detail:
+      "The borrower package was added to the deal record, classified, and mapped before underwriting began.",
   },
   {
     at: "13:47 UTC",
-    who: "System",
-    what: "Four signals raised",
-    detail: "Document integrity, duplicate submission, address conflict and cash-flow inconsistency. None of them auto-declined — a signal is raised for a person, never acted on by the system.",
+    who: "Cevrynt",
+    what: "Analysis completed",
+    detail:
+      "Financial findings and source-linked evidence were prepared and attached to the deal for reviewer inspection.",
   },
   {
     at: "14:02 UTC",
-    who: "System",
-    what: "Duplicate account signal",
-    detail: "First Harbor ····7123 matched against an application submitted 42 days earlier, and recorded with the note that a match is not proof of fraud.",
+    who: "Cevrynt",
+    what: "Policy exception raised",
+    detail:
+      "NSF activity exceeded the lender-defined threshold, leaving the exception open for human review.",
   },
   {
     at: "14:19 UTC",
     who: "Underwriter",
-    what: "Signal opened for review",
-    detail: "Assigned to an underwriter with the resolution steps left open in the queue and the disposition intentionally withheld.",
+    what: "Exception opened for review",
+    detail:
+      "Sarah Kim reviewed the underlying statement activity, supporting evidence, and applicable policy rule before taking action.",
   },
   {
     at: "14:22 UTC",
     who: "Underwriter",
-    what: "Correction recorded",
-    was: "Flagged — duplicate account pattern",
-    now: "Resolved — same owner, second entity",
-    detail: "Second entity confirmed against the registry filing; both accounts share a controlling owner. The correction was added as this entry — the finding above it is untouched.",
+    what: "Override recorded",
+    was: "Policy exception open",
+    now: "Override accepted",
+    detail:
+      "Recent cash flow had improved, and four of six NSF events occurred more than 60 days earlier. The reviewer rationale was recorded with the override.",
   },
   {
     at: "14:31 UTC",
     who: "Underwriter",
-    what: "Memo sent for decision",
-    detail: "Findings, supporting evidence and the correction assembled for a credit decision that stays with your team.",
+    what: "Underwriting memo prepared",
+    detail:
+      "Updated findings, supporting evidence, policy outcomes, and reviewer rationale were assembled into the same deal record for final review.",
   },
 ];
 
 const removalRefusal = {
-  label: "Try to remove the top entry",
+  label: "Why this activity stays visible",
   before:
-    "The column is exactly as tall as the number of entries it holds. There is no control in the product that shortens it — use the one above and watch the height.",
+    "Material review actions stay attached to the underwriting record so a later reviewer can see what happened, when it happened, and who took the action.",
   after:
-    "It lifts, and it settles back at the height it left from. A correction is added to the record and stamped with who made it; nothing is ever taken out, on this deal or on any other.",
+    "If a finding is corrected or overridden, Cevrynt records the new action and its rationale alongside the earlier review history rather than silently replacing the context that came before it.",
 };
 
 /**
@@ -101,35 +127,93 @@ const removalRefusal = {
  * usually finds unnamed.
  */
 const surfaces = [
-  { name: "The documents you send", what: "Bank statements, filings and the rest of the file, exactly as they arrived.", clock: "Deletion schedule set in your pilot" },
-  { name: "The structured output", what: "The extraction, the analysis and the report derived from those documents.", clock: "Deletion schedule set in your pilot" },
-  { name: "The run log", what: "What the system did, what a reviewer changed, and when.", clock: "Held for the audit period you set", quiet: true },
-  { name: "Operational telemetry", what: "Timings, errors and throughput, used to keep the service running.", clock: "What it may carry is written into the agreement", quiet: true },
+  {
+    name: "Borrower source files",
+    what:
+      "Bank statements, applications, identity evidence, agreements, and other documents submitted for the underwriting review.",
+    clock:
+      "Retention defined for the approved underwriting workflow",
+  },
+  {
+    name: "Underwriting record",
+    what:
+      "Structured values, analysis results, verification findings, policy outcomes, exceptions, and memo content derived from the deal.",
+    clock:
+      "Retention defined around review, audit, and business requirements",
+  },
+  {
+    name: "Review activity",
+    what:
+      "Material reviewer actions such as exceptions opened, overrides recorded, corrections made, and review-state changes.",
+    clock:
+      "Retained according to the audit history your organization needs",
+    quiet: true,
+  },
+  {
+    name: "Operational & security logs",
+    what:
+      "Authentication events, errors, access-control events, processing status, and technical telemetry used to operate and secure the service.",
+    clock:
+      "Retention defined separately from borrower-file data",
+    quiet: true,
+  },
 ];
 
 const retentionNote =
-  "Every ring above stops short on purpose. What is settled is that each surface exists, that it has a clock of its own and who sets it — the arc left open is the duration, and that is agreed with your team before anything is sent rather than declared on a marketing page.";
-
+  "Retention is defined by data type, not by one blanket clock. Source files, underwriting records, review activity, and operational logs can each follow the retention and deletion requirements agreed for the workflow.";
 /** The questions this page deliberately does not answer, and when each closes. */
 const openQuestions = [
-  { q: "Is our borrower data used to train models?", when: "Confirmed in writing before anything is sent" },
-  { q: "Where does it live, and under whose account?", when: "Settled with your team at deployment" },
-  { q: "Who else processes it?", when: "Named in your review" },
+  {
+    q: "Which providers may process borrower data?",
+    when: "Documented for the approved production architecture",
+  },
+  {
+    q: "What data does each provider actually receive?",
+    when: "Scoped to the function that provider performs",
+  },
+  {
+    q: "Where is borrower data stored and processed?",
+    when: "Reviewed against agreed deployment and data-handling requirements",
+  },
 ];
 
-const custodyTally = { named: "hands, all named", undisclosed: "added without telling you" };
+const custodyTally = {
+  named: "processing layers documented",
+  undisclosed: "unreviewed providers",
+};
 
 const holders = [
-  { name: "Your systems", what: "The files you attach to a deal you send for review.", naming: "Origin" },
-  { name: "Cevrynt", what: "Structures the file and runs the analysis your team reads.", naming: "Named in your agreement" },
-  { name: "Cloud infrastructure", what: "Where that work runs, under a named agreement.", naming: "Named in your agreement" },
-  { name: "Model providers", what: "What reads the text, and what it is permitted to do with it.", naming: "Named in your review" },
+  {
+    name: "Your intake & systems",
+    what:
+      "The borrower data, files, and deal information your team chooses to send into the underwriting workflow.",
+    naming: "Your approved source",
+  },
+  {
+    name: "Cevrynt application",
+    what:
+      "Deal organization, structured underwriting data, findings, policy results, reviewer actions, and workflow state.",
+    naming: "Cevrynt processing scope",
+  },
+  {
+    name: "Infrastructure services",
+    what:
+      "Storage, compute, database, queue, and delivery functions required to operate the approved environment.",
+    naming: "Approved infrastructure providers",
+  },
+  {
+    name: "AI & document-processing services",
+    what:
+      "Only the content required for the extraction, analysis, or verification task those services are used to perform.",
+    naming: "Approved processing providers",
+  },
 ];
 
 /** The line that stays ruled and unwritten. */
 const custodyBlank = {
-  note: "Not added without notice",
-  body: "The fifth line is ruled and left blank on purpose. A list of four names can grow by one more line without anyone noticing; a register with a visible empty line cannot. Any name written onto it is raised with you before it happens, not after.",
+  note: "Provider changes follow review",
+  body:
+    "The processing chain can change as the production architecture evolves. Any new provider that may handle borrower data should be reviewed under the applicable security, contractual, and change-management process before it becomes part of the approved workflow.",
 };
 
 export default function SecurityPage() {
@@ -162,17 +246,17 @@ export default function SecurityPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">Access</p>
+            <p className="hx-kicker">DEAL-SCOPED ACCESS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="access-heading"
-              text="One deal in reach. Everything else stays out."
+              text="Give the review the deal — not the whole book."
             />
           </div>
           <p className="eg-lede t-lede">
-            Not a promise about scope — a count of it. Every mark below is one page of the package your team
-            sent, and the review reaches those pages and no others.
+            Cevrynt can scope an underwriting review around the borrower package and records required for that case. Unrelated deals, borrowers,
+            and historical files do not need to become part of the review just because they exist in the same organization.
           </p>
         </div>
 
@@ -181,7 +265,7 @@ export default function SecurityPage() {
             <ScopeField
               groups={packageGroups}
               total={packagePages}
-              closing="One mark per page · the field is the whole of what a review can reach"
+              closing="One mark per page · the review scope is the approved deal package"
             />
           </div>
         </div>
@@ -192,17 +276,18 @@ export default function SecurityPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The record</p>
+            <p className="hx-kicker hx-kicker-invert">Review activity</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="record-heading"
-              text="A reviewer overruled the system here. Everything about that survived."
+              text="If something changes on a deal, the record should show who changed it and why."
             />
           </div>
           <p className="eg-lede t-lede">
-            An auditor rarely asks whether your team may overrule a finding. They ask what is left afterwards —
-            so the column below is exactly as tall as the number of entries it holds. Try to shorten it.
+            Cevrynt keeps material review activity attached to the same underwriting record — findings raised,
+            evidence reviewed, policy exceptions handled, corrections made, and reviewer actions recorded with
+            their timing and context.
           </p>
         </div>
 
@@ -218,17 +303,17 @@ export default function SecurityPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Retention</p>
+            <p className="hx-kicker">RETENTION & DELETION</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="lifecycle-heading"
-              text="Four surfaces. Four clocks. None of them set by us."
+              text="Not every part of an underwriting file needs the same clock."
             />
           </div>
           <p className="eg-lede t-lede">
-            A single retention promise is the answer that fails a review. These are the surfaces underneath
-            it — and every dial stops short, because the duration is yours to set, not ours to publish.
+            Cevrynt separates source documents, derived underwriting data, review activity,
+            and operational logs so retention can be defined around the purpose of each data type — rather than applying one blanket period to everything.
           </p>
         </div>
 
@@ -244,17 +329,17 @@ export default function SecurityPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Custody</p>
+            <p className="hx-kicker hx-kicker-invert">DATA CUSTODY & PROCESSING</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="custody-heading"
-              text="Four hands, signed for. The fifth line is blank."
+              text="Every system that can process the file should be accounted for."
             />
           </div>
           <p className="eg-lede t-lede">
-            The hard question in a vendor review is not who you are — it is who stands behind you, and whether
-            that list can grow without anyone telling you. So it is kept as a register, with the next line ruled.
+            A production Cevrynt workflow should make the processing path clear: what
+            borrower data enters, which approved service layers may handle it, why each one needs access, and where responsibility sits.
           </p>
         </div>
 
@@ -275,9 +360,9 @@ export default function SecurityPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="05"
-          kicker="Founder-led review"
-          heading="Bring the questionnaire to the call."
-          lede="Access, retention, custody and audit worked through against your own review process, by the person who can commit to the answers."
+          kicker="FOUNDER-LED SECURITY REVIEW"
+          heading="Bring your security requirements."
+          lede="Walk through your questionnaire, access model, retention rules, data-processing requirements, audit expectations, and deployment constraints directly with the team responsible for the product."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />
