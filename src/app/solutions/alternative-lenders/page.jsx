@@ -42,57 +42,110 @@ export function generateMetadata() {
 /* 01 — the policy run, and where a person's time actually goes ------------- */
 
 const policyCriteria = [
-  { name: "Monthly revenue", observed: "$84.6K", threshold: "≥ $75K", result: "Settled", held: false },
-  { name: "Average daily balance", observed: "$31.2K", threshold: "≥ $20K", result: "Settled", held: false },
   {
-    name: "NSF events · 90d",
-    observed: "6",
+    name: "Average monthly deposits",
+    observed: "$84.6K",
+    threshold: "≥ $75K",
+    result: "Pass",
+    held: false,
+  },
+  {
+    name: "Average daily balance",
+    observed: "$31.2K",
+    threshold: "≥ $20K",
+    result: "Pass",
+    held: false,
+  },
+  {
+    name: "NSF activity · 90 days",
+    observed: "6 events",
     threshold: "≤ 5",
     result: "Exception",
     held: true,
     record: {
-      what: "One event over the policy limit. Four of the six occurred more than sixty days ago, and recent cash flow and average daily balance remain above policy — so an override was approved rather than the exception being cleared away.",
-      who: "Override approved · Sarah Kim · Senior Underwriter · 12:18 · reason code “improving cash flow”",
+      what:
+        "The file exceeds policy by one event. Cevrynt keeps the underlying statement activity available so the reviewer can see when the events occurred and how recent cash flow compares with policy.",
+      who:
+        "Reviewer action required · exception remains open",
     },
   },
-  { name: "Active MCA positions", observed: "2", threshold: "≤ 2", result: "Settled", held: false },
-  { name: "Time in business", observed: "14 mo", threshold: "≥ 12 mo", result: "Settled", held: false },
+  {
+    name: "Existing repayment obligations",
+    observed: "$1,550 / day",
+    threshold: "Within lender-defined limit",
+    result: "Pass",
+    held: false,
+  },
+  {
+    name: "Time in business",
+    observed: "14 months",
+    threshold: "≥ 12 months",
+    result: "Pass",
+    held: false,
+  },
   {
     name: "Address consistency",
-    observed: "Minor mismatch",
-    threshold: "Exact / explainable",
+    observed: "214 vs 210 Westlake Dr",
+    threshold: "Application and verification records align",
     result: "Exception",
     held: true,
     record: {
-      what: "The application shows 214 Westlake Dr and the registry shows 210. A reviewer has to decide whether that is a recent move or a data-entry error; officer identity and the entity record otherwise match.",
-      who: "No override recorded · still open",
+      what:
+        "The application lists 214 Westlake Dr while the verification source lists 210 Westlake Dr. Cevrynt keeps both values and their sources visible rather than silently selecting one.",
+      who:
+        "Reviewer action required · discrepancy remains open",
     },
   },
 ];
-
 const policyReadout = {
   figures: [
-    { n: "10 / 12", k: "rules settled without a reader" },
-    { n: "02", k: "held for a named person", tone: "held" },
-    { n: "No", k: "auto-decline, at any threshold", tone: "never" },
+    {
+      n: "10 / 12",
+      k: "policy checks resolved",
+    },
+    {
+      n: "02",
+      k: "exceptions routed for review",
+      tone: "held",
+    },
+    {
+      n: "No",
+      k: "automatic decline from an exception alone",
+      tone: "never",
+    },
   ],
 };
 
 const policyAudit = {
-  title: "What the engine keeps, whatever the answer is",
+  title: "What stays with every policy result",
   items: [
-    { k: "Policy version retained", v: "Yes · v3.4" },
-    { k: "Exception reason visible", v: "Required" },
-    { k: "Override reviewer recorded", v: "Required" },
-    { k: "Evidence linked to decision", v: "Required" },
+    {
+      k: "Policy version",
+      v: "v3.4 retained",
+    },
+    {
+      k: "Observed value + threshold",
+      v: "Visible",
+    },
+    {
+      k: "Exception reason",
+      v: "Required when outside policy",
+    },
+    {
+      k: "Source evidence",
+      v: "Linked to the finding",
+    },
+    {
+      k: "Reviewer action",
+      v: "Recorded when resolved",
+    },
   ],
   note:
-    "Six of the twelve criteria are tabulated on the screen for this deal; the four settled ones above are one line long because one line is all they cost anybody.",
+    "Six of the twelve policy checks are shown in this example. Routine passes stay compact; exceptions expand to show the observed value, applicable rule, supporting evidence, and reviewer action still required.",
 };
 
 const policyNote =
-  "The two entries that open out are the whole section. Ten criteria settle on arithmetic and take nobody's afternoon; the two that stop carry a named reviewer, a timestamp and a reason code — or, in the second case, carry the fact that no override exists and the exception is simply still open. What the engine never does is decide. It raises, holds, records, and keeps the policy version with the file. Illustrative deal · synthetic borrower data.";
-
+  "Cevrynt resolves the routine policy checks and keeps the exceptions explicit. Each exception stays attached to the observed value, lender-defined threshold, supporting evidence, and reviewer action still required. The engine does not make the credit decision — it applies the policy, surfaces what falls outside it, records what happens next, and keeps the policy version with the deal. Illustrative deal · synthetic borrower data.";
 /* 02 — four claims, four records, and the characters that disagree --------- */
 
 const verifyShot = {
@@ -107,53 +160,60 @@ const verifyShot = {
  */
 const verifyPairs = [
   {
-    field: "Legal entity",
+    field: "Legal business name",
     claim: [{ t: "Cedar & Stone LLC" }],
     record: [{ t: "Cedar & Stone LLC" }],
-    claimFrom: "Application · p.1",
-    recordFrom: "Texas business registry",
-    verdict: "Exact match",
+    claimFrom: "Business application · p.1",
+    recordFrom: "Business verification source",
+    verdict: "Match",
     matched: true,
   },
   {
-    field: "Entity standing",
+    field: "Entity status",
     claim: [{ t: "Active business" }],
     record: [{ t: "Active · in good standing" }],
-    claimFrom: "Application · p.1",
+    claimFrom: "Business application · p.1",
     recordFrom: "State filing record",
-    verdict: "Active",
+    verdict: "Match",
     matched: true,
   },
   {
     field: "Tax identifier",
     claim: [{ t: "**-***4821" }],
     record: [{ t: "Ending 4821" }],
-    claimFrom: "Application · p.1",
+    claimFrom: "Business application · p.1",
     recordFrom: "Business identity source",
-    verdict: "Matched",
+    verdict: "Match",
     matched: true,
   },
   {
     field: "Business address",
-    claim: [{ t: "2" }, { t: "14", diff: true }, { t: " Westlake Dr" }],
-    record: [{ t: "2" }, { t: "10", diff: true }, { t: " Westlake Dr" }],
-    claimFrom: "Application · p.1",
-    recordFrom: "Registry record",
+    claim: [
+      { t: "2" },
+      { t: "14", diff: true },
+      { t: " Westlake Dr" },
+    ],
+    record: [
+      { t: "2" },
+      { t: "10", diff: true },
+      { t: " Westlake Dr" },
+    ],
+    claimFrom: "Business application · p.1",
+    recordFrom: "Business verification source",
     verdict: "Review",
     matched: false,
   },
 ];
 
 const verifyReadout = {
-  checked: "claims checked against a record",
-  open: "that did not close",
+  checked: "business fields compared",
+  open: "review item still open",
   said:
-    "Three resolve to a single reading. The fourth disagrees by two characters, marked above on both sides — which is a recent move, a typo, or something worth asking about, and the screen does not pretend to know which. It goes to a person with both records attached.",
+    "Three fields align across the application and verification sources. The business address does not. Cevrynt keeps both values and their sources visible, then leaves the discrepancy open for reviewer resolution instead of silently choosing one.",
 };
 
 const verifyNote =
-  "Nothing here is a fraud finding and none of it is a decision. A registry that disagrees with an application by one digit is the most ordinary thing in SMB lending, and the useful behaviour is to say exactly where it differs rather than to score it. Three matched and one open is what this one file did; no rate is being claimed. Illustrative deal · synthetic verification data.";
-
+  "A mismatch is not a fraud finding and it is not a credit decision. Cevrynt shows exactly which business details align, which do not, and the source behind each one, then leaves unresolved differences open for reviewer judgment. Illustrative deal · synthetic verification data.";
 /* 03 — the lens on the borrower's own document ---------------------------- */
 
 const extractShot = {
@@ -163,38 +223,40 @@ const extractShot = {
 
 const extractFields = [
   {
-    name: "Average monthly deposits",
+    name: "Monthly deposits · Apr 2026",
     value: "$84,613",
-    source: "p.4 · lines 12–14",
-    raw: "“Deposit — ACH Credit · $18,700.00 · Balance $31,150.00”",
+    source: "Bank statement · p.84 · lines 21–31",
+    raw:
+      "“Total deposits and credits · $84,613.42 · Statement period 04/01–04/30”",
     at: { x: 18.6, y: 65.7 },
   },
   {
-    name: "Ending balance evidence",
-    value: "$31,240.19",
-    source: "p.4 · lines 28–31",
-    raw: "“Deposit — Card Settlement · $24,850.00 · Balance $47,060.00”",
+    name: "Average daily balance · Apr 2026",
+    value: "$31,240",
+    source: "Bank statement · p.84 · lines 32–39",
+    raw:
+      "“Average daily balance · $31,240.19 · Lowest daily balance $18,904.42”",
     at: { x: 18.6, y: 82 },
   },
   {
-    name: "Recurring MCA debit",
+    name: "Recurring repayment",
     value: "$1,550 / day",
-    source: "p.4 · lines 44–46",
-    raw: "“Rapid Advance Funding · ACH debit · $1,550.00”",
+    source: "Bank statement · p.46 · lines 41–46",
+    raw:
+      "“Rapid Advance Funding · ACH debit · $1,550.00 · observed business-daily”",
     at: { x: 18.6, y: 73.8 },
   },
 ];
 
 const extractReadout = {
-  fieldsN: "164",
-  fields: "fields read off this file",
-  retypedN: "00",
-  retyped: "of them retyped by anyone",
+  fieldsN: "143",
+  fields: "pages mapped to one deal",
+  retypedN: "01",
+  retyped: "structured underwriting record",
 };
 
 const extractNote =
-  "The lens magnifies the borrower's own statement; the screen underneath is not cropped, moved or annotated. That is the point of the section — the document is being examined rather than reformatted for the argument. The claim is not that a reading is always right, which no picture can show. It is that there is no untraceable step between a page of the file and the number a credit committee is looking at, because every field keeps its page and its lines. Illustrative deal · synthetic borrower data.";
-
+  "Cevrynt turns the borrower package into structured underwriting data while keeping material findings connected to the original evidence behind them. An underwriter can move from the review back to the relevant document, page, and source lines instead of relying on a detached extracted value. Illustrative deal · synthetic borrower data.";
 /* 04 — where twelve months of banking actually comes from ------------------ */
 
 const ledgerMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -216,47 +278,59 @@ const ledgerStatements = [
 
 const ledgerFindings = [
   {
-    k: "Customer deposits",
+    k: "Deposit consistency",
     v: "Consistent",
-    b: "Weekly clusters, with 41% of deposit value from recurring counterparties.",
+    b: "Monthly inflows remain broadly stable across the six-statement review period.",
   },
   {
-    k: "Payroll rhythm",
-    v: "Bi-weekly",
-    b: "Stable payroll windows across eleven of the twelve months.",
+    k: "Liquidity",
+    v: "Stable",
+    b: "Average balances remain positive with no sustained deterioration across the period.",
   },
   {
-    k: "Debt / MCA payments",
-    v: "2 positions",
-    b: "An estimated $6.2K a month already committed to existing advances.",
+    k: "Existing repayment obligations",
+    v: "Watch",
+    b: "Recurring debt payments remain a meaningful draw on operating cash flow and warrant underwriter review.",
     watch: true,
   },
   {
-    k: "Overdraft pressure",
-    v: "Low",
-    b: "Five negative-balance days, with no sustained decline behind them.",
+    k: "Cash-flow stress",
+    v: "Limited",
+    b: "NSF and negative-balance activity appears intermittently rather than as a persistent deterioration pattern.",
   },
 ];
-
 const ledgerReadout = {
   figures: [
-    { n: "6 → 1", k: "statements into one ledger" },
-    { n: "12", k: "months normalised, no gap" },
-    { n: "10 / 12", k: "months of positive net cash flow", tone: "lit" },
+    {
+      n: "6 → 1",
+      k: "bank statements connected",
+    },
+    {
+      n: "06",
+      k: "months normalized",
+    },
+    {
+      n: "05 / 06",
+      k: "months with positive net cash flow",
+      tone: "lit",
+    },
   ],
-  span: "Width is the period each statement covers · height is how long the document is",
-  unstated: "not listed",
-  saying: "What the ledger is saying",
+
+  span:
+    "Each block represents one statement period · height reflects the source-page volume behind it",
+
+  unstated: "not available",
+
+  saying: "What the six-month view shows",
 };
 
 const ledgerInsight = {
-  k: "The screen's own conclusion",
-  v: "Cash flow is broadly stable. The watch item is the recurring repayment load already committed — not deposit volatility.",
+  k: "What the six-month view shows",
+  v: "Cash flow is broadly stable. The main watch item is the recurring repayment burden already drawing from operating cash flow — not deposit volatility.",
 };
 
 const ledgerNote =
-  "Six documents covering the same two months each are not six documents of the same size — eighteen pages against twenty-two — which is exactly the work that gets done by hand when a period has to be rebuilt in a spreadsheet. The sixth block is an outline because the screen tallies that statement without stating its length, and drawing a plausible height for it would have been invisible and wrong. The closing line is the screen's own reading of this file, not a general finding. Illustrative deal · synthetic borrower data.";
-
+  "Cevrynt normalizes six monthly bank statements into one continuous cash-flow view so deposit consistency, liquidity, repayment obligations, and cash-flow stress can be reviewed together rather than rebuilt month by month. The conclusion shown here is specific to this illustrative file, and the underlying statement evidence remains available for review. Illustrative deal · synthetic borrower data.";
 /* 05 — the line the software stops at ------------------------------------- */
 
 const memoShot = {
@@ -265,26 +339,50 @@ const memoShot = {
 };
 
 const memoSummary = [
-  { k: "Financial analysis", v: "Supportive", open: false },
-  { k: "KYB / KYC", v: "Verified", open: false },
-  { k: "Fraud review", v: "Resolved", open: false },
-  { k: "Policy exceptions", v: "1 open", open: true },
+  {
+    k: "Financial analysis",
+    v: "Supportive",
+    open: false,
+  },
+  {
+    k: "Business verification",
+    v: "1 review item",
+    open: true,
+  },
+  {
+    k: "Fraud review",
+    v: "No unresolved material finding",
+    open: false,
+  },
+  {
+    k: "Policy exceptions",
+    v: "1 open",
+    open: true,
+  },
+  {
+    k: "Evidence trace",
+    v: "Attached",
+    open: false,
+  },
 ];
 
-const memoDispositions = ["Approve", "Conditional", "Request info", "Decline"];
-
+const memoDispositions = [
+  "Approve",
+  "Conditional",
+  "Request information",
+  "Decline",
+];
 const memoReadout = {
-  available: "dispositions on this file",
-  issued: "of them issued by Cevrynt",
-  summary: "Decision summary · team-owned",
-  choice: "The four your team chooses from",
+  available: "available lender dispositions",
+  issued: "issued by Cevrynt",
+  summary: "Decision summary · lender-owned",
+  choice: "Your team makes the final credit decision",
   stop:
-    "These are drawn the way the product draws them, and they do nothing here. They are not controls in this page's markup, because pressing one is not something this software does.",
+    "These are lender actions, not Cevrynt recommendations. Cevrynt assembles the review, keeps the evidence and policy context attached, and leaves approval, decline, conditions, and information requests with your team.",
 };
 
 const memoNote =
-  "The memo assembles: findings, the evidence behind each one, the policy outcomes, and the exception that is still open — which the summary states rather than rounds away. Then it stops. Cevrynt organizes what a reviewer needs and issues no approval, no decline and no recommendation dressed as one; the disposition, and the accountability that comes with it, stays with the lender. Illustrative deal · synthetic borrower data.";
-
+  "Cevrynt assembles the financial findings, business verification, policy results, open exceptions, and supporting evidence into one review-ready memo. Anything unresolved stays visible for the lender to address. Cevrynt does not issue the approval, decline, condition, or recommendation — the final credit decision and accountability remain with your team. Illustrative deal · synthetic borrower data.";
 export default function AlternativeLendersPage() {
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -315,17 +413,17 @@ export default function AlternativeLendersPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">The review path</p>
+            <p className="hx-kicker">POLICY & EXCEPTIONS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="policy-heading"
-              text="Ten rules read themselves. Two stop the run."
+              text="Ten rules settle. Two need an underwriter."
             />
           </div>
           <p className="eg-lede t-lede">
-            Your criteria, your thresholds, applied in the same order to every file — and a run that slows to
-            the length of each exception, because that is where a credit team&rsquo;s time is actually spent.
+            Cevrynt applies your credit policy criterion by criterion. Clear checks resolve against the
+             evidence; exceptions stay open with the observed value, threshold, source, and reason attached for human review.
           </p>
         </div>
 
@@ -346,17 +444,16 @@ export default function AlternativeLendersPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">Verification</p>
+            <p className="hx-kicker hx-kicker-invert">BUSINESS VERIFICATION</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="verify-heading"
-              text="Four claims. Three close. One is four digits apart."
+              text="Verify the business claim by claim — not with one green check."
             />
           </div>
           <p className="eg-lede t-lede">
-            What the borrower wrote, set against what the registry and officer records say — with the distance
-            between them drawn, and left open where it does not close.
+            Cevrynt compares what the borrower submitted with business verification sources. Fields that align can close; anything that conflicts stays visible with both values and its source for an underwriter to resolve.
           </p>
         </div>
 
@@ -372,17 +469,16 @@ export default function AlternativeLendersPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Evidence</p>
+            <p className="hx-kicker">DOCUMENT INTELLIGENCE</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="extract-heading"
-              text="A hundred and sixty-four fields. None of them retyped."
+              text="Turn the borrower package into underwriting data — without losing the source."
             />
           </div>
           <p className="eg-lede t-lede">
-            Every value keeps the page and the lines it was read from. The lens below sits on the borrower&rsquo;s
-            own statement — nothing is cropped, moved, or annotated.
+            Cevrynt classifies the submitted files, structures the fields your underwriting workflow needs, and keeps material values connected to the document, page, transaction, or verification result they came from.
           </p>
         </div>
 
@@ -404,17 +500,17 @@ export default function AlternativeLendersPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The ledger</p>
+            <p className="hx-kicker hx-kicker-invert">CASH-FLOW CONTEXT</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="ledger-heading"
-              text="Six statements. Twelve months. Nobody rebuilt them."
+              text="Six statements become one view of how the business actually moves."
             />
           </div>
           <p className="eg-lede t-lede">
-            Every figure the policy above was judged against comes from here. Each statement is laid on the
-            period it covers, and the six of them tile twelve months with no gap and no overlap.
+            Cevrynt normalizes the statement period into one continuous underwriting view, so deposits, liquidity,
+             recurring obligations, and cash-flow stress can be read across time instead of reconstructed month by month.
           </p>
         </div>
 
@@ -436,17 +532,16 @@ export default function AlternativeLendersPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The final call</p>
+            <p className="hx-kicker hx-kicker-invert">DECISION MEMO</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="memo-heading"
-              text="The memo assembles itself. The four buttons do not."
+              text="The review comes together. The decision stays with your team."
             />
           </div>
           <p className="eg-lede t-lede">
-            Findings, evidence, policy outcomes and what is still open, gathered into one review-ready memo —
-            and then a line the software does not cross.
+            Cevrynt assembles the borrower facts, financial analysis, business verification, policy results, open exceptions, and supporting evidence into one review-ready underwriting memo. Your team resolves what is still open and makes the final credit call.
           </p>
         </div>
 
@@ -467,9 +562,9 @@ export default function AlternativeLendersPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="06"
-          kicker="Founder-led walkthrough"
-          heading="Bring a file your team argued about."
-          lede="We will run it against your own criteria, show you where the exceptions land and what the memo would carry — and leave the call exactly where it belongs."
+          kicker="FOUNDER-LED SMB UNDERWRITING REVIEW"
+          heading="Bring one SMB file your team already knows."
+          lede="Walk through the borrower package, cash-flow evidence, business verification, lender policy, and open exceptions with Cevrynt. Compare what the platform surfaces with the underwriting work your team already trusts."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

@@ -86,8 +86,8 @@ const solutionPages = [
   {
     path: "solutions/alternative-lenders",
     group: "Solutions",
-    title: "Alternative Lenders",
-    description: "Bring more structure to SMB underwriting without forcing every deal through a one-size-fits-all score.",
+    title: "Underwrite the SMB file without losing the story behind it.",
+    description: "Cevrynt brings borrower documents, bank activity, business verification, fraud signals, and your credit policy into one evidence-linked review — with exceptions left visible for your underwriters.",
     metaTitle: "Underwriting Software for Alternative Lenders",
     metaDescription: "Standardize document review and decision preparation across fast-moving SMB finance teams with one connected underwriting workflow.",
     keywords: ["alternative lending software", "SMB underwriting automation", "alternative lender decision engine"],
