@@ -50,27 +50,51 @@ const lifeMonths = 14;
 const evidencedMonths = 12;
 
 const lifeMarks = [
-  { v: "6 statements", k: "normalised into a single twelve-month ledger." },
-  { v: "$31.2K", k: "average daily balance, held across the whole of it." },
-  { v: "14 months", k: "time in business, against a twelve-month policy floor." },
+  {
+    v: "12 months",
+    k: "commerce activity available across the merchant’s operating history.",
+  },
+  {
+    v: "6 months",
+    k: "bank statements reviewed for cash flow, liquidity, and repayment obligations.",
+  },
+  {
+    v: "14 months",
+    k: "time in business compared with the lender-defined operating-history requirement.",
+  },
 ];
 
 const lifeReadout = {
   figures: [
-    { n: "14", k: "months the company has traded" },
-    { n: "12", k: "of them inside the bank record" },
-    { n: "02", k: "months older than the evidence", tone: "bare" },
+    {
+      n: "14",
+      k: "months in business",
+    },
+    {
+      n: "12",
+      k: "months of commerce activity available",
+    },
+    {
+      n: "86%",
+      k: "of operating history covered",
+      tone: "bare",
+    },
   ],
-  start: "First filing",
+
+  start: "First recorded activity",
+
   now: "Today",
-  before: "Before the record starts",
-  covered: "Twelve months, read as one period",
+
+  before: "Limited operating history",
+
+  covered: "Twelve months of merchant activity",
+
   said:
-    "A young merchant is usually read as a thin file. Turn it around: all but the opening weeks of this company's entire existence sit inside the evidence — a share of a business's life no fifteen-year-old borrower will ever hand a lender.",
+    "Time in business shows how long the merchant has existed. The operating record shows how the business behaved during that time — including sales cadence, orders, payouts, refunds, disputes, and changes in performance across the observed period.",
 };
 
 const lifeNote =
-  "Fourteen months and twelve months are both stated on screens for this file; the two months at the head are the difference between them, and they sit at the start because a record running to the present must have begun after the company did. This describes one illustrative borrower. It is not a claim about merchants in general, and nothing here predicts month fifteen. Illustrative deal · synthetic borrower data.";
+  "This illustrative merchant has 14 months in business, 12 months of commerce activity, and 6 months of bank evidence. Cevrynt keeps those evidence windows distinct and brings them into one underwriting review so the lender can compare operating history, cash-flow behavior, and policy requirements without treating them as the same thing. Illustrative merchant · synthetic data.";
 
 /* 02 — what a settlement has already had taken out of it ------------------- */
 
@@ -93,51 +117,61 @@ const redactionRemoved = [
 ];
 
 const redactionSurvives = {
-  when: "19 April",
-  what: "Deposit — Card Settlement",
+  when: "19 Apr",
+  what: "Card settlement",
   amount: "$24,850.00",
   source: "First Harbor Bank statement · p.4 · lines 28–31",
 };
 
 const redactionReadout = {
   figures: [
-    { n: "05", k: "kinds of fact removed before the money moves" },
-    { n: "01", k: "line that reaches the lender", tone: "left" },
+    {
+      n: "06",
+      k: "commerce signals behind the payout",
+    },
+    {
+      n: "01",
+      k: "net settlement in the bank",
+      tone: "left",
+    },
   ],
-  knows: "What the merchant's own systems hold",
-  arrives: "What arrives in the bank",
+
+  knows: "What the commerce record can show",
+
+  arrives: "What the bank shows",
+
   said:
-    "The surviving line is net, batched, and carries nothing about what came back. Merchant context can be brought to an underwriter alongside the file — it cannot be extracted from a statement that never contained it.",
+    "A bank settlement shows what reached the account, not the operating activity that produced it. When approved commerce data is available, Cevrynt can bring sales, orders, refunds, disputes, fees, and payout adjustments alongside the bank evidence so the underwriter can see both sides of the transaction.",
 };
 
 const redactionNote =
-  "This is a property of the medium, not a gap in the product: no amount of reading a bank statement will produce an order book. Saying so plainly is the point of the section, because the alternative — implying that commerce detail can be recovered from a deposit line — is how merchant-financing pages usually oversell. Illustrative deal · synthetic borrower data.";
+  "The bank record and the commerce record answer different underwriting questions. Cevrynt keeps the settlement as financial evidence and, when approved commerce data is available, adds the operating context behind it rather than pretending that orders, refunds, disputes, fees, or payout adjustments can be inferred from a net deposit alone. Illustrative merchant · synthetic data.";
 
 /* 03 — the relationship, set as a clause ---------------------------------- */
 
 const partnerClause =
-  "Cevrynt and SHOPLINE have a documented development and referral partnership exploring e-commerce merchant-underwriting workflows.";
+  "Cevrynt and SHOPLINE are working together to explore e-commerce merchant underwriting and financing workflows that bring approved commerce context closer to lender review.";
 
 const partnerQualifications = [
-  "It is not a generally available live integration.",
-  "It does not involve automatic data sharing between the two.",
-  "It is not an investment by either party in the other.",
-  "It is not exclusive on either side.",
-  "It is not an endorsement of Cevrynt by SHOPLINE.",
-  "It does not make every merchant on the platform eligible for anything.",
-  "It does not guarantee funding, to anyone, in any amount.",
+  "Not a claim of universal live integration. Availability depends on the workflow, merchant authorization, data scope, and implementation agreed for the use case.",
+
+  "Not automatic data access. Commerce data is only used when the required access and permissions are available for the approved workflow.",
+
+  "Not merchant eligibility or guaranteed funding. Being on a commerce platform does not determine whether a lender will finance the business.",
+
+  "Not lender decision-making. Cevrynt can bring commerce context into the underwriting review, while eligibility, pricing, approval, and final credit authority remain with the lender.",
 ];
 
 const partnerClauseReadout = {
   ref: "Cevrynt × SHOPLINE",
-  of: "Stated in full",
-  lead: "Qualifications",
+  of: "Partnership scope",
+  lead: "Current boundaries",
   foot:
-    "Set as a clause because that is how it should be read. Partnership copy gets skimmed and remembered generously, which is how a development and referral relationship becomes an implied data pipe in somebody's head.",
+    "The partnership explores how approved commerce context can support e-commerce merchant underwriting. It does not imply universal integration, automatic data access, merchant eligibility, or lender decision-making.",
 };
 
 const partnerClauseNote =
-  "Lending decisions, merchant eligibility and funding all remain with the lender. Cevrynt does not lend, does not originate, and is not a party to any credit decision made using its output.";
+  "Merchant eligibility, pricing, approval, and funding remain with the participating lender. Cevrynt provides underwriting evidence and workflow support; it does not make or guarantee the credit decision.";
 
 /* 04 — the instrument, complete, with no needle in it --------------------- */
 
@@ -147,23 +181,38 @@ const needleShot = {
 };
 
 const needleProduced = [
-  { v: "10 / 12", k: "rules settled against the lender's own configured criteria" },
-  { v: "02", k: "exceptions raised and held for a named reviewer" },
-  { v: "01", k: "override recorded, with its reason code and timestamp" },
-  { v: "v3.4", k: "policy version retained with the file" },
+  {
+    v: "10 / 12",
+    k: "policy checks resolved against the lender's configured criteria",
+  },
+  {
+    v: "02",
+    k: "exceptions kept open with the observed value, threshold, and supporting evidence",
+  },
+  {
+    v: "v3.4",
+    k: "policy version retained with the underwriting review",
+  },
+  {
+    v: "00",
+    k: "credit decisions issued by Cevrynt — approval, pricing, and funding remain with the lender",
+  },
 ];
 
 const needleReadout = {
   dialLabel:
-    "A gauge drawn from zero to one hundred with every tick and its hub in place, and no needle on it — the merchant score Cevrynt does not issue.",
-  dialK: "Merchant score",
+    "A zero-to-one-hundred gauge with every mark in place and no needle — representing the universal merchant score Cevrynt does not issue.",
+
+  dialK: "Universal merchant score",
+
   dialV:
-    "The apparatus is perfectly buildable. The missing part is a choice: a number a lender can sort a queue on would quietly move the decision from them to us.",
-  madeK: "What is produced instead",
+    "Cevrynt does not collapse commerce activity, bank evidence, verification, and policy results into one number that becomes the credit decision. The signals stay visible, the lender's rules stay explicit, and final judgment remains with the lender.",
+
+  madeK: "What Cevrynt produces instead",
 };
 
 const needleNote =
-  "A merchant's platform activity does not become a score here, and no approval, decline or recommendation dressed as one is issued. What a lender gets is their own criteria applied the same way every time, the exceptions raised rather than smoothed over, and the evidence still attached — with the disposition, and the accountability that comes with it, staying where it belongs. Illustrative deal · synthetic borrower data.";
+  "Commerce activity can strengthen the underwriting record without becoming a universal merchant score. Cevrynt applies the lender's configured criteria, keeps exceptions and supporting evidence visible, and preserves the policy context used for the review. Approval, decline, pricing, and funding decisions remain with the lender. Illustrative merchant · synthetic data.";
 
 export default function EcommerceMerchantUnderwritingPage() {
   const breadcrumbJsonLd = {
@@ -195,17 +244,16 @@ export default function EcommerceMerchantUnderwritingPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">Time in business</p>
+            <p className="hx-kicker">OPERATING HISTORY</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="life-heading"
-              text="Fourteen months old. Twelve of them on the record."
+              text="Fourteen months in business. Twelve months of behavior to inspect."
             />
           </div>
           <p className="eg-lede t-lede">
-            A young merchant reads as a thin file until you turn it around: almost the entire life of this
-            company sits inside the evidence, which is a share no long-established borrower can offer.
+            For an e-commerce merchant, age is only one signal. Commerce activity can show how the business has actually operated across most of its life — sales cadence, order activity, refunds, disputes, payouts, and changes in performance over time.
           </p>
         </div>
 
@@ -227,17 +275,17 @@ export default function EcommerceMerchantUnderwritingPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The deposit line</p>
+            <p className="hx-kicker hx-kicker-invert">COMMERCE-TO-BANK CONTEXT</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="redact-heading"
-              text="Everything a settlement lost on the way to the bank."
+              text="The bank shows the payout. Commerce activity explains it."
             />
           </div>
           <p className="eg-lede t-lede">
-            A merchant&rsquo;s own systems hold every order, refund, fee and channel. None of it survives the
-            trip. What reaches a lender is one net line — so here is the rest of it, going.
+            
+            A $24,850 settlement tells an underwriter what reached the bank. When approved commerce data is available, Cevrynt can bring the activity behind that settlement into the same review — sales, orders, refunds, disputes, fees, and payout adjustments.
           </p>
         </div>
 
@@ -259,17 +307,17 @@ export default function EcommerceMerchantUnderwritingPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">The partnership</p>
+            <p className="hx-kicker">Cevrynt × SHOPLINE</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="partner-heading"
-              text="One clause, and everything it does not say."
+              text="An underwriting partnership built around where merchants already operate."
             />
           </div>
           <p className="eg-lede t-lede">
-            Set the way a term sheet is set, because that is how it should be read — and because the readings
-            it does not support are exactly the ones a merchant-financing page usually invites.
+            Cevrynt and SHOPLINE are exploring merchant-financing infrastructure that brings approved commerce context
+    closer to borrower documents, financial evidence, verification, and lender-defined underwriting policy.
           </p>
         </div>
 
@@ -290,17 +338,16 @@ export default function EcommerceMerchantUnderwritingPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The final call</p>
+            <p className="hx-kicker hx-kicker-invert">LENDER CONTROL</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="needle-heading"
-              text="A dial with no needle in it."
+              text="Commerce signals inform the review. They do not decide the merchant."
             />
           </div>
           <p className="eg-lede t-lede">
-            The apparatus for scoring a merchant is perfectly buildable. Cevrynt does not build the last part
-            of it, and the gauge below is drawn exactly as far as it goes.
+            Sales performance, operating history, refunds, disputes, payout behavior, bank evidence, and verification can all matter. Cevrynt brings those signals into the lender’s own underwriting criteria instead of collapsing them into one universal merchant score.
           </p>
         </div>
 
@@ -320,9 +367,9 @@ export default function EcommerceMerchantUnderwritingPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="05"
-          kicker="Founder-led walkthrough"
-          heading="Bring a merchant file you were unsure about."
-          lede="We will read it the way a lender would, show you exactly which questions the statements can settle and which ones they cannot, and leave the call where it belongs."
+          kicker="FOUNDER-LED E-COMMERCE UNDERWRITING REVIEW"
+          heading="Bring an e-commerce merchant your team already knows."
+          lede="Walk through the merchant’s commerce activity, bank settlements, borrower documents, business verification, existing obligations, and lender policy in one evidence-linked review. See what the evidence supports, what still needs judgment, and where the final decision stays with your team."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

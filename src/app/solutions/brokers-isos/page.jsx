@@ -48,46 +48,49 @@ const reviewStages = ["Intake", "Documents", "Financials", "Verification", "Frau
  */
 const packageGaps = [
   {
-    name: "Second account on the statements",
-    stage: "Financials",
-    cost: "Cash flow cannot be closed out until the other account is in the pack.",
+    name: "Second bank account statements",
+    stage: "Financial analysis",
+    cost:
+      "Deposits appear to move through another operating account, so the lender cannot see the full cash-flow picture until those statements are included.",
   },
   {
     name: "Ownership percentage",
-    stage: "Verification",
-    cost: "Surfaces after the file has already been read through financials.",
+    stage: "Business verification",
+    cost:
+      "The application identifies the owner but does not provide enough ownership detail to reconcile the submitted business record.",
   },
   {
-    name: "Landlord or lease contact",
-    stage: "Verification",
-    cost: "Same stage, second question — and the same trip back to the start.",
+    name: "Business address support",
+    stage: "Business verification",
+    cost:
+      "The application and verification source show different addresses, leaving the reviewer to determine whether it is an operating address, recent move, or data-entry issue.",
   },
 ];
 
 const packagePresent = [
   "Signed application",
   "6 of 6 bank statements",
-  "Photo identity",
-  "Voided cheque",
-  "Existing advance agreement",
-  "Business registration",
+  "Owner identity",
+  "Bank proof",
+  "Existing obligation disclosure",
+  "Business verification documents",
 ];
 
 const routeLabels = {
-  passes: "passes over this file before a decision",
-  open: "questions the lender still has to ask",
-  origin: "Back to intake",
-  missing: "What is missing",
-  surfaces: "Surfaces at",
-  costs: "What that costs",
-  action: "In the pack",
-  close: "Add it",
-  reopen: "Undo",
-  none: "Nothing — it travels with the file",
+  passes: "core package checks",
+  open: "items need attention",
+  origin: "Before submission",
+  missing: "Item to resolve",
+  surfaces: "Surfaces during",
+  costs: "Why it matters",
+  action: "Broker action",
+  close: "Resolve",
+  reopen: "Reopen",
+  none: "Already complete",
 };
 
 const routeNote =
-  "A gap does not cost one question. It costs everything the lender had already read, again — which is why the two that surface at verification are more expensive than the one that surfaces at financials. Passes over the file is simply gaps plus one. Illustrative package · synthetic borrower data.";
+  "Cevrynt helps surface preventable submission gaps before the lender has to stop the review and ask for more. The earlier a missing statement, ownership detail, address discrepancy, or existing obligation is resolved, the cleaner the file is when underwriting begins. Illustrative package · synthetic borrower data.";
 
 const fraudShot = {
   src: "/media/Steps/Fraud Detection.png",
@@ -102,42 +105,50 @@ const fraudShot = {
 const fraudSignals = [
   {
     name: "Document integrity",
-    badge: "1 anomaly",
-    what: "One bank-statement page has different PDF metadata and compression characteristics.",
+    badge: "Needs review",
+    what:
+      "One bank-statement page differs from the rest of the bank-exported file and should be checked against the original source.",
     source: "Bank statement · p.84",
     at: { x: 5.4, y: 46.5, w: 24.2, h: 8.8 },
-    answer: "Send a clean export of page 84 pulled from the bank, not a re-scan of the copy you already have.",
+    answer:
+      "Provide the original bank-downloaded statement or clean source file so the lender can compare it directly.",
   },
   {
     name: "Duplicate submission",
-    badge: "Potential duplicate",
-    what: "Same bank account ending 7123 appears in a prior application submitted 42 days earlier.",
+    badge: "Context needed",
+    what:
+      "The same business account ending 7123 appears in an earlier application submitted 42 days ago.",
     source: "Cross-application match · APP-240708-092",
     at: { x: 5.4, y: 57.8, w: 24.2, h: 8.8 },
-    answer: "Name the earlier submission yourself, and say plainly what the relationship between the two files is.",
+    answer:
+      "Identify the earlier submission and explain whether this is a resubmission, revised request, or separate application.",
   },
   {
-    name: "Address conflict",
-    badge: "Mismatch",
-    what: "Application address differs from the current business-registry address by street number.",
-    source: "Application vs KYB record",
-    at: { x: 5.4, y: 69.2, w: 24.2, h: 8.4 },
-    answer: "Whichever address is the current operating one, with the filing or utility record that shows it.",
-  },
-  {
-    name: "Cash-flow inconsistency",
+    name: "Business address mismatch",
     badge: "Context needed",
-    what: "Two large deposits are not consistent with the borrower's usual transaction rhythm.",
-    source: "Financial analysis · May 14 and May 27",
+    what:
+      "The application lists 214 Westlake Dr while the business verification source lists 210 Westlake Dr.",
+    source: "Application · Business verification",
+    at: { x: 5.4, y: 69.2, w: 24.2, h: 8.4 },
+    answer:
+      "Add supporting address context if the difference is known, such as a recent move, operating address, or corrected filing.",
+  },
+  {
+    name: "Unusual deposit activity",
+    badge: "Context needed",
+    what:
+      "Two deposits are materially outside the merchant’s normal transaction pattern and may require supporting context.",
+    source: "Bank analysis · May 14 and May 27",
     at: { x: 5.4, y: 80.5, w: 24.2, h: 8.4 },
-    answer: "The invoice or contract behind each of the two deposits, so they read as revenue rather than as an outlier.",
+    answer:
+      "Attach the invoice, contract, settlement detail, or other supporting context already available for those deposits.",
   },
 ];
 
 const fraudReadout = {
-  raised: "signals raised on this file",
-  declined: "of them auto-declined",
-  answer: "What answers it in the pack",
+  raised: "review signals surfaced",
+  declined: "automatic declines",
+  answer: "What your team can add now",
 };
 
 const fraudFoot = {
@@ -146,65 +157,84 @@ const fraudFoot = {
 };
 
 const fraudNote =
-  "None of these is an accusation, and the screen says so: a repeated account looks identical whether it is a resubmission, a second entity under one owner, or a borrower who went to two brokers, so the product raises it for a person rather than declining on it. What it is not is invisible. Illustrative deal · synthetic borrower data.";
-
+  "These signals are review items, not accusations or automatic decline reasons. Cevrynt makes the underlying issue visible, keeps the supporting evidence attached, and leaves the interpretation with the broker and lender. Illustrative deal · synthetic borrower data.";
 /* --------------------------------------------------------------------------
    03 — the same seven items from the two sections above, sorted by who can
    close them. The counts are the point: two of the seven never need a call.
    -------------------------------------------------------------------------- */
 
 const triageOwners = [
-  { key: "desk", name: "Your desk", when: "Closeable today" },
-  { key: "borrower", name: "The borrower", when: "One phone call" },
-  { key: "lender", name: "The lender", when: "Their judgment, not yours" },
+  {
+    key: "desk",
+    name: "Your desk",
+    when: "Resolve before submission",
+  },
+  {
+    key: "borrower",
+    name: "The borrower",
+    when: "Request before submission",
+  },
+  {
+    key: "lender",
+    name: "The lender",
+    when: "Requires underwriting judgment",
+  },
 ];
 
 const triageItems = [
   {
     owner: "desk",
     name: "Duplicate submission",
-    action: "Name the earlier application yourself, and say plainly how the two files relate.",
+    action:
+      "Link the earlier application to the current deal and explain whether this is a resubmission, revised request, or separate application.",
   },
   {
     owner: "desk",
-    name: "Cash-flow inconsistency",
-    action: "The invoice or contract behind each of the two deposits is usually already sitting in your deal folder.",
+    name: "Cash-flow context",
+    action:
+      "Add supporting context for unusual deposits, transfers, or revenue movements already identified in the borrower package.",
+  },
+  {
+    owner: "desk",
+    name: "Existing obligation disclosure",
+    action:
+      "Confirm recurring repayment obligations surfaced in bank activity and attach the relevant agreement when available.",
   },
   {
     owner: "borrower",
-    name: "Second account on the statements",
-    action: "Six statements for the other account, pulled from the borrower's own bank portal.",
+    name: "Second bank account statements",
+    action:
+      "Request the missing statement period for the additional operating account so the lender receives the complete cash-flow picture.",
   },
   {
     owner: "borrower",
     name: "Ownership percentage",
-    action: "One number, from whoever holds the operating agreement.",
+    action:
+      "Confirm the ownership split and provide the supporting company or operating document needed to reconcile the application.",
   },
   {
     owner: "borrower",
-    name: "Landlord or lease contact",
-    action: "A name and a phone number, read off the lease.",
+    name: "Business address support",
+    action:
+      "Clarify the difference between the submitted and verified addresses and provide supporting evidence where needed.",
   },
   {
     owner: "lender",
-    name: "Document integrity",
-    action: "You can send a clean export of page 84. Whether that settles it is an underwriter's call.",
-  },
-  {
-    owner: "lender",
-    name: "Address conflict",
-    action: "You can supply both records. Which one governs is the lender's policy, not your paperwork.",
+    name: "Document integrity review",
+    action:
+      "Cevrynt surfaces the document concern and supporting evidence, but whether the document is acceptable remains an underwriting judgment.",
   },
 ];
 
 const triageLabels = {
-  total: "open questions this file leaves behind",
-  yours: "of them close without calling anyone",
-  dial: "A reach dial. Your desk is at the centre; two of the seven questions sit inside the first boundary and close without a call, three sit in the second and close with one call to the borrower, and two sit outside a broken third boundary because they are the lender's judgment rather than anything paperwork settles.",
+  total: "open items identified",
+  yours: "your desk can resolve",
+  dial:
+    "Your desk sits at the centre. Three items can be resolved by your team before submission, three require borrower input, and one remains with the lender because it depends on underwriting judgment rather than missing paperwork.",
 };
 
 const triageNote =
-  "Distance from the centre is the whole point. Two of these close at a desk this afternoon and three take one call to the borrower — but the outer two sit past a line no amount of work on this side crosses, because they are the lender's judgment. For those the pack cannot supply an answer; it can only make sure they are already named when the question arrives. Illustrative package · synthetic borrower data.";
+  "Cevrynt separates open items by who can actually move them forward. Three can be resolved by your desk before submission, three require borrower input, and one remains with the lender because it depends on underwriting judgment rather than missing paperwork. Illustrative package · synthetic borrower data.";
 
 /* --------------------------------------------------------------------------
    04 — the intake screen the submission becomes, read left to right. The three
@@ -219,19 +249,19 @@ const intakeShot = {
 const intakeColumns = [
   {
     n: "01",
-    question: "What did I receive?",
+    question: "What arrived?",
     answer:
-      "Five files, one of them a hundred and twenty pages long, each identified before anything reaches underwriting.",
-    fact: "5 files · the existing advance detected automatically",
+      "Five submitted files are accounted for and attached to the same deal before underwriting begins.",
+    fact: "5 files · 143 pages · one borrower package",
     from: 0,
     to: 32.4,
     at: 6,
   },
   {
     n: "02",
-    question: "What is it?",
+    question: "How is it organized?",
     answer:
-      "Every document classified and mapped to a page range, and the package normalised into one borrower schema.",
+      "Cevrynt classifies each document, maps its page range, and structures the package into one underwriting record.",
     fact: "5 documents mapped · pages 1–143",
     from: 32.4,
     to: 69.3,
@@ -239,10 +269,11 @@ const intakeColumns = [
   },
   {
     n: "03",
-    question: "Where did that number come from?",
+    question: "Where did the finding come from?",
     answer:
-      "Each structured value keeps the document, page and line it was read from, so a figure can be checked without hunting for it.",
-    fact: "Legal name p.1 line 4 · deposits p.84 lines 22–31",
+      "Material underwriting values stay connected to the document, page, transaction, or source evidence behind them.",
+    fact:
+      "Legal business name · p.1 line 4 · monthly deposits · p.84 lines 21–31",
     from: 69.3,
     to: 100,
     at: 71,
@@ -251,13 +282,13 @@ const intakeColumns = [
 
 const intakeReadout = {
   filesN: "05",
-  files: "files handed over",
+  files: "files organized",
   pagesN: "143",
-  pages: "pages accounted for",
+  pages: "pages mapped to the deal",
 };
 
 const intakeNote =
-  "Nothing is annotated on top of the screen and nothing is cropped out of it — the export is shown whole, and the only thing added is the order it gets read in. A submission does not get read sooner because it is friendlier. It gets read sooner because the reader's first three questions are already answered on the page. Illustrative deal · synthetic borrower data.";
+  "Cevrynt turns the submitted folder into a structured underwriting map: what arrived, where each document belongs, what the review found, and where the supporting evidence lives. The lender still makes the underwriting judgment; the package simply arrives easier to navigate. Illustrative deal · synthetic borrower data.";
 
 /* --------------------------------------------------------------------------
    05 — the product's re-run. Every previous and current value below is read off
@@ -274,29 +305,72 @@ const rerunVersions = [
   {
     name: "Version 1",
     at: "10:42 AM",
-    what: "The initial package, analyzed as it was submitted.",
+    what: "Initial borrower package reviewed as originally submitted.",
   },
   {
     name: "Version 2",
     at: "12:14 PM",
-    what: "One new bank statement and one corrected agreement, added to the same file.",
+    what: "One new bank statement and a corrected agreement added to the same deal.",
   },
 ];
 
 const rerunSignals = [
-  { name: "Avg monthly deposits", from: 84.6, to: 91.3, prefix: "$", suffix: "K", decimals: 1, badge: "+7.9%" },
-  { name: "Average daily balance", from: 31.2, to: 34.8, prefix: "$", suffix: "K", decimals: 1, badge: "+$3.6K" },
-  { name: "NSF events · 90d", from: 6, to: 4, decimals: 0, badge: "Improved" },
-  { name: "Active MCA positions", from: 2, to: 1, decimals: 0, badge: "Reduced" },
-  { name: "Policy exceptions", from: 2, to: 1, decimals: 0, badge: "−1" },
-  { name: "Debt pressure", from: 63, to: 48, decimals: 0, badge: "Lower risk" },
+  {
+    name: "Average monthly deposits",
+    from: 84.6,
+    to: 91.3,
+    prefix: "$",
+    suffix: "K",
+    decimals: 1,
+    badge: "+7.9%",
+  },
+  {
+    name: "Average daily balance",
+    from: 31.2,
+    to: 34.8,
+    prefix: "$",
+    suffix: "K",
+    decimals: 1,
+    badge: "+$3.6K",
+  },
+  {
+    name: "NSF activity · 90 days",
+    from: 6,
+    to: 4,
+    decimals: 0,
+    badge: "Improved",
+  },
+  {
+    name: "Existing repayment obligations",
+    from: 2,
+    to: 1,
+    decimals: 0,
+    badge: "Reduced",
+  },
+  {
+    name: "Policy exceptions",
+    from: 2,
+    to: 1,
+    decimals: 0,
+    badge: "1 cleared",
+  },
+  {
+    name: "Daily repayment load",
+    from: 1550,
+    to: 775,
+    prefix: "$",
+    suffix: " / day",
+    decimals: 0,
+    badge: "Reduced",
+  },
 ];
 
 const rerunStill = {
-  name: "Address mismatch",
+  name: "Business address mismatch",
   value: "Unresolved",
   badge: "Still open",
-  said: "The address mismatch does not move, because a new bank statement does not settle an address. The screen keeps it visible across both versions instead of quietly dropping it — which is the part to want, since the alternative is a question that reappears later without warning.",
+  said:
+    "The new financial evidence changes the cash-flow picture, but it does not explain the address discrepancy. Cevrynt carries the review item forward into Version 2 instead of silently clearing it during reanalysis.",
 };
 
 const rerunReadout = {
@@ -315,7 +389,7 @@ const rerunReadout = {
 };
 
 const rerunNote =
-  "Every previous and current value here is read off the screen above; none of it is drawn for the drawing. A policy result moving is not an approval and not a decline — Cevrynt issues neither, and the underwriter still decides. What the re-run changes is that the second pass is a comparison rather than a second read, and that what moved is named rather than left to be found. Illustrative deal · synthetic borrower data.";
+  "Cevrynt keeps the previous review beside the updated one, highlights the findings affected by new evidence, and carries unresolved items forward. A policy result can move without becoming an approval or decline — the lender still makes the credit decision. Illustrative deal · synthetic borrower data.";
 
 export default function BrokersIsosPage() {
   const breadcrumbJsonLd = {
@@ -347,17 +421,17 @@ export default function BrokersIsosPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">The package</p>
+            <p className="hx-kicker">SUBMISSION READINESS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="route-heading"
-              text="A gap does not cost a question. It costs everything read before it."
+              text="Find the stip before the lender sends the file back."
             />
           </div>
           <p className="eg-lede t-lede">
-            Below is the review your file goes into, and where each missing item surfaces in it. Two of these
-            three do not come up until verification — by which point the whole file has already been read.
+            Cevrynt checks the borrower package before submission and shows what is complete, what is missing, and where that missing information is likely
+             to interrupt underwriting — so your team can fix avoidable gaps before the lender finds them.
           </p>
         </div>
 
@@ -379,17 +453,16 @@ export default function BrokersIsosPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">What the lender sees</p>
+            <p className="hx-kicker hx-kicker-invert">FUNDER-FACING SIGNALS</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="prior-heading"
-              text="This is the screen your submission lands on."
+              text="Don’t just send the file. Send the context with it."
             />
           </div>
           <p className="eg-lede t-lede">
-            Four signals, none of them declined by the system, and three steps left open for a person. Each
-            one is a question that reaches you in a few days — unless the pack answers it first.
+            Cevrynt surfaces the issues a lender is likely to notice in the package — duplicate submissions, document concerns, verification conflicts, and unusual cash-flow activity — so your team can answer what it can before underwriting has to ask.
           </p>
         </div>
 
@@ -411,18 +484,16 @@ export default function BrokersIsosPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Triage</p>
+            <p className="hx-kicker">SUBMISSION TRIAGE</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="triage-heading"
-              text="Seven open questions. Two of them are yours."
+              text="Seven open items. Know who can close each one."
             />
           </div>
           <p className="eg-lede t-lede">
-            Everything the two sections above left open, placed by how far the answer sits from your desk —
-            because a question you settle this afternoon and a question that is the lender&rsquo;s to make are
-            not the same problem.
+            Cevrynt separates what your desk can fix, what needs another borrower document, and what must stay with the lender. Your team spends time on the questions it can actually move instead of chasing every issue the same way.
           </p>
         </div>
 
@@ -443,17 +514,16 @@ export default function BrokersIsosPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">04</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The handoff</p>
+            <p className="hx-kicker hx-kicker-invert">SUBMISSION MAP</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="handoff-heading"
-              text="You hand over a folder. They open a map."
+              text="Turn the folder into a file the lender can navigate."
             />
           </div>
           <p className="eg-lede t-lede">
-            The intake screen your submission becomes, read the way any new reader reads a package: what did I
-            receive, what is it, and where did each number come from.
+            Cevrynt organizes the borrower package before handoff — classifying each document, mapping the pages, structuring the underwriting fields, and keeping important findings connected to their source.
           </p>
         </div>
 
@@ -474,17 +544,16 @@ export default function BrokersIsosPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">05</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The re-run</p>
+            <p className="hx-kicker hx-kicker-invert">THE RE-RUN</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="rerun-heading"
-              text="Send what was missing. The file does not start over."
+              text="Add what was missing. See exactly what changed."
             />
           </div>
           <p className="eg-lede t-lede">
-            Two documents go back into the same file. Drag between the two passes to see what the re-run
-            recomputes — and the one thing that stays exactly where it was.
+            A new bank statement or corrected agreement goes back into the same deal. Cevrynt re-runs the affected analysis, compares it with the previous review, and shows what improved, what moved, and what is still unresolved.
           </p>
         </div>
 
@@ -506,9 +575,9 @@ export default function BrokersIsosPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="06"
-          kicker="Founder-led walkthrough"
-          heading="Bring a submission that came back."
-          lede="We will read it the way the lender did, name what would have been asked, and show you what the pack needed to carry the first time."
+          kicker="FOUNDER-LED SUBMISSION REVIEW"
+          heading="Bring a deal that came back. See what should go back with it."
+          lede="Walk through the borrower package, missing items, lender-facing signals, borrower follow-ups, and anything that changed since the first submission. Cevrynt shows what can be resolved before the file goes back to underwriting."
           calendlyUrl={calendlyUrl}
           email="arin@cevrynt.com"
         />

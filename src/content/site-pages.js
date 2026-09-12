@@ -96,8 +96,8 @@ const solutionPages = [
   {
     path: "solutions/brokers-isos",
     group: "Solutions",
-    title: "Brokers and ISOs",
-    description: "Know what the lender is going to question before the submission leaves your desk.",
+    title: "Know what the lender will find before you send the file.",
+    description: "Cevrynt reviews the borrower package, bank activity, existing obligations, business verification, and missing or conflicting information — so your team can send a cleaner submission with fewer surprises downstream.",
     metaTitle: "Submission Tools for MCA Brokers & ISOs",
     metaDescription: "Help brokers and ISOs prepare complete submissions and flag missing information before lender review, for faster funding decisions.",
     keywords: ["MCA broker software", "ISO submission software", "broker underwriting tools"],
@@ -106,8 +106,8 @@ const solutionPages = [
   {
     path: "solutions/ecommerce-merchant-underwriting",
     group: "Solutions",
-    title: "E-commerce Merchant Underwriting",
-    description: "Merchant activity already tells part of the underwriting story. Cevrynt helps connect that operating context with documents, financial evidence and lender requirements.",
+    title: "Underwrite the merchant behind the storefront.",
+    description: "Cevrynt brings commerce performance, borrower documents, bank activity, business verification, existing obligations, and lender policy into one evidence-linked review — so platform signals become part of the underwriting decision, not a substitute for it.",
     metaTitle: "E-commerce Merchant Underwriting Software",
     metaDescription: "Bring commerce-context signals into evidence-backed underwriting for eligible e-commerce and marketplace merchant financing.",
     keywords: ["e-commerce merchant underwriting", "Shopify merchant underwriting", "marketplace seller financing underwriting"],
