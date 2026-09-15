@@ -168,25 +168,25 @@ const principles = [
   {
     term: "Traceable",
     detail: "Every important number and finding keeps the source behind it — the statement, page, transaction or verification result your underwriter can go back and inspect.",
-    image: "/media/placeholder/why-consistent.webp",
+    image: "/media/placeholder/Traceable.png",
     imageAlt: "One shared review path applied across a queue of files",
   },
   {
     term: "Policy-led",
     detail: "Cevrynt works from your underwriting criteria, thresholds and exceptions. It does not replace your credit policy with a universal score that your team has to work around.",
-    image: "/media/placeholder/why-explainable.webp",
+    image: "/media/placeholder/policy-led.png",
     imageAlt: "A finding shown with the source document it was drawn from",
   },
   {
     term: "Exception-aware",
     detail: "A mismatch should look like a mismatch. An out-of-policy condition should look like an exception. Cevrynt surfaces the gray areas instead of quietly turning them into a clean answer.",
-    image: "/media/placeholder/why-configurable.webp",
+    image: "/media/placeholder/Exception-aware.png",
     imageAlt: "Lender-defined policy criteria with an exception recorded",
   },
   {
     term: "Human-owned",
     detail: "The system prepares the review; your team makes the credit decision. Notes, overrides and the reasoning behind the call stay with the deal instead of disappearing into chat, spreadsheets or memory.",
-    image: "/media/placeholder/why-human.webp",
+    image: "/media/placeholder/Human-owned.png",
     imageAlt: "A reviewer override recorded against a policy outcome",
   },
 ];
@@ -420,7 +420,7 @@ export default function Home() {
         <div className="eg wk-body">
           <div className="wk-full">
             <ProductShot
-              src="/media/placeholder/worked-example.webp"
+              src="/media/placeholder/cevrynt-worked.png"
               alt="Underwriting workspace showing the full audit trail for one illustrative deal"
               width={1600}
               height={900}

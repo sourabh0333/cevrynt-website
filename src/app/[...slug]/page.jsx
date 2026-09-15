@@ -16,6 +16,11 @@ const bespoke = new Set([
   "solutions/alternative-lenders",
   "solutions/ecommerce-merchant-underwriting",
   "about",
+  "investors",
+  "contact",
+  "product/document-intelligence",
+  "product/business-verification",
+  "product/policy-engine",
 ]);
 
 export function generateStaticParams() {

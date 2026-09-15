@@ -13,8 +13,12 @@ const productPages = [
   {
     path: "product/document-intelligence",
     group: "Product",
-    title: "Who are we actually funding?",
-    description: "Compare the legal entity, business details, ownership, address and application claims before treating the rest of the file as fact.",
+    // Was "Who are we actually funding?" with a lede about legal entity,
+    // ownership and address — which is the Business Verification subject, not
+    // this one. Replaced with copy that matches the page's own metaTitle,
+    // keywords and points.
+    title: "Fifteen files, and none of them labelled.",
+    description: "Tell a borrower submission apart, structure what is inside it, and keep every reading attached to the document, page and line it came from.",
     metaTitle: "Document Intelligence for Loan Underwriting",
     metaDescription: "Turn mixed borrower files into structured, source-linked underwriting data. Classify, extract, and organize loan documents for faster human review.",
     keywords: ["document intelligence lending", "loan document automation software", "document classification underwriting"],
@@ -33,8 +37,12 @@ const productPages = [
   {
     path: "product/business-verification",
     group: "Product",
-    title: "What is already coming out of the account?",
-    description: "Surface recurring MCA and loan payments, existing positions and repayment activity that can change how the deal should be read.",
+    // Was "What is already coming out of the account?" with a lede about
+    // recurring MCA payments and existing positions — bank-statement subject
+    // matter, not KYB. Replaced with copy matching this page's own metaTitle,
+    // keywords and points.
+    title: "Who are we actually funding?",
+    description: "Compare the legal entity, business details, ownership, address and application claims before treating the rest of the file as fact.",
     metaTitle: "Business Verification (KYB) Software for Lenders",
     metaDescription: "Bring business identity, formation, and operating signals into underwriting review, with conflicts flagged for human verification.",
     keywords: ["business verification software", "KYB for lenders", "know your business lending"],
