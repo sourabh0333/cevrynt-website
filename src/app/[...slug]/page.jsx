@@ -21,6 +21,8 @@ const bespoke = new Set([
   "product/document-intelligence",
   "product/business-verification",
   "product/policy-engine",
+  "product/underwriting-report",
+  "product/bank-statement-analysis",
 ]);
 
 export function generateStaticParams() {
