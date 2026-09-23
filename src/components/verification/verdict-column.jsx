@@ -59,6 +59,14 @@ export function VerdictColumn({ conflicts, columns, readout, aside, close, note 
             <p className="bv2-conflict">
               <span className="bv2-n hx-mono">{String(r + 1).padStart(2, "0")}</span>
               <span className="bv2-k">{c.k}</span>
+              {/* A person settled it, or nobody has yet. Either way the verdict
+                  column stays empty: settling is a reviewer's act, not ours. */}
+              {c.status ? (
+                <span className={`bv2-status hx-mono is-${c.status.state}`}>
+                  {c.status.state === "settled" ? readout.settledK : readout.openK}
+                  {c.status.by ? <span className="bv2-status-by"> · {c.status.by}</span> : null}
+                </span>
+              ) : null}
             </p>
 
             {c.readings.map((t, i) => (

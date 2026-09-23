@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Decision intelligence connects data, analysis, and human judgment into one underwriting workflow. Here is what that actually means for alternative lenders.",
   publishedAt: "2026-05-04",
   updatedAt: "2026-05-04",
-  readingTime: 15,
+  readingTime: 12,
   workflowStage: null,
   heroImage: { src: "/media/cevrynt-dashboard-website-analytics.webp", alt: "Illustrative Cevrynt underwriting workspace showing business verification, cash-flow analysis, fraud review, and underwriting status" },
   relatedProductPaths: ["platform", "product/underwriting-report"],

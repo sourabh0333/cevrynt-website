@@ -8,7 +8,7 @@ export const post = {
   excerpt: "A policy engine applies a lender's own credit criteria consistently across every deal, while preserving room for human judgment.",
   publishedAt: "2026-07-11",
   updatedAt: "2026-07-11",
-  readingTime: 14,
+  readingTime: 7,
   workflowStage: "Policy",
   heroImage: null,
   relatedProductPaths: ["product/policy-engine"],

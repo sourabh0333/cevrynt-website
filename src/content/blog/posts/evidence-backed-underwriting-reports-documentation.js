@@ -8,7 +8,7 @@ export const post = {
   excerpt: "A good underwriting report reads like a case a reviewer can inspect, not a summary they have to take on faith.",
   publishedAt: "2026-07-23",
   updatedAt: "2026-07-23",
-  readingTime: 14,
+  readingTime: 7,
   workflowStage: "Report",
   heroImage: { src: "/media/cevrynt-dashboard-website-analytics.webp", alt: "Illustrative Cevrynt underwriting workspace showing a compiled underwriting report with linked evidence" },
   relatedProductPaths: ["product/underwriting-report"],

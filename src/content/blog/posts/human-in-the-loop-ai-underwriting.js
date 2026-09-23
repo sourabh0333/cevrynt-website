@@ -8,7 +8,7 @@ export const post = {
   excerpt: "AI can accelerate underwriting review, but removing the underwriter from the loop trades speed for risk. Here is how to balance both.",
   publishedAt: "2026-05-12",
   updatedAt: "2026-05-12",
-  readingTime: 15,
+  readingTime: 8,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["why-cevrynt", "product/policy-engine"],

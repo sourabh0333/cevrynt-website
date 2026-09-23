@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Structured document handling is where most underwriting time is won or lost. Here is what good document intelligence actually looks like.",
   publishedAt: "2026-05-16",
   updatedAt: "2026-05-16",
-  readingTime: 15,
+  readingTime: 7,
   workflowStage: "Documents",
   heroImage: null,
   relatedProductPaths: ["product/document-intelligence"],

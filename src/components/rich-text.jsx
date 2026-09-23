@@ -1,41 +1,51 @@
+import { Fragment } from "react";
 import Link from "next/link";
 
-function renderBold(text, keyPrefix) {
-  const parts = text.split(/\*\*([^*]+)\*\*/g);
-  return parts.map((part, index) =>
-    index % 2 === 1 ? <strong key={`${keyPrefix}-b-${index}`}>{part}</strong> : part
-  );
-}
+const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
 
-export function RichText({ text }) {
+/* Links inside one run of text. */
+function renderLinks(text, keyPrefix) {
   const nodes = [];
   let lastIndex = 0;
   let match;
-  let segmentIndex = 0;
+  let index = 0;
 
-  const linkPattern = /\[([^\]]+)\]\(([^)]+)\)/g;
-  while ((match = linkPattern.exec(text)) !== null) {
+  LINK.lastIndex = 0;
+  while ((match = LINK.exec(text)) !== null) {
     const [full, label, href] = match;
-    if (match.index > lastIndex) {
-      nodes.push(...renderBold(text.slice(lastIndex, match.index), `t${segmentIndex++}`));
-    }
-    const isExternal = href.startsWith("http");
+    if (match.index > lastIndex) nodes.push(text.slice(lastIndex, match.index));
+    const external = href.startsWith("http");
     nodes.push(
-      isExternal ? (
-        <a key={`link-${segmentIndex++}`} href={href} target="_blank" rel="noreferrer">
+      external ? (
+        <a href={href} key={`${keyPrefix}-l${index}`} rel="noreferrer" target="_blank">
           {label}
         </a>
       ) : (
-        <Link key={`link-${segmentIndex++}`} href={href}>
+        <Link href={href} key={`${keyPrefix}-l${index}`}>
           {label}
         </Link>
-      )
+      ),
     );
+    index += 1;
     lastIndex = match.index + full.length;
   }
-  if (lastIndex < text.length) {
-    nodes.push(...renderBold(text.slice(lastIndex), `t${segmentIndex++}`));
-  }
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes;
+}
 
-  return <>{nodes}</>;
+/* Bold is read first, so a link wrapped in bold — **[label](/href)** — keeps
+   both, instead of leaving the asterisks in the text. */
+export function RichText({ text }) {
+  const parts = text.split(/\*\*([^*]+)\*\*/g);
+  return (
+    <>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <strong key={`b${i}`}>{renderLinks(part, `b${i}`)}</strong>
+        ) : (
+          <Fragment key={`t${i}`}>{renderLinks(part, `t${i}`)}</Fragment>
+        ),
+      )}
+    </>
+  );
 }

@@ -8,7 +8,7 @@ export const post = {
   excerpt: "A decision that can't be reconstructed months later isn't really documented — it's just remembered, until it isn't.",
   publishedAt: "2026-05-14",
   updatedAt: "2026-05-14",
-  readingTime: 13,
+  readingTime: 6,
   workflowStage: "Report",
   heroImage: null,
   relatedProductPaths: ["product/underwriting-report", "security"],

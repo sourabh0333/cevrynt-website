@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Bust-out fraud is patient by design, which is exactly what makes it dangerous — and exactly why early signals matter so much.",
   publishedAt: "2026-07-03",
   updatedAt: "2026-07-03",
-  readingTime: 12,
+  readingTime: 7,
   workflowStage: "Fraud",
   heroImage: null,
   relatedProductPaths: ["product/fraud-signals", "solutions/merchant-cash-advance"],

@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Overrides are a normal, healthy part of underwriting judgment. Undocumented ones are where consistency and accountability quietly erode.",
   publishedAt: "2026-07-19",
   updatedAt: "2026-07-19",
-  readingTime: 12,
+  readingTime: 7,
   workflowStage: "Policy",
   heroImage: null,
   relatedProductPaths: ["product/policy-engine", "product/underwriting-report"],

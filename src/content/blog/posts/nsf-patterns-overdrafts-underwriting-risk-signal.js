@@ -8,7 +8,7 @@ export const post = {
   excerpt: "NSF frequency is one of the clearest stress signals in bank statement data, but reading it correctly requires more than a raw count.",
   publishedAt: "2026-06-05",
   updatedAt: "2026-06-05",
-  readingTime: 13,
+  readingTime: 8,
   workflowStage: "Financials",
   heroImage: null,
   relatedProductPaths: ["product/bank-statement-analysis"],

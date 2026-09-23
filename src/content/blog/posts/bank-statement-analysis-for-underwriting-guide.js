@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Bank statements are the single richest data source in alternative lending underwriting. Here is how to actually use them well.",
   publishedAt: "2026-05-28",
   updatedAt: "2026-05-28",
-  readingTime: 17,
+  readingTime: 7,
   workflowStage: "Financials",
   heroImage: { src: "/media/cevrynt-dashboard-website-analytics.webp", alt: "Illustrative Cevrynt underwriting workspace showing cash-flow trend analysis and deposit patterns" },
   relatedProductPaths: ["product/bank-statement-analysis"],

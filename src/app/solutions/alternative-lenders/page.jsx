@@ -223,7 +223,7 @@ const extractShot = {
 
 const extractFields = [
   {
-    name: "Monthly deposits · Apr 2026",
+    name: "Monthly deposits · April",
     value: "$84,613",
     source: "Bank statement · p.84 · lines 21–31",
     raw:
@@ -231,7 +231,7 @@ const extractFields = [
     at: { x: 18.6, y: 65.7 },
   },
   {
-    name: "Average daily balance · Apr 2026",
+    name: "Average daily balance · April",
     value: "$31,240",
     source: "Bank statement · p.84 · lines 32–39",
     raw:

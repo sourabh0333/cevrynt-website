@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Stacking is one of the costliest risks in MCA underwriting and one of the easiest to miss without the right signals in view.",
   publishedAt: "2026-06-13",
   updatedAt: "2026-06-13",
-  readingTime: 14,
+  readingTime: 9,
   workflowStage: "Fraud",
   heroImage: null,
   relatedProductPaths: ["product/fraud-signals", "solutions/merchant-cash-advance"],

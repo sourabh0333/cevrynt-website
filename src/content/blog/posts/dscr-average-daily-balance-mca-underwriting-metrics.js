@@ -8,7 +8,7 @@ export const post = {
   excerpt: "ADB, DSCR, and deposit consistency show up in nearly every MCA underwriting conversation. Here is what each one actually measures.",
   publishedAt: "2026-06-09",
   updatedAt: "2026-06-09",
-  readingTime: 14,
+  readingTime: 10,
   workflowStage: "Financials",
   heroImage: null,
   relatedProductPaths: ["product/bank-statement-analysis", "solutions/merchant-cash-advance"],

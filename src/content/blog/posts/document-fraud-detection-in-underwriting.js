@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Modern document editing tools have made altered bank statements and forged documents harder to spot by eye alone.",
   publishedAt: "2026-07-07",
   updatedAt: "2026-07-07",
-  readingTime: 12,
+  readingTime: 7,
   workflowStage: "Fraud",
   heroImage: null,
   relatedProductPaths: ["product/fraud-signals", "product/document-intelligence"],

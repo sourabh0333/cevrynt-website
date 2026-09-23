@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Confirming a business is who it claims to be is a distinct discipline from financial analysis, and it deserves its own rigor.",
   publishedAt: "2026-06-17",
   updatedAt: "2026-06-17",
-  readingTime: 15,
+  readingTime: 9,
   workflowStage: "Verification",
   heroImage: null,
   relatedProductPaths: ["product/business-verification"],

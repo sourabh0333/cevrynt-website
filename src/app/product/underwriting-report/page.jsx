@@ -90,7 +90,7 @@ const residueStages = [
     k: "Financials",
     n: 11,
     open: 1,
-    say: "One open finding: a month whose deposits break the pattern of the other thirteen. The arithmetic is settled and the explanation is not, and the difference between those two things is the entire reason a report exists.",
+    say: "One open finding: a month whose deposits break the pattern of the other four on file. The arithmetic is settled and the explanation is not, and the difference between those two things is the entire reason a report exists.",
     b: "A month that does not look like the others. The deposits are counted, the gap is measured, and what it means is not something a statement can answer.",
   },
   {
@@ -514,7 +514,7 @@ const waitingLanes = [
     items: [
       {
         stage: "Financials",
-        k: "February deposits fall well below the other thirteen months on file.",
+        k: "February deposits fall well below the four other months on file.",
         with: "With the senior underwriter",
         say: "The owner's explanation is already on the file, entered after a call on day two. Accepting it or not is a judgment about a person and a business, and no amount of reading the statements again will produce it.",
       },

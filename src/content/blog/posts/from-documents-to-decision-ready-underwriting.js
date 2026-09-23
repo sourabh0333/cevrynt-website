@@ -8,7 +8,7 @@ export const post = {
   excerpt: "A practical framework for connecting intake, analysis, verification, fraud review, policy, and human decisions into one underwriting workflow.",
   publishedAt: "2026-05-08",
   updatedAt: "2026-05-08",
-  readingTime: 16,
+  readingTime: 11,
   workflowStage: null,
   heroImage: { src: "/media/cevrynt-dashboard-website.webp", alt: "Illustrative Cevrynt underwriting workspace showing a deal moving through document review, verification, and policy stages" },
   relatedProductPaths: ["platform", "product/underwriting-report"],

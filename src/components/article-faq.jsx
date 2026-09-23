@@ -4,7 +4,7 @@ export function ArticleFaq({ items, title = "Frequently asked questions" }) {
   if (!items?.length) return null;
 
   return (
-    <section className="article-faq" aria-label={title}>
+    <section className="article-faq" id="faq" aria-label={title}>
       <h2>{title}</h2>
       <div className="faq-list">
         {items.map((item) => (

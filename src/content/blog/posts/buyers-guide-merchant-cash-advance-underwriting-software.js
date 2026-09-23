@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Most MCA underwriting software demos look impressive. This guide covers what to actually test before signing anything.",
   publishedAt: "2026-07-31",
   updatedAt: "2026-07-31",
-  readingTime: 16,
+  readingTime: 7,
   workflowStage: null,
   heroImage: { src: "/media/cevrynt-dashboard-website.webp", alt: "Illustrative Cevrynt underwriting workspace showing a merchant cash advance deal in review" },
   relatedProductPaths: ["solutions/merchant-cash-advance", "platform"],

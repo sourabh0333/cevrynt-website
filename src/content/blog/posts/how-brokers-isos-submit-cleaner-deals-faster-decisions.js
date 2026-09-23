@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Submission quality has an outsized effect on how quickly a funder can move — here is what actually makes a difference.",
   publishedAt: "2026-08-03",
   updatedAt: "2026-08-03",
-  readingTime: 13,
+  readingTime: 7,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["solutions/brokers-isos"],

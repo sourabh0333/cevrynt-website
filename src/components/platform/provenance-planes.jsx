@@ -21,9 +21,10 @@ gsap.registerPlugin(ScrollTrigger);
  * instead of decorating it.
  *
  * The motion is the argument: a value is not a bare number, so the plane lifts
- * and its source unfolds beneath it — document, page, line, the quoted text and
- * the confidence it was read with. The strip always occupies its space and is
- * only clipped, so nothing reflows as it opens.
+ * and its source unfolds beneath it — document, page, line and the quoted text.
+ * No confidence figure is shown: a percentage beside a value reads as an
+ * accuracy claim, and there is no documented figure behind one. The strip
+ * always occupies its space and is only clipped, so nothing reflows as it opens.
  */
 export function ProvenancePlanes({ items }) {
   const scope = useRef(null);
@@ -90,7 +91,6 @@ export function ProvenancePlanes({ items }) {
               <span className="hx-mono pv-source-k">Read from</span>
               <p className="pv-source-doc">{item.document}</p>
               <p className="pv-quote">{item.quote}</p>
-              <span className="hx-mono pv-conf">{item.confidence} confidence</span>
             </div>
           </div>
         </li>

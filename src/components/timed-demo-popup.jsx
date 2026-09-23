@@ -63,7 +63,7 @@ export function TimedDemoPopup() {
               <div className="demo-app-tabs"><span>Documents</span><span>Financials</span><span>Verification</span><span>Policy</span></div>
               <div className="demo-app-card"><small>BUSINESS &amp; IDENTITY</small><strong>Blue Ribbon Lawns Inc.</strong><div><span>Registry status</span><b>Active</b></div><div><span>Jurisdiction</span><b>Florida</b></div></div>
               <div className="demo-app-grid"><div><small>Bank statements</small><b>Reviewed</b></div><div><small>Risk signals</small><b>Needs review</b></div><div><small>Policy evaluation</small><b>3 conditions</b></div><div><small>Underwriting report</small><b>Ready</b></div></div>
-              <div className="demo-app-status"><b>Business verified</b><span>Evidence linked to source</span></div>
+              <div className="demo-app-status"><b>Sources compared</b><span>Evidence linked to source</span></div>
             </div>
             <div className="demo-prompt-copy">
               <button ref={closeRef} className="demo-prompt-close" type="button" aria-label="Close demo invitation" onClick={dismiss}><i /><i /></button>

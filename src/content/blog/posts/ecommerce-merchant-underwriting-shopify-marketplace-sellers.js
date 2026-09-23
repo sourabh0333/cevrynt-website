@@ -8,7 +8,7 @@ export const post = {
   excerpt: "E-commerce sellers generate a different kind of financial signal than brick-and-mortar businesses, and underwriting needs to adapt accordingly.",
   publishedAt: "2026-08-05",
   updatedAt: "2026-08-05",
-  readingTime: 14,
+  readingTime: 6,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["solutions/ecommerce-merchant-underwriting", "partners/shopline"],

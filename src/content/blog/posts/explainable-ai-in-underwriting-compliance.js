@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Explainability isn't a compliance tax on speed. Built in from the start, it's usually the thing that makes speed sustainable.",
   publishedAt: "2026-07-27",
   updatedAt: "2026-07-27",
-  readingTime: 14,
+  readingTime: 7,
   workflowStage: "Report",
   heroImage: null,
   relatedProductPaths: ["why-cevrynt", "security"],

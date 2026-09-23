@@ -127,9 +127,9 @@ const policyNote =
  */
 const sourceFigures = [
   {
-    field: "Monthly deposits · Apr 2026",
+    field: "Monthly deposits · April",
     value: "$84,613",
-    doc: "First Harbor Bank statement · Apr 2026",
+    doc: "First Harbor Bank statement · April",
     address: "p. 84 · lines 21–31",
     page: 84,
     from: 21,
@@ -157,9 +157,9 @@ const sourceFigures = [
   },
 
   {
-    field: "Average daily balance · Apr 2026",
+    field: "Average daily balance · April",
     value: "$31,240",
-    doc: "First Harbor Bank statement · Apr 2026",
+    doc: "First Harbor Bank statement · April",
     address: "p. 84 · lines 32–39",
     page: 84,
     from: 32,
@@ -215,7 +215,7 @@ const sourceFigures = [
     to: 4,
     window: [
       { n: 1, text: "MERCHANT FINANCING APPLICATION", amount: "" },
-      { n: 2, text: "Submitted", amount: "19 Aug 2026" },
+      { n: 2, text: "Submitted", amount: "19 Aug" },
       { n: 3, text: "— BUSINESS —", amount: "" },
       {
         n: 4,

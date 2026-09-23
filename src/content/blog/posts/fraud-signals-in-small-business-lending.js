@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Fraud in SMB lending rarely announces itself. It shows up as a collection of small inconsistencies that need to be seen together.",
   publishedAt: "2026-06-29",
   updatedAt: "2026-06-29",
-  readingTime: 15,
+  readingTime: 8,
   workflowStage: "Fraud",
   heroImage: null,
   relatedProductPaths: ["product/fraud-signals"],

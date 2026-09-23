@@ -6,15 +6,15 @@ import { useHasEntered, useReady } from "@/components/progressive";
 const DAY = 24 * 60 * 60 * 1000;
 
 /**
- * 03 — Seven years on one axis, and two changes in the last eight weeks.
+ * 03 — Fourteen months on one axis, and two changes in the last eight weeks.
  *
  * A status tells you almost nothing. A date tells you where to look: an entity
- * standing for seven years is a different proposition from the same entity
- * whose registered agent and principal address both moved in the two months
- * before it asked for money.
+ * fourteen months old is a different proposition from the same entity whose
+ * registered agent and principal address both moved in the two months before
+ * it asked for money.
  *
- * So this is a plot rather than a list. The axis carries a gridline for every
- * year and every event sits at its true date, which means the long gap on the
+ * So this is a plot rather than a list. The axis carries a gridline every three
+ * months, counted back from the application, and every event sits at its true date, which means the long gap on the
  * left reads as a long gap and the cluster on the right reads as a cluster.
  * Spacing the six events evenly — the usual way this gets drawn — would have
  * told the reader the opposite of what the dates say.

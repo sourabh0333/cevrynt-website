@@ -558,7 +558,7 @@ const overrideRows = [
     who: "Credit lead",
     reasonK: "Reason entered with the override",
     reason:
-      "Four of the six returns fall inside one week and match a processor error the borrower documented at the time. The pattern does not repeat across the other thirteen months on file, and the stop stands on the record next to this note rather than being removed by it.",
+      "Four of the six returns fall inside one week and match a processor error the borrower documented at the time. The pattern does not repeat in any other month on file, and the stop stands on the record next to this note rather than being removed by it.",
   },
   {
     k: "Average daily balance",
@@ -569,7 +569,7 @@ const overrideRows = [
     who: "Senior underwriter",
     reasonK: "Reason entered with the override",
     reason:
-      "Short of the clearing point, but the deposit pattern behind the balance is steady across all fourteen months on file. Cleared on that basis, by a person, with the band it sat in still shown.",
+      "Short of the clearing point, but the deposit pattern behind the balance is steady across the months on file apart from February, which the owner has already explained. Cleared on that basis, by a person, with the band it sat in still shown.",
   },
   {
     k: "Time in business",

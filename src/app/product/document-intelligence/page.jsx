@@ -84,12 +84,12 @@ const intakeVerdicts = [
   {
     k: "Bank statements",
     items: [
+      "Statement · February",
       "Statement · April",
       "Statement · May",
       "Statement · June",
       "Statement · July",
       "Statement · July (duplicate export)",
-      "Statement · September",
     ],
   },
   { k: "The application", items: ["Signed application", "Funding request form"] },
@@ -260,12 +260,12 @@ const qualityReadout = {
 const qualityStrip = {
   k: "The period those six files actually cover",
   cells: [
+    { k: "February" },
+    { k: "March", state: "gap", note: "Not supplied" },
     { k: "April" },
     { k: "May" },
     { k: "June" },
     { k: "July", state: "dupe", note: "Two exports" },
-    { k: "August", state: "gap", note: "Not supplied" },
-    { k: "September" },
   ],
   b: "Every one of the six was recognised for what it is. The type was never the problem — the period was, and no amount of correct classification finds a month that was not sent.",
 };
@@ -563,7 +563,7 @@ export default function DocumentIntelligencePage() {
             />
           </div>
           <p className="eg-lede t-lede">
-            Getting the type right is not the same as getting the period right. July arrived twice and August
+            Getting the type right is not the same as getting the period right. July arrived twice and March
             never arrived at all — and nothing about correct classification finds a month that was not sent.
           </p>
         </div>

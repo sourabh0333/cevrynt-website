@@ -8,7 +8,7 @@ export const post = {
   excerpt: "These two terms get used almost interchangeably in lending technology, but they describe different scopes of work.",
   publishedAt: "2026-07-15",
   updatedAt: "2026-07-15",
-  readingTime: 11,
+  readingTime: 6,
   workflowStage: "Policy",
   heroImage: null,
   relatedProductPaths: ["product/policy-engine", "product/underwriting-report"],

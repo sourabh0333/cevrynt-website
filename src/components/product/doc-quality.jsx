@@ -8,12 +8,12 @@ import { useHasEntered, useReady } from "@/components/progressive";
  *
  * The section that section one makes necessary. Six files were all correctly
  * recognised as bank statements, and the submission still does not cover six
- * months: July arrived twice and August never arrived at all. Getting the type
+ * months: July arrived twice and March never arrived at all. Getting the type
  * right is not the same as getting the period right, and the second problem is
  * invisible until somebody lines the months up.
  *
  * So the figure is the period itself. Six cells fill left to right as the
- * section is reached, and the run visibly steps over August — the gap is not
+ * section is reached, and the run visibly steps over March — the gap is not
  * drawn in a different colour after the fact, it simply never fills while the
  * sequence carries on past it. Only once the run has finished does the gap
  * name itself. The duplicate carries a second sheet that slides out from under

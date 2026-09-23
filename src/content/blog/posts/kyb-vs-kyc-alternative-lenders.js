@@ -8,7 +8,7 @@ export const post = {
   excerpt: "KYB and KYC get used interchangeably, but they answer different questions and require different verification approaches.",
   publishedAt: "2026-06-21",
   updatedAt: "2026-06-21",
-  readingTime: 12,
+  readingTime: 7,
   workflowStage: "Verification",
   heroImage: null,
   relatedProductPaths: ["product/business-verification"],

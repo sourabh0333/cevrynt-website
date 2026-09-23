@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Cash flow underwriting looks past a single revenue figure to how money actually moves through a business. Here is what that means in practice.",
   publishedAt: "2026-06-01",
   updatedAt: "2026-06-01",
-  readingTime: 15,
+  readingTime: 7,
   workflowStage: "Financials",
   heroImage: null,
   relatedProductPaths: ["product/bank-statement-analysis", "solutions/alternative-lenders"],

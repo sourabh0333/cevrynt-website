@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Fabricated businesses with real-looking documentation are a growing and increasingly sophisticated fraud pattern in SMB lending.",
   publishedAt: "2026-06-25",
   updatedAt: "2026-06-25",
-  readingTime: 13,
+  readingTime: 7,
   workflowStage: "Verification",
   heroImage: null,
   relatedProductPaths: ["product/business-verification", "product/fraud-signals"],

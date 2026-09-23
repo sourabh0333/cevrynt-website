@@ -8,7 +8,7 @@ export const post = {
   excerpt: "An extracted number without a path back to its source document is a claim, not evidence. Here is why that distinction matters for underwriters.",
   publishedAt: "2026-05-24",
   updatedAt: "2026-05-24",
-  readingTime: 13,
+  readingTime: 6,
   workflowStage: "Documents",
   heroImage: null,
   relatedProductPaths: ["product/document-intelligence", "product/underwriting-report"],

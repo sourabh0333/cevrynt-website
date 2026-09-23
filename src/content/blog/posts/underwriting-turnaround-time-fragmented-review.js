@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Turnaround time complaints usually point to a symptom. The actual cause is almost always fragmentation between review stages.",
   publishedAt: "2026-05-18",
   updatedAt: "2026-05-18",
-  readingTime: 13,
+  readingTime: 6,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["platform", "solutions/alternative-lenders"],

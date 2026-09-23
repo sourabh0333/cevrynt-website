@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Revenue-based financing ties repayment to a business's top line, which changes what underwriters actually need to evaluate.",
   publishedAt: "2026-08-07",
   updatedAt: "2026-08-07",
-  readingTime: 13,
+  readingTime: 7,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["solutions/alternative-lenders", "product/bank-statement-analysis"],

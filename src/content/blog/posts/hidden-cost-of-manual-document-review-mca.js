@@ -8,7 +8,7 @@ export const post = {
   excerpt: "Manual document sorting rarely looks like the bottleneck on a process map, but it quietly caps how many deals a funder can review well.",
   publishedAt: "2026-05-20",
   updatedAt: "2026-05-20",
-  readingTime: 14,
+  readingTime: 7,
   workflowStage: "Documents",
   heroImage: null,
   relatedProductPaths: ["product/document-intelligence", "solutions/merchant-cash-advance"],

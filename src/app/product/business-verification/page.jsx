@@ -120,7 +120,7 @@ const matrixFacts = [
     k: "Registered agent",
     cells: [
       { s: "none", v: [] },
-      { s: "ok", v: ["Changed 19 June 2026"] },
+      { s: "ok", v: ["Changed 61 days before the application"] },
       { s: "none", v: [] },
       { s: "none", v: [] },
     ],
@@ -168,8 +168,11 @@ const verdictReadout = {
     { n: "04", k: "Conflicts this grid produced" },
     { n: "12", k: "Ways to read them" },
     { n: "00", k: "Conclusions issued", tone: "never" },
+    { n: "02", k: "Still open after review", tone: "never" },
   ],
   cornerK: "Conflict",
+  openK: "Open · with a person",
+  settledK: "Settled in review",
   voidK: "No conclusion is issued",
   saidK: "Why the fourth column is empty",
   saidB:
@@ -181,6 +184,7 @@ const verdictColumns = ["Reading A", "Reading B", "Reading C", "What Cevrynt con
 const verdictConflicts = [
   {
     k: "The address on the application is not the address on the filing.",
+    status: { state: "open" },
     readings: [
       "The business moved and the filing has not caught up yet.",
       "The application gave a mailing address rather than a premises.",
@@ -189,6 +193,7 @@ const verdictConflicts = [
   },
   {
     k: "The registered agent changed weeks before the application.",
+    status: { state: "settled", by: "The broker confirmed a change of service provider" },
     readings: [
       "A routine change of service provider on renewal.",
       "A change of counsel ahead of a transaction.",
@@ -197,6 +202,7 @@ const verdictConflicts = [
   },
   {
     k: "The signature block names an entity that appears nowhere else in the file.",
+    status: { state: "settled", by: "A template error; page 2 was re-signed as Cedar & Stone LLC" },
     readings: [
       "A holding company that owns the applicant.",
       "A typing error carried over from another document.",
@@ -205,6 +211,7 @@ const verdictConflicts = [
   },
   {
     k: "The filing lists a holder the application does not.",
+    status: { state: "open" },
     readings: [
       "A passive investor nobody thought to list.",
       "A holder added after the application was drafted.",
@@ -228,7 +235,7 @@ const verdictClose =
   "Four conflicts and {total} ways to read them. Software that picks one is guessing with a straight face; software that hands you three is doing the only honest thing it can with a question that needs somebody to pick up the phone.";
 
 const verdictNote =
-  "Illustrative conflicts on the illustrative file used throughout. Cevrynt is AI-assisted infrastructure for human underwriting: it is not a lender, issues no approval or decline, and lenders retain final approval authority.";
+  "Illustrative conflicts on the illustrative file used throughout. Two were settled by a reviewer once the broker answered; the two still open are the verification findings the Underwriting Report page carries. Cevrynt is AI-assisted infrastructure for human underwriting: it is not a lender, issues no approval or decline, and lenders retain final approval authority.";
 
 
 /* 03 — when anything about it last changed -------------------------------- */
@@ -242,58 +249,59 @@ const plotReadout = {
   plotK: "Placed by date, on a ruled axis — not spaced evenly",
 };
 
-/* Gridlines. Real dates, so the axis is measured rather than implied. */
+/* Gridlines every three months, counted back from the application. The `on`
+   dates only position things on the axis; nothing on the page prints a year,
+   because the time that matters is the distance from the application. The
+   entity is fourteen months old — the same time in business every other page
+   evaluates for this file. */
 const plotYears = [
-  { k: "2020", on: "2020-01-01" },
-  { k: "2021", on: "2021-01-01" },
-  { k: "2022", on: "2022-01-01" },
-  { k: "2023", on: "2023-01-01" },
-  { k: "2024", on: "2024-01-01" },
-  { k: "2025", on: "2025-01-01" },
-  { k: "2026", on: "2026-01-01" },
+  { k: "−12 mo", on: "2025-08-19" },
+  { k: "−9 mo", on: "2025-11-19" },
+  { k: "−6 mo", on: "2026-02-19" },
+  { k: "−3 mo", on: "2026-05-19" },
 ];
 
 const plotEvents = [
   {
     k: "Entity formed",
-    on: "2019-03-14",
+    on: "2025-06-16",
     row: 0,
-    shown: "14 Mar 2019",
-    b: "Seven years of standing behind the file. It is the single most useful thing on this axis and the easiest to skip past, because nothing about it is recent.",
+    shown: "14 months before",
+    b: "Fourteen months of standing behind the file — the same time in business the Policy Engine page evaluates. A young entity, which is exactly why every later change sits close to its start and why the dates matter more than the list.",
   },
   {
     k: "Officer added",
-    on: "2024-01-11",
-    row: 0,
-    shown: "11 Jan 2024",
-    b: "Two years before the application, and unremarkable at that distance.",
+    on: "2025-09-22",
+    row: 1,
+    shown: "11 months before",
+    b: "Three months after formation, and unremarkable at that distance.",
   },
   {
-    k: "Registration renewed",
+    k: "Annual report filed",
     on: "2026-02-02",
     row: 1,
-    shown: "02 Feb 2026",
+    shown: "6 months before",
     b: "Routine, on schedule, and outside the window.",
   },
   {
     k: "Registered agent changed",
     on: "2026-06-19",
     row: 2,
-    shown: "19 Jun 2026",
+    shown: "61 days before",
     b: "Inside the window. A change of service provider and a change of where legal notice is served look identical from here.",
   },
   {
     k: "Principal address changed",
     on: "2026-07-05",
     row: 3,
-    shown: "05 Jul 2026",
+    shown: "45 days before",
     b: "Inside the window, and the reason the address on the application no longer matches the filing in section one.",
   },
   {
     k: "Application submitted",
     on: "2026-08-19",
     row: 4,
-    shown: "19 Aug 2026",
+    shown: "Day 0",
     anchor: true,
     b: "The date everything else is measured back from.",
   },
@@ -554,7 +562,7 @@ export default function BusinessVerificationPage() {
               as="h2"
               className="t-display-2"
               id="plot-heading"
-              text="Seven years on one axis, and two changes in the last eight weeks."
+              text="Fourteen months on one axis, and two changes in the last eight weeks."
             />
           </div>
           <p className="eg-lede t-lede">

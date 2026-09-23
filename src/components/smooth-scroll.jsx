@@ -1,14 +1,24 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* Long-form reading pages keep native scrolling: it is smoother and cheaper
+   than an animated scroll position on pages that are mostly text, and it
+   leaves sticky elements and in-page links to the browser. */
+const NATIVE_SCROLL = /^\/blog\/[^/]+\/?$/;
+
 export function SmoothScroll() {
+  const pathname = usePathname();
+  const native = NATIVE_SCROLL.test(pathname || "");
+
   useEffect(() => {
+    if (native) return undefined;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
 
     const lenis = new Lenis({
@@ -44,7 +54,7 @@ export function SmoothScroll() {
       gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();
     };
-  }, []);
+  }, [native]);
 
   return null;
 }

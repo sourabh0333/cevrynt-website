@@ -65,30 +65,27 @@ const layers = [
 
 /**
  * Three captured values and the lines they were read from. Every figure,
- * location and quotation is taken from the Extract screen; confidence appears
- * as a property the record carries, not as an accuracy claim.
+ * location and quotation is taken from the Extract screen. No confidence figure
+ * is shown: a percentage beside a value reads as an accuracy claim.
  */
 const provenance = [
   {
     field: "Average monthly deposits",
     value: "$84,613",
-    document: "First Harbor Bank Statement · Apr 2026 · pages 4–12",
+    document: "First Harbor Bank Statement · April · pages 4–12",
     quote: "Calculated from qualifying deposit activity · internal transfers excluded",
-    confidence: "99%",
   },
   {
-    field: "Legal business identity",
-    value: "VERIFIED",
-    document: "Borrower application + business verification result",
-    quote: "Cedar & Stone LLC · legal-name match confirmed",
-    confidence: "Verified",
+    field: "Legal business name",
+    value: "4 of 4",
+    document: "Application · articles of organisation · bank account · processing statement",
+    quote: "Cedar & Stone LLC in all four · punctuation differs · no identity determination made",
   },
   {
     field: "Recurring MCA debit",
     value: "$1,550 / day",
     document: "First Harbor Bank Statement · recurring ACH activity",
     quote: "Rapid Advance Funding · repeated daily debit pattern detected",
-    confidence: "95%",
   },
 ];
 
@@ -133,7 +130,7 @@ const treeDecision = {
  * a visual scale for an illustrative deal, with the real threshold and observed
  * figures printed as text beside it.
  */
-const lenderPolicy = { name: "Growth Capital · Standard MCA", meta: "Policy v3.4 · updated 12 Aug 2026 · active" };
+const lenderPolicy = { name: "Growth Capital · Standard MCA", meta: "Policy v3.4 · active" };
 
 const policySummary = [
   { value: "10 / 12", label: "Rules passed" },
