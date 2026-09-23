@@ -50,66 +50,68 @@ export function generateMetadata() {
 
 /* 01 — who you are, and where that goes ---------------------------------- */
 
-const routerReadout = { head: "Four reasons people write · pick one" };
-
+const routerReadout = {
+  head: "Four reasons to get in touch · choose the closest fit",
+};
 const routerReasons = [
   {
-    k: "You lend, and want to see it on a real file",
-    channelK: "Channel · a booked walkthrough",
-    channel: "Book a walkthrough.",
-    b: "Half an hour on the workflow itself rather than a slide deck — intake through to a report, with the evidence staying attached at every stage.",
+    k: "You underwrite or fund SMB deals",
+    channelK: "Channel · founder-led underwriting review",
+    channel: "Review a deal your team already knows.",
+    b: "See Cevrynt against a familiar underwriting case so your team can inspect the evidence, policy results, exceptions, and final review rather than judge a polished demo.",
     expect: [
-      "A run through the product on an illustrative file, using synthetic borrower data.",
-      "Straight answers about what it cannot do yet, which is usually the more useful half.",
-      "No obligation to bring a real file to a first call, and no pressure to.",
+      "A walkthrough across intake, financial analysis, verification, lender policy, and the deal memo.",
+      "A comparison against a file or workflow your team already understands.",
+      "A clear view of what Cevrynt handles today and where human judgment still remains.",
     ],
-    action: "Open the calendar",
+    action: "Book an underwriting review",
     href: calendlyUrl,
   },
   {
-    k: "You broker deals, or you run a platform",
-    channelK: "Channel · the founder, directly",
-    channel: "Write to the founder.",
-    b: "Brokers, ISOs, commerce platforms and embedded-finance partners all sit at a different point in the file's life, so the first conversation is about the shape of the workflow on your side.",
+    k: "You broker deals or run a platform",
+    channelK: "Channel · partnership conversation",
+    channel: "Explore the workflow together.",
+    b: "Talk through submission readiness, lender handoffs, commerce context, embedded underwriting, or a potential partnership without assuming another portal or integration is automatically the answer.",
     expect: [
-      "A conversation about where your submissions go and what the funder on the other end will accept.",
-      "An honest read on whether there is anything here for you yet.",
-      "Partnership language kept precise: nothing is described as an integration or an endorsement unless it is one.",
+      "Map what information moves today and where underwriting context gets lost.",
+      "Explore how Cevrynt could fit around your existing workflow.",
+      "Discuss partnership or integration scope before making technical assumptions.",
     ],
     action: `Email ${founderEmail}`,
     href: `mailto:${founderEmail}`,
   },
   {
-    k: "You are looking at this as an investment",
-    channelK: "Channel · the investors page, then a call",
-    channel: "Start with what is published.",
-    b: "The market, what is built, how it reaches a lender, who is behind it and the assumptions underneath are all set out already. Read those first and the call can be about the parts that are not.",
+    k: "You are evaluating Cevrynt as an investment",
+    channelK: "Channel · investors page, then the founder",
+    channel: "Start with the public thesis.",
+    b: "The investor page covers the market entry, product, go-to-market motion, team, and assumptions already embedded in Cevrynt. A direct conversation can go deeper into the parts that belong in context.",
     expect: [
-      "Five sections of context that do not need a meeting to access.",
-      "Revenue, pipeline, ownership and any raise are not published, and are answered in person.",
-      "No deck link, and no gated download standing between you and the detail.",
+      "Current product and development status.",
+      "Market-entry, distribution, and company-building approach.",
+      "Fundraising context and investor materials shared directly where appropriate.",
     ],
     action: "Read the investors page",
     href: "/investors",
   },
   {
-    k: "You already use it and need the application",
-    channelK: "Channel · the product itself",
-    channel: "Sign in.",
-    b: "This site is the marketing surface. The workspace where files are actually worked lives somewhere else, and that is where you want to be.",
+    k: "You have a product, integration, or technical question",
+    channelK: "Channel · direct email",
+    channel: "Start with the exact constraint.",
+    b: "If the question is about data flow, lender configuration, integrations, security requirements, deployment, or whether Cevrynt can support a particular workflow, send the specifics first.",
     expect: [
-      "The application is a separate sign-in, not part of this site.",
-      "Nothing on this page is needed to get to it.",
+      "Product and underwriting-workflow requirements.",
+      "Integration and data-handling questions.",
+      "Security, deployment, or technical evaluation context.",
     ],
-    action: "Go to the application",
-    href: siteConfig.appUrl,
+    action: `Email ${founderEmail}`,
+    href: `mailto:${founderEmail}`,
   },
 ];
 
-const routerFoot = `If none of those fit, ${salesEmail} reaches the general enquiries mailbox and is read. It is the slower of the two addresses on this page, and the founder's is the faster one.`;
+const routerFoot = `If none of these fit, email ${founderEmail} with a short description of what you are trying to solve and it can be routed from there.`;
 
 const routerNote =
-  "Cevrynt is AI-assisted infrastructure and is not a lender. Nothing on this page is an offer of finance, and no eligibility, approval or funding outcome is implied by getting in touch.";
+  "Cevrynt provides AI-assisted underwriting infrastructure for business financing workflows. It is not a lender, and contacting Cevrynt does not constitute an application, approval, offer, or guarantee of financing.";
 
 /* 02 — the addresses themselves ------------------------------------------ */
 
@@ -117,99 +119,104 @@ const linesReadout = { refusalsK: "What will not happen" };
 
 const directLines = [
   {
-    k: "Book a walkthrough",
+    k: "Schedule an underwriting review",
     to: "calendly.com/arin-cevrynt",
     href: calendlyUrl,
-    hint: "The founder's own calendar. Pick a slot and it is confirmed — nobody screens it first.",
+    hint: "For lenders and underwriting teams that want to walk through a file, policy workflow, or product evaluation directly with the founder.",
   },
   {
     k: "Founder, directly",
     to: founderEmail,
     href: `mailto:${founderEmail}`,
-    hint: "Product questions, partnerships, pilots and investment all land here, and the person who replies is the person who built it.",
+    hint: "For lender conversations, partnerships, investor discussions, product questions, and anything that benefits from direct founder context.",
   },
   {
     k: "General enquiries",
     to: salesEmail,
     href: `mailto:${salesEmail}`,
-    hint: "For anything that does not obviously belong to the founder's inbox. Read, but slower.",
+    hint: "For general company, commercial, and inbound enquiries that do not need to begin with a meeting.",
   },
   {
-    k: "The application",
+    k: "Product workspace",
     to: "app.cevrynt.com",
     href: siteConfig.appUrl,
-    hint: "Existing users only. Separate sign-in, and nothing to do with this site.",
+    hint: "The separate Cevrynt application for users who have already been provided access.",
   },
 ];
 
 const refusals = [
-  "No qualification call before the real one.",
-  "No automated sequence after you write.",
-  "No gated deck in exchange for your address.",
-  "No chatbot standing in for an answer.",
-  "No handing you to an account manager, because there is not one.",
-  "No pricing quoted before anyone has seen your workflow.",
+  "Founder-led conversations for early lender, partnership, and investor discussions.",
+  "No financing application or borrower marketplace on this page.",
+  "No gated deck required before starting a relevant conversation.",
+  "Product and integration questions can begin with the exact workflow or constraint.",
+  "Commercial terms depend on workflow, policy, integration, and deployment scope.",
+  "Product access is separate from this public website.",
 ];
 
 const linesClose =
-  "Two mailboxes and a calendar. The whole of the contact surface, because founder-led means there is nothing else for it to be.";
+  "Start with the route that matches the question. The rest can move from there.";
 
 const linesNote =
-  "These are commitments about how enquiries are handled. Nothing here states a response time, and no availability is guaranteed.";
+  "These contact details describe how to reach Cevrynt today. They do not imply guaranteed response times, product access, financing eligibility, or a commercial engagement.";
 
 /* 03 — what makes the first call worth having ---------------------------- */
 
-const prepReadout = { head: "Four things that help · tick as you go", meterK: "ready" };
+const prepReadout = {
+  head: "Four things to bring · one thing to keep out of email",
+  meterK: "ready",
+};
 
 const prepItems = [
   {
-    k: "Your thresholds, even roughly.",
-    b: "Minimum monthly revenue, average daily balance, how many negative days you tolerate. Approximate numbers are enough to make the policy engine concrete instead of hypothetical.",
+    k: "Your underwriting criteria.",
+    b: "Bring the thresholds, eligibility rules, exception logic, repayment limits, or other criteria your team actually uses. Rough ranges are enough for a first conversation.",
   },
   {
-    k: "What a typical file looks like on your side.",
-    b: "How many months of statements, how many documents, and where they usually arrive from. It decides which half of the workflow is worth the time.",
+    k: "What a normal file looks like.",
+    b: "Describe the statements, supporting documents, common gaps, and where the package usually comes from so the walkthrough can focus on the parts that matter most.",
   },
   {
-    k: "The part you are most sceptical about.",
-    b: "Whichever claim on this site you least believe. That is the useful half of the call, and getting to it early saves a second one.",
+    k: "The case your process handles badly.",
+    b: "Bring the exception, mismatch, missing evidence, or edge case that creates the most reviewer work. Difficult files are often more useful than clean ones for evaluating fit.",
   },
   {
-    k: "Who else has to be convinced.",
-    b: "Credit, risk, operations, and whoever signs. Knowing that up front stops the walkthrough being aimed at the wrong person.",
+    k: "Who needs to trust the result.",
+    b: "Underwriting, credit, risk, operations, compliance, engineering, or leadership may each need different evidence from the same review. Knowing that early keeps the conversation focused.",
   },
 ];
 
 const prepNone = {
   k: "What you do not need",
+
   items: [
     {
-      k: "A real borrower file.",
-      b: "The walkthrough runs on an illustrative one with synthetic data, and it shows the same behaviour.",
+      k: "A live borrower file.",
+      b: "The first walkthrough can use an illustrative case with synthetic borrower data. Real documents are not needed to understand the workflow.",
     },
     {
-      k: "A procurement process.",
-      b: "A slot on the calendar is the whole of it. There is nothing to route through purchasing to get a first look.",
+      k: "A finished integration plan.",
+      b: "Start with how your team works today. APIs, deployment, and technical implementation can come later if the workflow is worth taking further.",
     },
     {
-      k: "A decision.",
-      b: "Nothing about a first call commits anyone to a second, and nothing is quoted in it.",
+      k: "A buying decision.",
+      b: "The first conversation is for evaluating fit. It does not commit either side to a pilot, integration, or commercial engagement.",
     },
   ],
 };
 
 const prepCaution = {
   k: "One request",
-  h: "Please do not email borrower documents.",
-  b: "A first call does not need them, and real borrower paperwork should not travel to a vendor by email before anyone has agreed how it will be handled. Describe the shape of a file, or bring redacted screenshots — that is enough to have the whole conversation.",
+
+  h: "Please do not email unredacted borrower documents.",
+
+  b: "A first conversation should not require sensitive borrower information to travel through ordinary email. Describe the file, use redacted examples, or bring screenshots with identifying information removed. If real documents are needed later, the data-handling and secure intake process should be agreed first.",
 };
 
 const prepClose =
-  "Half an hour with those four things to hand covers more ground than an hour without them. Everything else about the call is our side of the work, not yours.";
+  "Bring the policy, the normal file, the difficult case, and the people who need to trust the result. That context is enough to make the first conversation useful; Cevrynt can handle the walkthrough from there.";
 
 const prepNote =
-  "The ticks are a reading aid and are not stored or sent anywhere. Nothing on this page asks for or collects any information about you.";
-
+  "The checklist is only an on-page preparation aid. It is not a request to upload borrower data or submit underwriting information through this page.";
 export default function ContactPage() {
   const orgJsonLd = {
     "@context": "https://schema.org",
@@ -247,17 +254,17 @@ export default function ContactPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">01</span>
           <div className="eg-head">
-            <p className="hx-kicker">Where to start</p>
+            <p className="hx-kicker">WHERE TO START</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="router-heading"
-              text="Tell it why you are writing. It will point you at the right door."
+              text="Start with why you’re here."
             />
           </div>
           <p className="eg-lede t-lede">
-            Four reasons people get in touch, and a different answer for each — the channel, what that
-            conversation actually covers, and the one thing worth clicking.
+            Different conversations need different context. Pick the closest reason for getting in touch and we will 
+            start with the file, workflow, partnership, or company question that actually matters.
           </p>
         </div>
 
@@ -278,17 +285,16 @@ export default function ContactPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">02</span>
           <div className="eg-head">
-            <p className="hx-kicker hx-kicker-invert">The direct lines</p>
+            <p className="hx-kicker hx-kicker-invert">THE DIRECT LINES</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="lines-heading"
-              text="Two mailboxes and a calendar. That is the whole switchboard."
+              text="Two inboxes, one calendar, one workspace."
             />
           </div>
           <p className="eg-lede t-lede">
-            No form, and nothing behind a gate. The addresses are the point of the page, so they are set at
-            the size the point deserves.
+            No contact form and no gated download before the conversation. Choose the route that matches what you need — underwriting review, a direct founder conversation, a general enquiry, or access to the product workspace.
           </p>
         </div>
 
@@ -310,17 +316,17 @@ export default function ContactPage() {
         <div className="eg sec-head">
           <span className="eg-rail hx-mono">03</span>
           <div className="eg-head">
-            <p className="hx-kicker">Before the call</p>
+            <p className="hx-kicker">BEFORE THE CALL</p>
             <RevealLines
               as="h2"
               className="t-display-2"
               id="prep-heading"
-              text="Four things to bring. One thing not to send."
+              text="Bring the workflow. Keep borrower data out of email."
             />
           </div>
           <p className="eg-lede t-lede">
-            A walkthrough held without your own numbers to hand turns into a demo. These are the four things
-            that make it a working session instead — and the one thing to keep out of your outbox.
+            A useful first conversation does not need a live borrower file. Four pieces of context are enough
+             to understand how your team underwrites today, where Cevrynt could fit, and what would need to be proven before going further.
           </p>
         </div>
 
@@ -342,9 +348,9 @@ export default function ContactPage() {
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
           index="04"
-          kicker="Founder-led"
-          heading="Ask the hard version of the question."
-          lede="What it cannot do yet, what happens when the submission is a mess, and where the boundary actually sits. Those are the conversations worth booking at this stage, and you will be having them with the person who built it."
+          kicker="FOUNDER-LED"
+          heading="Bring the question that actually decides fit."
+          lede="Ask about the messy file, the policy exception, the integration constraint, the security requirement, or the part of the workflow Cevrynt cannot handle yet. The useful conversation is the one that tests where the product holds up and where it does not."
           calendlyUrl={calendlyUrl}
           email={founderEmail}
         />

@@ -13,12 +13,8 @@ const productPages = [
   {
     path: "product/document-intelligence",
     group: "Product",
-    // Was "Who are we actually funding?" with a lede about legal entity,
-    // ownership and address — which is the Business Verification subject, not
-    // this one. Replaced with copy that matches the page's own metaTitle,
-    // keywords and points.
-    title: "Fifteen files, and none of them labelled.",
-    description: "Tell a borrower submission apart, structure what is inside it, and keep every reading attached to the document, page and line it came from.",
+     title: "Who are we actually funding?",
+    description: "Compare the legal entity, business details, ownership, address and application claims before treating the rest of the file as fact.",
     metaTitle: "Document Intelligence for Loan Underwriting",
     metaDescription: "Turn mixed borrower files into structured, source-linked underwriting data. Classify, extract, and organize loan documents for faster human review.",
     keywords: ["document intelligence lending", "loan document automation software", "document classification underwriting"],
@@ -37,12 +33,8 @@ const productPages = [
   {
     path: "product/business-verification",
     group: "Product",
-    // Was "What is already coming out of the account?" with a lede about
-    // recurring MCA payments and existing positions — bank-statement subject
-    // matter, not KYB. Replaced with copy matching this page's own metaTitle,
-    // keywords and points.
-    title: "Who are we actually funding?",
-    description: "Compare the legal entity, business details, ownership, address and application claims before treating the rest of the file as fact.",
+    title: "What is already coming out of the account?",
+    description: "Surface recurring MCA and loan payments, existing positions and repayment activity that can change how the deal should be read.",
     metaTitle: "Business Verification (KYB) Software for Lenders",
     metaDescription: "Bring business identity, formation, and operating signals into underwriting review, with conflicts flagged for human verification.",
     keywords: ["business verification software", "KYB for lenders", "know your business lending"],
@@ -195,8 +187,8 @@ const companyPages = [
   {
     path: "about",
     group: "Company",
-    title: "Building infrastructure for clearer underwriting decisions",
-    description: "Cevrynt is developing AI-assisted underwriting intelligence for alternative lenders and SMB finance teams.",
+    title: "Building the evidence layer for modern underwriting.",
+    description: "Cevrynt turns fragmented deal files — applications, bank statements, business verification, risk signals, and lender policy — into a structured, source-linked underwriting review. We help MCA and alternative lending teams move faster without hiding exceptions or taking the final credit decision away from the lender.",
     metaTitle: "About Cevrynt | AI Underwriting Infrastructure",
     metaDescription: "Cevrynt builds AI-assisted underwriting infrastructure for alternative lenders, focused on evidence, explainability, and human decision control.",
     keywords: ["about Cevrynt", "AI underwriting infrastructure company"],
@@ -205,8 +197,8 @@ const companyPages = [
   {
     path: "investors",
     group: "Company",
-    title: "Investor information",
-    description: "Connect directly with the founder for current company context, product progress, and the opportunity Cevrynt is pursuing.",
+    title: "Building the underwriting intelligence layer.",
+    description: "Cevrynt is starting with MCA and alternative lending, where fragmented borrower files, financial data, verification, and lender-specific policy still require significant manual review. We are building evidence-linked infrastructure that turns those inputs into one reviewable underwriting record while keeping final credit authority with the lender.",
     metaTitle: "Investor Information",
     metaDescription: "Connect with Cevrynt's founder for company context, product progress, and the underwriting infrastructure opportunity in alternative lending.",
     keywords: ["Cevrynt investors", "fintech underwriting startup"],
@@ -217,8 +209,8 @@ const companyPages = [
   {
     path: "contact",
     group: "Company",
-    title: "Talk with Cevrynt",
-    description: "Book a product walkthrough or contact the team about underwriting, partnerships, pilots, or investment.",
+    title: "Bring the file, workflow, or opportunity.",
+    description: "Whether you are evaluating Cevrynt for underwriting, exploring a lender or platform workflow, discussing a partnership, or looking at the company as an investor, start directly with the person building it.",
     metaTitle: "Contact Cevrynt | Book a Walkthrough",
     metaDescription: "Book a product walkthrough or reach the Cevrynt team about underwriting workflows, partnerships, pilots, or investment.",
     keywords: ["contact Cevrynt", "book underwriting software demo"],
