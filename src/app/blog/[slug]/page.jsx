@@ -9,8 +9,7 @@ import { PageHeroCopy } from "@/components/page-hero-copy";
 import { FounderClose } from "@/components/home/founder-close";
 import { ArticleRenderer } from "@/components/article-renderer";
 import { ArticleFaq } from "@/components/article-faq";
-import { ArticleContents } from "@/components/article/contents";
-import { ReadProgress } from "@/components/article/read-progress";
+import { ArticleIndex } from "@/components/article/article-index";
 import { ReadNext } from "@/components/article/read-next";
 import { JsonLd } from "@/components/json-ld";
 import { siteConfig } from "@/config/site";
@@ -52,23 +51,21 @@ export async function generateMetadata({ params }) {
 }
 
 /* --------------------------------------------------------------------------
-   The article page: the read carries on in the dark, straight out of the hero,
-   instead of dropping onto a white page.
+   The article page. The read carries on in the same green the hero is painted
+   in, so the two are one field rather than two sections.
 
-     outer rail  the gauge — how far through the article, which chapter, drawn
-                 as a lit line with a tick for every chapter
-     centre      the text: a raised initial in brand yellow, a contents with
-                 leaders, then chapters that open against an outsized outlined
-                 numeral standing in the margin
-     right       the suggestions, in view while reading rather than at the end
+     left    the index, held in view for the whole read: every chapter at its
+             real length, a lit dot travelling the spine as the article is
+             read, and each chapter lighting up as the dot passes it
+     centre  the text, opening on a raised initial, its chapters announced by
+             an outsized outlined numeral
+     right   read next, the label set on its side against a rule
 
-   The motion is deliberate and cheap. The gauge is one passive scroll listener
-   coalesced into a frame, writing one custom property; the contents and the
-   suggestions play a single staggered entrance the first time they are
-   reached; chapter numerals and figures lift on arrival through the browser's
-   own scroll timeline where it exists. Everything animates transform and
-   opacity only, every piece renders finished on the server, and reduced motion
-   turns all of it off.
+   The motion is deliberate and cheap: one passive scroll listener coalesced
+   into a frame for the dot, one staggered entrance each for the index and the
+   suggestions, and arrival lifts drawn by the browser's own scroll timeline
+   where it exists. Everything animates transform and opacity only, every piece
+   renders finished on the server, and reduced motion turns all of it off.
    -------------------------------------------------------------------------- */
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -92,17 +89,6 @@ function startMinutes(sections) {
   });
 }
 
-/* Where each chapter opens as a share of the whole article, which is where its
-   tick sits on the gauge. */
-function openingShares(sections) {
-  let run = 0;
-  return sections.map((s) => {
-    const at = run;
-    run += s.share;
-    return at;
-  });
-}
-
 const nextReadout = { headingK: "Read next", minK: "min", allK: "Every article" };
 
 export default async function BlogArticlePage({ params }) {
@@ -116,20 +102,20 @@ export default async function BlogArticlePage({ params }) {
   const articleUrl = `${siteConfig.url}/blog/${post.slug}`;
   const ogImageUrl = `${siteConfig.url}/blog/${post.slug}/opengraph-image`;
 
-  /* The contents: every chapter that has words, against the minute it opens
-     on. The opening has no heading of its own, so it is left out of the list. */
+  /* The index: every chapter that has words, its share of the article, and
+     the minute it opens on. The opening has no heading of its own, so it is
+     left out of the list. */
   const h2Ids = anatomy.sections.filter((s) => s.id).map((s) => s.id);
   const pages = startMinutes(anatomy.sections);
-  const openings = openingShares(anatomy.sections);
-  const contentsItems = anatomy.sections
-    .map((s, i) => ({ ...s, page: pages[i], at: openings[i] }))
+  const indexItems = anatomy.sections
+    .map((s, i) => ({ ...s, page: pages[i] }))
     .filter((s) => s.words > 0 && s.id)
     .map((s) => ({
       id: s.id,
       title: s.title,
       number: String(h2Ids.indexOf(s.id) + 1).padStart(2, "0"),
       page: String(s.page),
-      at: Number(s.at.toFixed(4)),
+      share: Number(s.share.toFixed(4)),
       cevrynt: s.cevrynt,
     }));
 
@@ -218,30 +204,21 @@ export default async function BlogArticlePage({ params }) {
         </div>
       </HeroMotion>
 
-      {/* The article: the gauge, the text column, the suggestions. */}
-      <article className="ar-read band-deep" id="article-start" aria-label={post.title}>
-        <div className="ar-read-glow" aria-hidden="true" />
+      {/* The article: the index, the text column, read next. */}
+      <article className="ar-read" id="article-start" aria-label={post.title}>
         <div className="eg ar-read-shell">
-          <div className="ar-read-rail">
+          <div className="ar-read-left">
             <div className="ar-read-stick">
-              <ReadProgress targetId="article-start" chapters={contentsItems} />
+              <ArticleIndex
+                items={indexItems}
+                faqLabel={post.faqs?.length ? "Questions" : null}
+                label="Contents"
+                targetId="article-start"
+              />
             </div>
           </div>
           <div className="ar-read-body">
-            <ArticleRenderer
-              blocks={post.body}
-              boundary={boundary}
-              numbered
-              contents={
-                contentsItems.length > 2 ? (
-                  <ArticleContents
-                    items={contentsItems}
-                    faqLabel={post.faqs?.length ? "Questions" : null}
-                    label="Contents"
-                  />
-                ) : null
-              }
-            />
+            <ArticleRenderer blocks={post.body} boundary={boundary} numbered />
             <ArticleFaq items={post.faqs} />
           </div>
           {nextItems.length ? (

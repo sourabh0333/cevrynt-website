@@ -7,10 +7,8 @@ import { WorkflowDiagram } from "@/components/workflow-diagram";
 /* `boundary` marks where the guidance ends and the section about Cevrynt
    begins: { id, label } puts a labelled rule directly before that heading,
    and an optional `figure` ({ image, caption, link }) sits right under it.
-   `numbered` gives every h2 its section number, counted in the article.
-   `contents` is placed directly after the opening paragraph, the way a
-   printed feature sets its contents under the standfirst. */
-export function ArticleRenderer({ blocks, boundary = null, numbered = false, sectionMeta = null, contents = null }) {
+   `numbered` gives every h2 its section number, counted in the article. */
+export function ArticleRenderer({ blocks, boundary = null, numbered = false, sectionMeta = null }) {
   const sectionNumber = new Map(
     blocks.filter((b) => b.type === "h2").map((b, i) => [b, String(i + 1).padStart(2, "0")]),
   );
@@ -85,14 +83,7 @@ export function ArticleRenderer({ blocks, boundary = null, numbered = false, sec
               </h3>
             );
           case "p":
-            return index === 0 && contents ? (
-              <Fragment key={key}>
-                <p>
-                  <RichText text={block.text} />
-                </p>
-                {contents}
-              </Fragment>
-            ) : (
+            return (
               <p key={key}>
                 <RichText text={block.text} />
               </p>

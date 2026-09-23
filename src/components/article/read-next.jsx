@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useHasEntered, useReady } from "@/components/progressive";
 
 /**
- * The suggestions, in the margin and in view while the article is read: three
- * related pieces, numbered, that arrive one after another when the column is
- * reached. Hovering one draws its rule down and carries the title across.
+ * Read next, in the right margin: the label set on its side against a rule,
+ * and three related pieces beside it — topic and length on one line, the title
+ * under it in the reading serif.
  *
- * Server-rendered complete, so it reads without JavaScript; the entrance is
- * the only thing the client adds. On narrow screens the same markup falls
- * under the article.
+ * The entries arrive one after another when the column is reached; hovering
+ * one lights its rule and carries it inwards. Server-rendered complete, so it
+ * reads without JavaScript, and on narrow screens the same markup lays itself
+ * out under the article with the label turned upright.
  */
 export function ReadNext({ items, readout }) {
   const ref = useRef(null);
@@ -25,29 +26,34 @@ export function ReadNext({ items, readout }) {
       ref={ref}
     >
       <p className="ar-nx-k" id="next-heading">
-        {readout.headingK}
+        <span className="ar-nx-k-t">{readout.headingK}</span>
       </p>
-      <ol className="ar-nx-list">
-        {items.map((p, i) => (
-          <li className="ar-nx-i" key={p.slug} style={{ "--i": i }}>
-            <Link className="ar-nx-a" href={`/blog/${p.slug}`}>
-              <span aria-hidden="true" className="ar-nx-n">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="ar-nx-t">{p.title}</span>
-              <span className="ar-nx-m">
-                {p.category} · {p.minutes} {readout.minK}
-              </span>
-              <span aria-hidden="true" className="ar-nx-rule" />
-            </Link>
-          </li>
-        ))}
-      </ol>
-      <p className="ar-nx-all" style={{ "--i": items.length }}>
-        <Link className="ar-nx-all-a" href="/blog">
-          {readout.allK} <span aria-hidden="true">→</span>
-        </Link>
-      </p>
+      <div className="ar-nx-body">
+        <ol className="ar-nx-list">
+          {items.map((p, i) => (
+            <li className="ar-nx-i" key={p.slug} style={{ "--i": i }}>
+              <Link className="ar-nx-a" href={`/blog/${p.slug}`}>
+                <span className="ar-nx-meta">
+                  <span className="ar-nx-cat">{p.category}</span>
+                  <span className="ar-nx-min">
+                    {p.minutes} {readout.minK}
+                  </span>
+                </span>
+                <span className="ar-nx-t">{p.title}</span>
+                <span aria-hidden="true" className="ar-nx-rule" />
+              </Link>
+            </li>
+          ))}
+        </ol>
+        <p className="ar-nx-all" style={{ "--i": items.length }}>
+          <Link className="ar-nx-all-a" href="/blog">
+            {readout.allK}
+            <span aria-hidden="true" className="ar-nx-all-arrow">
+              →
+            </span>
+          </Link>
+        </p>
+      </div>
     </aside>
   );
 }
