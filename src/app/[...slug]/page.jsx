@@ -26,6 +26,7 @@ const bespoke = new Set([
   "product/fraud-signals",
   "partners/shopline",
   "resources",
+  "pilot",
 ]);
 
 export function generateStaticParams() {

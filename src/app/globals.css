@@ -14712,27 +14712,29 @@ body:has(.article-header) .nav-use-cases a:hover {
 }
 
 /* -- Blog article template ---------------------------------------------------
-   The article is its own surface — the soft green, set against the dark hero
-   above it and the white close below — and it is built on a ruled grid so the
-   three columns read as one structure rather than three stacked things:
+   Two tones, split down the page, with a sticky rail on each side.
 
-     one rule across the top, and a vertical rule dropping from it at each
-     column boundary
+     left    a dark panel that runs off the left edge of the screen and the
+             full height of the article. The index lives in it, sticky for the
+             whole read: a lit spine, the chapter being read marked, and a
+             readout of how far through the article you are.
+     centre  the text, on the pale surface, chapters announced by an outlined
+             numeral.
+     right   read next, sticky too, hanging from the rule that separates it.
 
-     columns 1–3    the index, sticky for the whole read, on an even rhythm:
-                    a lit spine with the dot riding the chapter being read
-     columns 4–9    the text, chapters announced by an outlined numeral
-     columns 10–12  read next
+   The dark panel carries the hero's colour down the side of the page instead
+   of flooding the read with it, which is what keeps the two apart while still
+   joining them.
 
-   Motion: one custom property moves the dot, one staggered entrance each for
-   the index and the suggestions, arrival lifts from the browser's own scroll
-   timeline where it exists. Transform and opacity only, everything renders
-   finished on the server, and reduced motion turns all of it off.
+   Motion: one custom property moves the marker, one staggered entrance each
+   for the index and the suggestions, arrival lifts from the browser's own
+   scroll timeline where it exists. Transform and opacity only, everything
+   renders finished on the server, reduced motion turns all of it off.
    -------------------------------------------------------------------------- */
 
 :root {
   --ar-serif: "Iowan Old Style", Baskerville, "Times New Roman", serif;
-  --ar-surface: var(--soft-blue);
+  --ar-surface: var(--surface);
   --ar-amber: #7a5306;
   --ar-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -14747,39 +14749,43 @@ body:has(.article-header) .nav-use-cases a:hover {
 
 /* -- Layout ---------------------------------------------------------------- */
 .ar-read { position: relative; padding-block: clamp(48px, 6vw, 88px) clamp(56px, 7vw, 104px); background: var(--ar-surface); color: var(--muted); }
-/* The rule across the top, and the vertical rules dropping from it. */
 .ar-read-shell { align-items: stretch; border-top: 1px solid var(--border); padding-top: clamp(28px, 3vw, 44px); }
-.ar-read-left { grid-column: 1 / span 3; grid-row: 1; padding-right: var(--gutter); border-right: 1px solid var(--border); }
+
+/* The panel: the column's own background, run out to the edge of the screen.
+   html clips the overflow, so the extra width never makes a scrollbar. */
+.ar-read-left { grid-column: 1 / span 3; grid-row: 1; padding-right: var(--gutter); border-right: 1px solid var(--border); color: var(--muted); }
 .ar-read-body { grid-column: 4 / span 6; grid-row: 1; min-width: 0; max-width: 680px; }
 .ar-read-right { grid-column: 10 / span 3; grid-row: 1; padding-left: var(--gutter); border-left: 1px solid var(--border); }
 .ar-read-stick { position: sticky; top: 116px; }
-/* A long index on a short screen scrolls on its own rather than losing its
-   last chapters behind the fold. */
-.ar-read-left .ar-read-stick { max-height: calc(100dvh - 148px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
 
-/* -- The index ------------------------------------------------------------- */
-.ar-ix-k { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0 0 12px; padding-left: 17px; color: var(--muted); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+/* -- The index, in the panel ----------------------------------------------- */
+.ar-ix-k { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0 0 14px; padding-left: 17px; color: var(--muted); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
 .ar-ix-list { position: relative; margin: 0; padding: 0; list-style: none; }
-/* The spine, lit as far as the chapter being read, with the dot at its end. */
+/* The spine, lit as far as the chapter being read, with the marker at its end. */
 .ar-ix-list::before { position: absolute; top: 0; bottom: 0; left: 0; width: 1px; background: var(--border); content: ""; }
 .ar-ix-list::after { position: absolute; top: 0; left: 0; width: 1px; height: var(--ar-y, 0px); background: var(--rail); content: ""; transition: height 460ms var(--ar-ease); }
 .ar-ix-dot { position: absolute; top: var(--ar-y, 0px); left: -2px; width: 5px; height: 5px; margin-top: -2px; border-radius: 50%; background: var(--rail); transition: top 460ms var(--ar-ease); }
-/* One even rhythm: every row the same shape, on the same three columns. */
 .ar-ix-i { position: relative; }
 .ar-ix-a { display: grid; grid-template-columns: 1.8em minmax(0, 1fr) 1.4em; column-gap: 0.6em; align-items: start; min-height: 44px; padding: 11px 0 11px 17px; color: var(--muted); text-decoration: none; transition: color 240ms var(--ar-ease); }
-.ar-ix-n { grid-column: 1; padding-top: 0.14em; color: var(--muted); font-size: 0.64rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; transition: color 240ms var(--ar-ease); }
-.ar-ix-t { grid-column: 2; font-size: 0.83rem; line-height: 1.45; }
-.ar-ix-m { grid-column: 3; padding-top: 0.16em; color: var(--muted); font-size: 0.66rem; font-variant-numeric: tabular-nums; text-align: right; transition: color 240ms var(--ar-ease); }
-/* A chapter already passed keeps its number in the rail green, so the list
-   reads as read / reading / to come without dimming anything under 4.5:1. */
+.ar-ix-n { grid-column: 1; padding-top: 0.14em; font-size: 0.64rem; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; transition: color 240ms var(--ar-ease); }
+/* Two lines at most, so the index keeps one rhythm and never needs a scroll
+   of its own; anything longer ends in an ellipsis. The full chapter name stays
+   in the markup for screen readers and for the heading it points at. */
+.ar-ix-t { display: -webkit-box; grid-column: 2; overflow: hidden; font-size: 0.83rem; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.ar-ix-m { grid-column: 3; padding-top: 0.16em; font-size: 0.66rem; font-variant-numeric: tabular-nums; text-align: right; transition: color 240ms var(--ar-ease); }
 .ar-ix-a.is-past .ar-ix-n { color: var(--rail); }
 .ar-ix-a.is-on { color: var(--ink); }
 .ar-ix-a.is-on .ar-ix-t { font-weight: 600; }
 .ar-ix-a.is-on .ar-ix-n, .ar-ix-a.is-on .ar-ix-m { color: var(--rail); }
 .ar-ix-a:hover { color: var(--ink); }
-.ar-ix-a:hover .ar-ix-n { color: var(--rail); }
 .ar-ix-a:focus-visible { outline: 2px solid var(--rail); outline-offset: -2px; }
 .ar-ix-a.is-cevrynt .ar-ix-n { color: var(--ar-amber); }
+
+/* The readout at the foot of the panel: which chapter, out of how many. */
+.ar-ix-read { display: flex; align-items: baseline; gap: 6px; margin: 18px 0 0; padding-left: 17px; color: var(--muted); font-size: 0.66rem; font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+.ar-ix-read-n { color: var(--rail); font-size: 1.05rem; font-weight: 600; }
+.ar-ix-read-s { color: var(--muted); }
+.ar-ix-read-k { margin-left: 4px; font-size: 0.58rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
 
 /* The chapters draw down the spine once, when the read begins. Armed only on
    the client, so the index is complete without JavaScript. */
@@ -14795,13 +14801,10 @@ body:has(.article-header) .nav-use-cases a:hover {
 .ar-read .article-body a { color: var(--rail); font-weight: 600; text-decoration: underline; text-decoration-color: rgba(10, 92, 80, 0.32); text-underline-offset: 4px; transition: text-decoration-color 180ms var(--ar-ease); }
 .ar-read .article-body a:hover { text-decoration-color: currentColor; }
 .ar-read .article-body a:focus-visible { outline: 2px solid var(--rail); outline-offset: 3px; }
-/* The opening paragraph carries the article in, set larger and in the ink. */
 .ar-read .article-body > p:first-of-type { margin: 0 0 26px; color: var(--ink); font-size: clamp(1.18rem, 1.6vw, 1.34rem); line-height: 1.55; }
 
 /* -- Chapters -------------------------------------------------------------- */
 .ar-read .article-body h2 { margin: clamp(64px, 7vw, 100px) 0 18px; color: var(--ink); font-family: var(--ar-serif); font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 400; letter-spacing: -0.026em; line-height: 1.12; scroll-margin-top: 108px; }
-/* The numeral is drawn as an outline above the title: furniture, never a
-   competitor to it. */
 .article-h2-n { display: block; margin-bottom: 4px; pointer-events: none; }
 .article-h2-d { display: inline-block; color: rgba(10, 92, 80, 0.16); font-family: var(--ar-serif); font-size: clamp(2.4rem, 4vw, 3.4rem); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; line-height: 1; }
 @supports (-webkit-text-stroke: 1px red) {
@@ -14818,7 +14821,7 @@ body:has(.article-header) .nav-use-cases a:hover {
 .ar-read .article-callout-title { margin: 0 0 12px; color: var(--rail); font-size: 0.64rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
 .ar-read .article-callout ul { margin: 0; padding-left: 16px; columns: 2; column-gap: 36px; }
 .ar-read .article-callout li { margin-bottom: 10px; break-inside: avoid; color: var(--muted); font-size: 0.97rem; line-height: 1.6; }
-.ar-read .article-callout li::marker { color: var(--neutral-depth); }
+.ar-read .article-callout li::marker { color: var(--label); }
 
 /* Where the guidance ends and the section about Cevrynt begins. */
 .ar-read .article-body .article-boundary { display: flex; align-items: center; gap: 14px; margin: clamp(64px, 7vw, 100px) 0 0; }
@@ -14850,8 +14853,7 @@ body:has(.article-header) .nav-use-cases a:hover {
 .ar-read .faq-list summary:focus-visible { outline: 2px solid var(--rail); outline-offset: 3px; }
 .ar-read .faq-list p { margin: 0 0 20px; color: var(--muted); }
 
-/* -- Read next ------------------------------------------------------------- */
-/* One column, aligned to the top rule like the other two. */
+/* -- Read next, in the right rail ------------------------------------------ */
 .ar-nx { display: block; }
 .ar-nx-k { margin: 0 0 4px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
 .ar-nx-k-t { display: block; color: var(--muted); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
@@ -14866,7 +14868,7 @@ body:has(.article-header) .nav-use-cases a:hover {
 .ar-nx-t { display: block; color: var(--ink); font-family: var(--ar-serif); font-size: 1.14rem; font-weight: 400; letter-spacing: -0.014em; line-height: 1.32; transition: color 220ms var(--ar-ease), translate 300ms var(--ar-ease); }
 .ar-nx-a:hover .ar-nx-t { color: var(--rail); translate: 6px 0; }
 .ar-nx-a:focus-visible { outline: 2px solid var(--rail); outline-offset: 3px; }
-.ar-nx-all { margin: 16px 0 0; padding-left: 16px; }
+.ar-nx-all { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; margin: 16px 0 0; padding-left: 16px; }
 .ar-nx-all-a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--rail); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
 .ar-nx-all-arrow { transition: translate 220ms var(--ar-ease); }
 .ar-nx-all-a:hover .ar-nx-all-arrow { translate: 6px 0; }
@@ -14897,15 +14899,16 @@ body:has(.article-header) .nav-use-cases a:hover {
 @keyframes ar-numeral { from { opacity: 0; translate: -16px 0; } to { opacity: 1; translate: none; } }
 
 /* -- Responsive ------------------------------------------------------------ */
-@media (max-width: 1280px) {
-  /* Two columns: the suggestions go under the text, still on the grid. */
+@media (max-width: 1120px) {
+  /* Below this the text column would be too narrow to read three abreast, so
+     the suggestions go to the foot of the article. The panel stays. */
   .ar-read-body { grid-column: 4 / span 9; }
   .ar-read-right { grid-column: 4 / span 9; grid-row: 2; max-width: 680px; margin-top: clamp(48px, 6vw, 72px); padding-left: 0; border-left: 0; }
   .ar-read-right .ar-read-stick { position: static; }
   .ar-nx.is-armed .ar-nx-i, .ar-nx.is-armed .ar-nx-all { translate: 0 12px; }
 }
 @media (max-width: 980px) {
-  /* One column: the index leads the article instead of standing beside it. */
+  /* One column: the panel becomes the band the article opens with. */
   .ar-read-left { grid-column: 2 / span 11; grid-row: 1; margin-bottom: clamp(32px, 4vw, 48px); padding-right: 0; border-right: 0; }
   .ar-read-left .ar-read-stick { position: static; max-height: none; overflow: visible; }
   .ar-read-body { grid-column: 2 / span 11; grid-row: 2; }
@@ -14937,3 +14940,224 @@ body:has(.article-header) .nav-use-cases a:hover {
    makes the section a scroll container, which pins the sticky contents rail
    104px down and stops it following the page. The article band has no glow. */
 .ar-read.band-white { overflow: visible; }
+
+/* -- Pilot 01: the scope slabs -----------------------------------------------
+   Eight rows, one per stage, and the scopes drawn as nested brackets in three
+   gutters down the left of them. Bracket and row share the same grid rows, so
+   a scope reaches exactly the stages it covers and the nesting is literal.
+   -------------------------------------------------------------------------- */
+.pi-scope .eg-full { margin-top: var(--s-block); }
+.pi1 { margin: 0; }
+.pi1-k { margin: 0 0 16px; color: var(--muted); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+
+/* The legend: which bracket is which, read before the rows. */
+.pi1-legend-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 44px); margin: 0 0 clamp(36px, 4vw, 56px); padding: 0; list-style: none; }
+.pi1-legend-i { position: relative; padding-left: 20px; }
+/* The same bracket shape the rows carry, at legend size. */
+/* The narrower the scope, the more solid its bracket — the widest sits
+   furthest out and quietest, the way a margin note nests. */
+.pi1-legend-mark { position: absolute; top: 4px; bottom: 4px; left: 0; width: 7px; border-top: 1px solid var(--rail); border-bottom: 1px solid var(--rail); border-left: 2px solid var(--rail); opacity: calc(0.58 + var(--d) * 0.21); }
+.pi1-legend-t { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0 0 8px; color: var(--ink); font-size: 1.04rem; font-weight: 640; letter-spacing: -0.016em; }
+.pi1-legend-span { color: var(--rail); font-size: 0.64rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.pi1-legend-b { margin: 0; color: var(--muted); font-size: 0.92rem; line-height: 1.62; }
+
+/* The slabs. Three bracket gutters, then the row itself. */
+.pi1-k-slabs { margin-bottom: 14px; }
+.pi1-grid { display: grid; grid-template-columns: 10px 10px 10px minmax(0, 1fr); grid-template-rows: repeat(var(--rows), auto); column-gap: 8px; border-top: 1px solid var(--ink); }
+/* Gutter 1 holds the widest scope, gutter 3 the narrowest, so the brackets
+   nest instead of crossing. */
+.pi1-bracket { grid-column: calc(1 + var(--d)); grid-row: var(--from) / var(--to); margin: 10px 0; border-top: 1px solid var(--rail); border-bottom: 1px solid var(--rail); border-left: 2px solid var(--rail); opacity: calc(0.58 + var(--d) * 0.21); }
+.pi1-row { display: grid; grid-column: 4; grid-row: var(--r); grid-template-columns: 2.6em minmax(0, 8.5em) minmax(0, 1fr); column-gap: clamp(14px, 2vw, 28px); align-items: baseline; padding: 15px 0; border-bottom: 1px solid var(--border); }
+.pi1-row-n { color: var(--label); font-size: 0.64rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+.pi1-row-t { position: relative; color: var(--ink); font-size: 1rem; font-weight: 640; letter-spacing: -0.012em; text-decoration: none; transition: color 200ms ease; }
+/* The label is one line tall; this gives it a 44px target without opening the
+   row up to match. */
+.pi1-row-t::after { position: absolute; inset: -11px -10px; content: ""; }
+.pi1-row-t:hover { color: var(--rail); text-decoration: underline; text-decoration-color: rgba(10, 92, 80, 0.4); text-underline-offset: 4px; }
+.pi1-row-t:focus-visible { outline: 2px solid var(--rail); outline-offset: 3px; }
+.pi1-row-b { color: var(--muted); font-size: 0.93rem; line-height: 1.6; }
+/* The row no bracket reaches. */
+.pi1-row.is-out { border-bottom: 0; }
+.pi1-row.is-out .pi1-row-t, .pi1-row.is-out .pi1-row-n { color: #7a5306; }
+.pi1-row-tag { grid-column: 2 / -1; margin-top: 8px; color: #7a5306; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+
+.pi1-out { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 8px clamp(24px, 4vw, 56px); margin-top: clamp(32px, 3.5vw, 48px); padding-top: 18px; border-top: 2px solid #7a5306; }
+.pi1-out-t { margin: 0; color: var(--ink); font-size: clamp(1.08rem, 1.6vw, 1.28rem); font-weight: 640; letter-spacing: -0.02em; line-height: 1.32; }
+.pi1-out-b { margin: 0; color: var(--muted); font-size: 0.97rem; line-height: 1.68; }
+.pi1-note { margin: 22px 0 0; color: var(--label); font-size: 0.8rem; line-height: 1.62; }
+
+/* -- Pilot 02: the comparison ladder -----------------------------------------
+   Two rails and a rung for each comparison. The rung is the line between the
+   sides, so both stay on one baseline and the measure sits where the join is.
+   -------------------------------------------------------------------------- */
+.pi-measure .eg-full { margin-top: var(--s-block); }
+/* The shared section index is set in --label, which only reaches 3.4:1 on a
+   deep band. Lifted here; the same is true of every other deep section on the
+   site, which is a separate change. */
+.pi-measure .eg-rail { color: rgba(234, 243, 240, 0.6); }
+
+.pi2 { --pi2-line: rgba(234, 243, 240, 0.18); }
+.pi2-order { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: 0 0 clamp(28px, 3vw, 40px); padding: 0 0 18px; border-bottom: 1px solid rgba(234, 243, 240, 0.28); list-style: none; }
+.pi2-order-i { display: flex; align-items: baseline; gap: 8px; color: rgba(234, 243, 240, 0.86); font-size: 0.78rem; }
+.pi2-order-i + .pi2-order-i::before { margin-right: 18px; color: rgba(234, 243, 240, 0.45); content: "→"; }
+.pi2-order-n { color: var(--yellow); font-size: 0.62rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+
+.pi2-rails, .pi2-rung { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 0.86fr) minmax(0, 1fr); column-gap: clamp(16px, 2vw, 30px); align-items: center; }
+.pi2-rail-k { margin: 0 0 14px; color: rgba(234, 243, 240, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+.pi2-rail-k-l { text-align: right; }
+.pi2-rail-k-c { text-align: center; }
+.pi2-rungs { margin: 0; padding: 0; list-style: none; }
+.pi2-rung { padding: 13px 0; }
+.pi2-side { margin: 0; color: rgba(234, 243, 240, 0.74); font-size: 0.88rem; line-height: 1.55; }
+.pi2-side-l { text-align: right; }
+/* The rung itself: the line that joins the two sides, with the measure on it. */
+.pi2-mid { position: relative; display: flex; align-items: center; justify-content: center; margin: 0; padding: 10px 0; }
+.pi2-line { position: absolute; top: 50%; right: 0; left: 0; height: 0; border-top: 1px solid var(--pi2-line); }
+/* The ends of the rung, where it meets each rail. */
+.pi2-mid::before, .pi2-mid::after { position: absolute; top: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--pi2-line); content: ""; translate: 0 -50%; }
+.pi2-mid::before { left: -2px; }
+.pi2-mid::after { right: -2px; }
+.pi2-k { position: relative; display: inline-flex; align-items: baseline; gap: 8px; padding: 0 12px; background: var(--ink-deeper); color: #f6fbf9; font-size: 0.95rem; font-weight: 640; letter-spacing: -0.012em; text-align: center; }
+.pi2-n { color: var(--yellow); font-size: 0.6rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+
+/* The rung a pilot will not run: drawn cut, with the ends left showing. */
+.pi2-rung.is-cut { margin-top: 10px; padding-top: 20px; border-top: 1px solid rgba(234, 243, 240, 0.28); }
+.pi2-rung.is-cut .pi2-line { border-top-style: dashed; border-top-color: rgba(255, 239, 179, 0.5); }
+.pi2-rung.is-cut .pi2-k { color: rgba(234, 243, 240, 0.7); }
+.pi2-rung.is-cut .pi2-k s { text-decoration-color: var(--yellow); text-decoration-thickness: 1px; }
+.pi2-rung.is-cut .pi2-side { color: rgba(234, 243, 240, 0.6); }
+.pi2-cut-why { max-width: 74ch; margin: 14px auto 0; color: rgba(234, 243, 240, 0.78); font-size: 0.9rem; line-height: 1.62; text-align: center; }
+
+.pi2-fig { margin: clamp(36px, 4vw, 56px) 0 0; }
+.pi2-img { display: block; width: 100%; height: auto; border: 1px solid var(--pi2-line); border-radius: 0; }
+.pi2-cap { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--pi2-line); color: rgba(234, 243, 240, 0.7); font-size: 0.8rem; line-height: 1.58; }
+.pi2-note { margin: 22px 0 0; color: rgba(234, 243, 240, 0.6); font-size: 0.8rem; line-height: 1.62; }
+
+/* -- Responsive --------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .pi1-legend-list { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .pi1-row { grid-template-columns: 2.4em minmax(0, 7.5em) minmax(0, 1fr); }
+  .pi2-rails, .pi2-rung { grid-template-columns: minmax(0, 1fr) minmax(170px, 0.8fr) minmax(0, 1fr); }
+  .pi2-side { font-size: 0.84rem; }
+}
+@media (max-width: 860px) {
+  /* The rows stack their text; the brackets stay, because they are the point. */
+  .pi1-row { grid-template-columns: 2.4em minmax(0, 1fr); row-gap: 6px; }
+  .pi1-row-b { grid-column: 2; }
+  .pi1-out { grid-template-columns: minmax(0, 1fr); }
+
+  /* One rail: each comparison becomes a block with both sides under it. */
+  .pi2-rails { display: none; }
+  .pi2-rung { grid-template-columns: minmax(0, 1fr); row-gap: 6px; padding: 16px 0; border-top: 1px solid var(--pi2-line); }
+  .pi2-mid { justify-content: flex-start; padding: 0 0 4px; }
+  .pi2-line, .pi2-mid::before, .pi2-mid::after { display: none; }
+  .pi2-k { padding: 0; background: none; }
+  .pi2-side { text-align: left; }
+  .pi2-side-l::before { margin-right: 6px; color: rgba(234, 243, 240, 0.5); content: "Your team:"; }
+  .pi2-side-r::before { margin-right: 6px; color: rgba(234, 243, 240, 0.5); content: "Cevrynt:"; }
+  .pi2-cut-why { margin-top: 12px; text-align: left; }
+}
+@media (max-width: 560px) {
+  .pi1-grid { grid-template-columns: 8px 8px 8px minmax(0, 1fr); column-gap: 6px; }
+  .pi1-row { grid-template-columns: minmax(0, 1fr); }
+  .pi1-row-n { display: none; }
+  .pi1-row-tag { grid-column: 1; }
+}
+
+/* -- Pilot 03: the criteria manifold -----------------------------------------
+   Three inputs on the left, a collector spanning all of them, one output
+   opposite its middle. The rules are grid lines rather than drawn shapes, so
+   the join lands on the same pixel as the rows it joins.
+   -------------------------------------------------------------------------- */
+.pi-criteria .eg-full { margin-top: var(--s-block); }
+.pi3 { margin: 0; }
+.pi3-k { margin: 0 0 16px; color: var(--muted); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+.pi3-flow { display: grid; grid-template-columns: minmax(0, 1fr) 2px minmax(0, 0.92fr); grid-template-rows: auto repeat(var(--rows), auto); column-gap: clamp(22px, 3.4vw, 52px); }
+.pi3-k-in { grid-column: 1; grid-row: 1; }
+.pi3-k-out { grid-column: 3; grid-row: 1; }
+
+.pi3-in { grid-column: 1; grid-row: calc(var(--r) + 1); position: relative; padding: 16px 0; border-top: 1px solid var(--border); }
+.pi3-in:last-of-type { border-bottom: 1px solid var(--border); }
+/* The feed: a rule running from the row out to the collector. */
+.pi3-in::after { position: absolute; top: 50%; right: calc(clamp(22px, 3.4vw, 52px) * -1); width: clamp(22px, 3.4vw, 52px); height: 0; border-top: 1px solid var(--rail); content: ""; }
+.pi3-in-k { display: grid; grid-template-columns: 2.4em minmax(0, 1fr); align-items: baseline; margin: 0 0 8px; color: var(--ink); font-size: 1.02rem; font-weight: 640; letter-spacing: -0.016em; line-height: 1.35; }
+.pi3-in-n { color: var(--label); font-size: 0.64rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+.pi3-in-b { margin: 0 0 0 2.4em; color: var(--muted); font-size: 0.93rem; line-height: 1.65; }
+
+.pi3-collector { grid-column: 2; grid-row: 2 / calc(var(--rows) + 2); margin: 14px 0; background: var(--rail); }
+.pi3-out { grid-column: 3; grid-row: 2 / calc(var(--rows) + 2); position: relative; align-self: center; padding: 18px 0 18px 0; }
+/* The single line out of the collector, meeting the output. */
+.pi3-out::before { position: absolute; top: 50%; left: calc(clamp(22px, 3.4vw, 52px) * -1); width: clamp(22px, 3.4vw, 52px); height: 0; border-top: 2px solid var(--rail); content: ""; }
+.pi3-out-k { margin: 0 0 10px; color: var(--rail); font-size: 0.64rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+.pi3-out-b { margin: 0; color: var(--ink); font-size: clamp(1.02rem, 1.4vw, 1.16rem); font-weight: 500; letter-spacing: -0.012em; line-height: 1.55; }
+
+.pi3-refusals { margin: clamp(30px, 3.4vw, 44px) 0 0; padding: 18px 0 0; border-top: 2px solid #7a5306; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px clamp(24px, 4vw, 56px); }
+.pi3-refusal { display: grid; grid-template-columns: 1.4em minmax(0, 1fr); align-items: baseline; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+.pi3-refusal-x { color: #7a5306; font-size: 0.72rem; font-weight: 700; }
+
+.pi3-fig { margin: clamp(32px, 4vw, 52px) 0 0; }
+.pi3-img { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 0; }
+.pi3-cap { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; line-height: 1.58; }
+.pi3-note { margin: 20px 0 0; color: var(--label); font-size: 0.8rem; line-height: 1.62; }
+
+/* -- Pilot 04: the settle matrix ---------------------------------------------
+   Rows against three lanes on one grid, so the markers stack into columns and
+   the shape of the answer reads before the words do.
+   -------------------------------------------------------------------------- */
+.pi-settle .eg-full { margin-top: var(--s-block); }
+.pi-settle .eg-rail { color: rgba(234, 243, 240, 0.6); }
+.pi4 { --pi4-line: rgba(234, 243, 240, 0.16); margin: 0; }
+.pi4-grid { display: grid; grid-template-columns: minmax(0, 1fr) repeat(var(--lanes), minmax(76px, 0.2fr)); column-gap: clamp(10px, 1.4vw, 20px); }
+.pi4-corner, .pi4-lane-k { margin: 0 0 4px; padding-bottom: 12px; border-bottom: 1px solid rgba(234, 243, 240, 0.28); color: rgba(234, 243, 240, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+.pi4-lane-k { text-align: center; }
+.pi4-lane-k.is-yours { color: var(--yellow); }
+
+.pi4-row { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; align-items: center; padding: 0; border-bottom: 1px solid var(--pi4-line); }
+.pi4-row-k { margin: 0; padding: 15px 0; color: rgba(248, 251, 250, 0.88); font-size: 0.97rem; line-height: 1.45; }
+.pi4-cell { display: flex; align-items: center; justify-content: center; min-height: 44px; }
+.pi4-dot { width: 7px; height: 7px; border: 1px solid var(--pi4-line); border-radius: 50%; }
+.pi4-cell.is-on .pi4-dot { width: 11px; height: 11px; border-color: var(--yellow); background: var(--yellow); }
+.pi4-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.pi4-corner-foot { margin-top: 14px; padding: 0; border-bottom: 0; }
+.pi4-tally { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin: 14px 0 0; color: rgba(234, 243, 240, 0.6); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+.pi4-tally-n { color: rgba(234, 243, 240, 0.86); font-size: 1.15rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.pi4-tally.is-yours .pi4-tally-n { color: var(--yellow); }
+.pi4-tally-t { display: none; }
+
+.pi4-link { margin: clamp(26px, 3vw, 38px) 0 0; }
+.pi4-link-a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--yellow); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
+.pi4-link-arrow { transition: translate 220ms ease; }
+.pi4-link-a:hover .pi4-link-arrow { translate: 6px 0; }
+.pi4-link-a:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+.pi4-note { margin: 16px 0 0; color: rgba(234, 243, 240, 0.6); font-size: 0.8rem; line-height: 1.62; }
+
+/* -- Responsive --------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  /* The manifold turns upright: inputs stacked, the collector across, the
+     output beneath it. */
+  .pi3-flow { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; }
+  .pi3-k-in, .pi3-k-out { grid-column: 1; }
+  .pi3-k-out { margin-top: 26px; }
+  .pi3-in { grid-column: 1; grid-row: auto; }
+  .pi3-in::after { display: none; }
+  .pi3-collector { grid-column: 1; grid-row: auto; height: 2px; margin: 18px 0 0; }
+  .pi3-out { grid-column: 1; grid-row: auto; padding-top: 0; }
+  .pi3-out::before { display: none; }
+  .pi3-refusals { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .pi4-grid { grid-template-columns: minmax(0, 1fr) repeat(var(--lanes), minmax(46px, 0.16fr)); column-gap: 6px; }
+  .pi4-lane-k { font-size: 0.5rem; letter-spacing: 0.08em; }
+  .pi4-row-k { font-size: 0.92rem; }
+}
+@media (max-width: 480px) {
+  /* Too narrow for lanes: each row states its own owner instead. */
+  .pi4-grid { grid-template-columns: minmax(0, 1fr); }
+  .pi4-lane-k, .pi4-corner, .pi4-tally, .pi4-corner-foot { display: none; }
+  .pi4-row { grid-template-columns: minmax(0, 1fr); padding: 14px 0; }
+  .pi4-row-k { padding: 0 0 6px; }
+  .pi4-cell { display: none; justify-content: flex-start; min-height: 0; }
+  .pi4-cell.is-on { display: flex; align-items: baseline; gap: 8px; }
+  .pi4-cell.is-on .pi4-sr { position: static; width: auto; height: auto; overflow: visible; clip-path: none; color: var(--yellow); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+}

@@ -64,6 +64,11 @@ export const post = {
       text: "Identifying who actually owns and controls a business is technically part of KYB, but it inherently requires verifying individual identities — meaning it draws on KYC methods and data sources. This is often where the two disciplines overlap most directly in practice.",
     },
     {
+      type: "workflow",
+      stage: "Verification",
+      caption: "Both checks belong to the verification stage: the business is verified as an entity, and the people behind it as individuals.",
+    },
+    {
       type: "h3",
       text: "Fraud patterns often exploit the gap between them",
       id: "fraud-exploits-the-gap",

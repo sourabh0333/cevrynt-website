@@ -89,7 +89,12 @@ function startMinutes(sections) {
   });
 }
 
-const nextReadout = { headingK: "Read next", minK: "min", allK: "Every article" };
+const nextReadout = {
+  headingK: "Read next",
+  minK: "min",
+  allK: "Every article",
+  hubK: "Underwriting resources",
+};
 
 export default async function BlogArticlePage({ params }) {
   const { slug } = await params;

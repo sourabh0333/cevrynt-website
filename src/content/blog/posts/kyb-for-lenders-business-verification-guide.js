@@ -77,6 +77,11 @@ export const post = {
       text: "In a well-structured underwriting workflow, KYB verification happens before — or at minimum alongside — financial analysis, not as a final checkpoint. The reason is pragmatic: if basic identity and registration verification fails, further financial analysis is working on a potentially invalid premise. Spending significant review time analyzing the cash flow of a business that turns out to be unregistered or inactive wastes underwriting capacity.",
     },
     {
+      type: "workflow",
+      stage: "Verification",
+      caption: "Where business verification sits: after the financials are read, before fraud signals and policy evaluation.",
+    },
+    {
       type: "p",
       text: "The canonical underwriting workflow — Intake → Documents → Financials → Verification → Fraud → Policy → Report — treats verification as a dedicated stage because the findings from that stage directly inform how the fraud and policy evaluation stages are conducted. A file that clears verification cleanly gets evaluated differently than one where there are unresolved inconsistencies — even if the financial metrics look identical.",
     },

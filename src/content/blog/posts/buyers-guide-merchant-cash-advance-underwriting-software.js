@@ -28,6 +28,11 @@ export const post = {
       text: "Before evaluating any specific product, map out your current underwriting workflow honestly — where document handling actually happens, how bank statement analysis gets done today, how verification and fraud checks fit in, and where the real bottlenecks are. Our piece on **[underwriting turnaround time](/blog/underwriting-turnaround-time-fragmented-review)** offers a useful framework for this. Without this baseline, it's easy to be impressed by a feature that doesn't actually address your biggest pain point.",
     },
     {
+      type: "workflow",
+      stage: null,
+      caption: "The underwriting workflow a tool has to fit: intake through human decision. Map any product you evaluate onto the stages your team actually runs.",
+    },
+    {
       type: "h2",
       text: "What to test in a vendor evaluation",
       id: "what-to-test",

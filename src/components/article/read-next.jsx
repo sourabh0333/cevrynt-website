@@ -52,6 +52,15 @@ export function ReadNext({ items, readout }) {
               →
             </span>
           </Link>
+          {/* The hub that sorts every guide by workflow stage, with the
+              question index and the glossary. Reachable from the navigation
+              only, until here. */}
+          <Link className="ar-nx-all-a" href="/resources">
+            {readout.hubK}
+            <span aria-hidden="true" className="ar-nx-all-arrow">
+              →
+            </span>
+          </Link>
         </p>
       </div>
     </aside>

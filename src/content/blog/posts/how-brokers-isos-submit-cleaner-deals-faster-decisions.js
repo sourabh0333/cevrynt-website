@@ -84,6 +84,11 @@ export const post = {
       text: "Brokers who understand what a funder's underwriting team actually needs — not just what the application says is required — tend to submit better packages than those who treat intake as a form-filling exercise. From the funder's perspective, the intake package needs to be complete enough that underwriting can begin without a back-and-forth cycle, and clear enough that the business being represented can be independently verified from the materials provided.",
     },
     {
+      type: "workflow",
+      stage: "Intake",
+      caption: "Submission quality is decided at the first stage. What a broker sends sets how quickly the file can move through the rest.",
+    },
+    {
       type: "p",
       text: "That means the documents need to be legible and complete, the details need to be internally consistent, and anything unusual about the deal — an existing MCA position, a business that recently changed ownership, a merchant whose revenue seasonality is unusual for the industry — is better surfaced proactively by the broker than discovered during underwriting. A broker who surfaces complications proactively is easier to work with than one who submits a clean-looking package that produces surprises in review.",
     },

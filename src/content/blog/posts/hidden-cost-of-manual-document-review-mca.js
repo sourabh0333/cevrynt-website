@@ -32,6 +32,11 @@ export const post = {
       text: "A typical MCA submission bundles several document types together — recent bank statements, a signed application, a voided check, sometimes tax returns or a driver's license copy — often as one combined file from a broker or ISO. Before any real underwriting analysis can start, someone has to figure out what's actually in that bundle.",
     },
     {
+      type: "workflow",
+      stage: "Documents",
+      caption: "Where the hours go: the document stage, before any analysis starts. Everything downstream waits on it.",
+    },
+    {
       type: "h3",
       text: "Sorting mixed submissions",
       id: "sorting-mixed-submissions",

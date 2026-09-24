@@ -28,6 +28,11 @@ export const post = {
       text: "A useful exercise for any underwriting team trying to improve turnaround time is to break a typical file's lifecycle into discrete stages and time each one separately, rather than tracking only the total. Doing this consistently across several lenders tends to reveal the same pattern: the actual credit analysis — reviewing cash flow, checking policy fit — often takes less total time than the surrounding administrative and handoff work.",
     },
     {
+      type: "workflow",
+      stage: null,
+      caption: "Turnaround time is the sum of every stage plus the waiting between them, which is why measuring only the total hides where it goes.",
+    },
+    {
       type: "h3",
       text: "Intake and document sorting",
       id: "intake-document-sorting",

@@ -8,7 +8,7 @@ export const post = {
   excerpt: "E-commerce sellers generate a different kind of financial signal than brick-and-mortar businesses, and underwriting needs to adapt accordingly.",
   publishedAt: "2026-08-05",
   updatedAt: "2026-08-05",
-  readingTime: 6,
+  readingTime: 7,
   workflowStage: null,
   heroImage: null,
   relatedProductPaths: ["solutions/ecommerce-merchant-underwriting", "partners/shopline"],
@@ -112,6 +112,11 @@ export const post = {
         "**Categorize platform and processor fees distinctly** from general operating expenses for a clearer margin picture.",
         "**Adapt verification to account for lighter physical footprints** without lowering the underlying verification standard.",
       ],
+    },
+    {
+      type: "workflow",
+      stage: null,
+      caption: "The same workflow an e-commerce file runs through. What changes is the evidence each stage reads, not the order of the stages.",
     },
     {
       type: "callout",

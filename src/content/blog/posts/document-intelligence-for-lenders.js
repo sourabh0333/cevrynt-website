@@ -32,6 +32,11 @@ export const post = {
       text: "It is useful to break document intelligence into three distinct jobs, because vendors often only do one or two of them well.",
     },
     {
+      type: "workflow",
+      stage: "Documents",
+      caption: "Document intelligence is the second stage of the workflow: what arrives at intake is structured here, and every later stage reads from it.",
+    },
+    {
       type: "h3",
       text: "Classification: knowing what you're looking at",
       id: "classification",

@@ -51,6 +51,11 @@ export const post = {
       text: "As covered throughout our content on **[source-linked extraction](/blog/source-linked-extraction-underwriting-evidence)**, every finding needs a path back to the specific document or transaction that produced it. This is the foundation explainability is built on — without it, nothing downstream can really be considered explainable.",
     },
     {
+      type: "workflow",
+      stage: "Report",
+      caption: "Explainability is carried to the report stage: each finding stays linked to the document and the policy rule it came from, all the way to the human decision.",
+    },
+    {
       type: "h3",
       text: "Rule-based policy evaluation",
       id: "rule-based-policy-evaluation",

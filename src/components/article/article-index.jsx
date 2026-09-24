@@ -129,6 +129,12 @@ export function ArticleIndex({ items, faqLabel, label, targetId }) {
           </li>
         ) : null}
       </ol>
+      <p aria-hidden="true" className="ar-ix-read">
+        <span className="ar-ix-read-n">{current >= 0 ? items[current].number : "00"}</span>
+        <span className="ar-ix-read-s">/</span>
+        <span className="ar-ix-read-t">{String(items.length).padStart(2, "0")}</span>
+        <span className="ar-ix-read-k">chapters</span>
+      </p>
     </nav>
   );
 }
