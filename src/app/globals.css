@@ -15161,3 +15161,76 @@ body:has(.article-header) .nav-use-cases a:hover {
   .pi4-cell.is-on { display: flex; align-items: baseline; gap: 8px; }
   .pi4-cell.is-on .pi4-sr { position: static; width: auto; height: auto; overflow: visible; clip-path: none; color: var(--yellow); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
 }
+
+/* -- Pilot 05: after the run -------------------------------------------------
+   One axis, two drops from it. Both branches are the same width on the same
+   grid, so neither reads as the expected answer, and the constant sits under
+   both of them.
+   -------------------------------------------------------------------------- */
+.pi-after .eg-full { margin-top: var(--s-block); }
+.pi5 { margin: 0; }
+.pi5-axis { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
+.pi5-axis-k { margin: 0; color: var(--muted); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+.pi5-axis-k-r { color: var(--rail); }
+
+.pi5-branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
+.pi5-branch { position: relative; padding-top: clamp(30px, 3.4vw, 44px); }
+/* The drop from the axis into the branch. */
+.pi5-drop { position: absolute; top: 0; left: 0; width: 1px; height: clamp(22px, 2.6vw, 32px); background: var(--rail); }
+.pi5-branch-k { margin: 0 0 10px; color: var(--ink); font-size: clamp(1.1rem, 1.7vw, 1.36rem); font-weight: 640; letter-spacing: -0.022em; line-height: 1.28; }
+.pi5-branch-b { margin: 0; color: var(--muted); font-size: 0.97rem; line-height: 1.68; }
+.pi5-branch-link { margin: 16px 0 0; }
+.pi5-branch-a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--rail); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
+.pi5-branch-arrow { transition: translate 220ms ease; }
+.pi5-branch-a:hover .pi5-branch-arrow { translate: 6px 0; }
+.pi5-branch-a:focus-visible { outline: 2px solid var(--rail); outline-offset: 3px; }
+
+.pi5-constant { display: grid; grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr); gap: 8px clamp(24px, 4vw, 56px); margin-top: clamp(34px, 4vw, 52px); padding-top: 18px; border-top: 1px solid var(--border); }
+.pi5-constant-k { margin: 0; color: var(--rail); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+.pi5-constant-b { margin: 0; color: var(--ink); font-size: clamp(1rem, 1.4vw, 1.12rem); font-weight: 500; letter-spacing: -0.01em; line-height: 1.6; }
+.pi5-note { margin: 20px 0 0; color: var(--label); font-size: 0.8rem; line-height: 1.62; }
+
+@media (max-width: 860px) {
+  .pi5-branches { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pi5-branch { padding-top: clamp(24px, 4vw, 34px); }
+  .pi5-branch + .pi5-branch { margin-top: clamp(26px, 4vw, 38px); padding-top: clamp(26px, 4vw, 38px); border-top: 1px solid var(--border); }
+  .pi5-constant { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* -- Pilot 06: the limits ----------------------------------------------------
+   No drawing in this one: four sections of ruled figures come before it, so the
+   argument is carried by the type instead. Claim and correction share one grid,
+   which keeps both columns readable straight down.
+   -------------------------------------------------------------------------- */
+.pi-limits .eg-full { margin-top: var(--s-block); }
+.pi-limits .eg-rail { color: rgba(234, 243, 240, 0.6); }
+.pi6 { --pi6-line: rgba(234, 243, 240, 0.16); margin: 0; }
+
+.pi6-head, .pi6-i { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); column-gap: clamp(24px, 4vw, 64px); }
+.pi6-head { padding-bottom: 12px; border-bottom: 1px solid rgba(234, 243, 240, 0.28); color: rgba(234, 243, 240, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+.pi6-list { margin: 0; padding: 0; list-style: none; }
+.pi6-i { align-items: start; padding: clamp(20px, 2.4vw, 30px) 0; border-bottom: 1px solid var(--pi6-line); }
+
+/* The hoped-for claim, struck out at display size. */
+.pi6-claim { display: grid; grid-template-columns: 2.6em minmax(0, 1fr); align-items: baseline; margin: 0; color: #f6fbf9; font-size: clamp(1.12rem, 1.9vw, 1.5rem); font-weight: 600; letter-spacing: -0.024em; line-height: 1.26; }
+.pi6-n { color: rgba(234, 243, 240, 0.6); font-size: 0.62rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.1em; }
+.pi6-claim s { text-decoration-color: var(--yellow); text-decoration-thickness: 2px; text-underline-offset: 0; }
+
+.pi6-truth-b { margin: 0; color: rgba(234, 243, 240, 0.8); font-size: 0.97rem; line-height: 1.68; }
+.pi6-truth-link { margin: 12px 0 0; }
+.pi6-truth-a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--yellow); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; }
+.pi6-truth-arrow { transition: translate 220ms ease; }
+.pi6-truth-a:hover .pi6-truth-arrow { translate: 6px 0; }
+.pi6-truth-a:focus-visible { outline: 2px solid var(--yellow); outline-offset: 3px; }
+
+.pi6-close { max-width: 86ch; margin: clamp(26px, 3vw, 38px) 0 0; color: rgba(234, 243, 240, 0.78); font-size: 0.95rem; line-height: 1.68; }
+
+@media (max-width: 860px) {
+  .pi6-head { display: none; }
+  .pi6-i { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
+  .pi6-truth { padding-left: 2.6em; }
+}
+@media (max-width: 480px) {
+  .pi6-claim { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+  .pi6-truth { padding-left: 0; }
+}

@@ -7,6 +7,8 @@ import { ScopeSlabs } from "@/components/pilot/scope-slabs";
 import { ComparisonLadder } from "@/components/pilot/comparison-ladder";
 import { CriteriaManifold } from "@/components/pilot/criteria-manifold";
 import { SettleMatrix } from "@/components/pilot/settle-matrix";
+import { AfterSplit } from "@/components/pilot/after-split";
+import { LimitsList } from "@/components/pilot/limits-list";
 import { JsonLd } from "@/components/json-ld";
 import { pageByPath, workflow } from "@/content/site-pages";
 import { siteConfig } from "@/config/site";
@@ -270,6 +272,72 @@ const settleLink = {
 const settleNote =
   "Nothing here is a security claim. It is the list of decisions a pilot cannot start without, and the side of the table each one is settled on.";
 
+/* 05 — where the run ends, both ways. */
+const afterAxis = { left: "The run ends", right: "The decision is yours" };
+
+const afterBranches = [
+  {
+    k: "It earns a place in the workflow",
+    body:
+      "Then the production workflow is scoped around the systems already moving your deals — intake, your LOS or CRM, document sources, verification providers and downstream reporting — rather than the other way round. That scoping is its own conversation, and it starts from what the pilot showed.",
+    link: { href: "/integrations", label: "How Cevrynt connects around a stack" },
+  },
+  {
+    k: "It does not",
+    body:
+      "Then you have a file-by-file comparison against your own review, your criteria written down as your team actually applies them, and a workflow sitting exactly where it was. Knowing precisely where the output fell short of your underwriters is a result worth having.",
+    link: null,
+  },
+];
+
+const afterConstant = {
+  k: "True on both paths",
+  body:
+    "Nothing was connected to find out. The run works from representative historical files your team has already reviewed, so the evaluation never depends on wiring Cevrynt into the systems your deals move through today.",
+};
+
+const afterNote =
+  "Whether anything follows a pilot is the eighth row of the table above — decided by your team, on what the comparison actually showed.";
+
+/* 06 — the limits, stated before anybody has to discover them. */
+const limits = [
+  {
+    claim: "That your approval rate will go up.",
+    truth:
+      "Approval depends on your policy and your risk appetite, both of which stay exactly where they are. A pilot changes how a file arrives at that decision — not the decision, and not what you choose to fund.",
+    link: null,
+  },
+  {
+    claim: "That it holds for files you did not include.",
+    truth:
+      "A run answers for the stages you bracketed and the files you chose, and nothing beyond them. Messy packs, thin files and unusual document sets only count in the result if you put them in.",
+    link: null,
+  },
+  {
+    claim: "That your data handling requirements are satisfied.",
+    truth:
+      "A comparison of underwriting output proves nothing about access, retention or audit. Those are settled before a file moves, as their own review, against your own requirements.",
+    link: { href: "/security", label: "What that review covers" },
+  },
+  {
+    claim: "That your underwriters can stop reading.",
+    truth:
+      "The output still has to be read by somebody who knows the file. A pilot measures the preparation in front of the judgment; the judgment stays where it already was.",
+    link: null,
+  },
+  {
+    claim: "That another lender's result would be yours.",
+    truth:
+      "Every run is tied to one lender's criteria, thresholds and files. Nothing about it transfers to a different policy, which is also why this site publishes no accuracy figures to compare against.",
+    link: null,
+  },
+];
+
+const limitsReadout = { claimK: "What it will not tell you", truthK: "What is true instead" };
+
+const limitsClose =
+  "None of this is hedging. A pilot that claimed any of the five would be measuring something other than the work, and you would find out at the point it mattered rather than before you started.";
+
 export default function PilotPage() {
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -429,10 +497,64 @@ export default function PilotPage() {
         </div>
       </section>
 
+      {/* 05 — what follows the run, both ways */}
+      <section className="pi-after band-light" aria-labelledby="after-heading">
+        <div className="eg sec-head">
+          <span className="eg-rail hx-mono">05</span>
+          <div className="eg-head">
+            <p className="hx-kicker">After the run</p>
+            <RevealLines
+              as="h2"
+              className="t-display-2"
+              id="after-heading"
+              text="Two ways this ends, and the page owes you both of them."
+            />
+          </div>
+          <p className="eg-lede t-lede">
+            A pilot that can only end one way is a demo. These two hang from the same line at the same width,
+            because the comparison is run to answer the question either way — and one thing stays true down
+            both of them.
+          </p>
+        </div>
+
+        <div className="eg">
+          <div className="eg-full">
+            <AfterSplit axis={afterAxis} branches={afterBranches} constant={afterConstant} note={afterNote} />
+          </div>
+        </div>
+      </section>
+
+      {/* 06 — the limits, said out loud */}
+      <section className="pi-limits band-deep" aria-labelledby="limits-heading">
+        <div className="eg sec-head">
+          <span className="eg-rail hx-mono">06</span>
+          <div className="eg-head">
+            <p className="hx-kicker hx-kicker-invert">The limits</p>
+            <RevealLines
+              as="h2"
+              className="t-display-2"
+              id="limits-heading"
+              text="Five things a pilot will not tell you, said now rather than at the point they matter."
+            />
+          </div>
+          <p className="eg-lede t-lede">
+            Every evaluation has an edge, and a page that leaves you to find it is wasting your team&rsquo;s
+            time. These are the questions a focused pilot cannot answer, each with what is actually true in
+            its place.
+          </p>
+        </div>
+
+        <div className="eg">
+          <div className="eg-full">
+            <LimitsList items={limits} readout={limitsReadout} close={limitsClose} />
+          </div>
+        </div>
+      </section>
+
       <section className="fn band-white" aria-labelledby="cta-heading">
         <div className="fn-glow" aria-hidden="true" />
         <FounderClose
-          index="05"
+          index="07"
           kicker="Founder-led"
           heading="Bring the workflow you would want a pilot to prove."
           lede="Walk through how a deal moves through your team today. We'll agree which stages a focused pilot should cover, what it would be compared against, and what would count as a result worth acting on."
