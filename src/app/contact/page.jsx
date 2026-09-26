@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { HeroMotion } from "@/components/hero-motion";
 import { RainbowCta } from "@/components/ui/rainbow-cta";
 import { PageHeroCopy } from "@/components/page-hero-copy";
@@ -245,6 +246,23 @@ export default function ContactPage() {
           <PageHeroCopy heading={page.title} lede={page.description} />
           <div className="hero-actions">
             <RainbowCta href={page.ctaHref || calendlyUrl} label={page.cta || "Book a walkthrough"} />
+          </div>
+        </div>
+        {/* The same illustrative workspace the homepage opens on, in the same
+            folded frame. */}
+        <div className="hero-dashboard-wrap">
+          <div className="hero-dashboard-frame">
+            <div className="hero-dashboard-float">
+              <Image
+                src="/media/cevrynt-dashboard-website-analytics.webp"
+                alt="Illustrative Cevrynt underwriting workspace showing business verification, cash-flow analysis, fraud review, and underwriting status"
+                width={1672}
+                height={941}
+                priority
+                loading="eager"
+                sizes="(max-width: 760px) 96vw, 1180px"
+              />
+            </div>
           </div>
         </div>
       </HeroMotion>

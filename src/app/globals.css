@@ -474,12 +474,10 @@ body:has(.page-hero) .site-header { background: transparent; }
 }
 .hero-dashboard-wrap { position: relative; z-index: 1; width: min(1600px, calc(100vw - 80px)); margin: -38px auto 0; padding: 0; }
 .hero-dashboard-frame { --dashboard-fold: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 13%); position: relative; overflow: hidden; border: 0; border-radius: 0; padding: 0; background: transparent; box-shadow: none; }
-.hero-dashboard-frame::before { position: absolute; z-index: 2; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 18%, rgba(255,239,179,0.18) 50%, transparent 68%); clip-path: var(--dashboard-fold); content: ""; pointer-events: none; transform: translateX(-85%); animation: dashboard-sheen 8s ease-in-out 2s infinite; }
 .hero-dashboard-frame::after { position: absolute; z-index: 3; top: 0; left: 0; width: 10%; height: 13%; background-image: url("/media/cevrynt-dashboard-website.webp"); background-position: top left; background-repeat: no-repeat; background-size: 1000% auto; clip-path: polygon(0 0, 100% 0, 0 100%); content: ""; pointer-events: none; transform-origin: center; animation: dashboard-photo-fold 2400ms cubic-bezier(0.65, 0, 0.35, 1) 1.2s both; }
 .hero-dashboard-float { position: relative; z-index: 1; clip-path: var(--dashboard-fold); animation: dashboard-float 7s ease-in-out 4s infinite alternate both; width: 100%; }
 .hero-dashboard-float img { display: block; width: 100%; height: auto; object-fit: cover; object-position: center center; filter: saturate(0.92) contrast(1.04); }
 @keyframes dashboard-float { to { transform: translate3d(0, -8px, 0); } }
-@keyframes dashboard-sheen { 0%, 58% { transform: translateX(-85%); } 78%, 100% { transform: translateX(85%); } }
 @keyframes dashboard-photo-fold { 0%, 12% { opacity: 1; transform: perspective(900px) rotate3d(1, -1, 0, 0deg); } 72% { opacity: 0.9; } 100% { opacity: 0; transform: perspective(900px) rotate3d(1, -1, 0, 92deg) scale(0.94); } }
 @keyframes logo-fold-back { 0%, 100% { transform: none; } 42% { transform: rotateY(58deg) translateX(5px); } }
 @keyframes logo-fold-front { 0%, 100% { transform: none; } 42% { transform: rotateY(-58deg) translateX(-5px); } }

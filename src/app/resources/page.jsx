@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "@/components/icons";
 import { RevealLines } from "@/components/home/reveal-lines";
@@ -550,6 +551,23 @@ export default function ResourcesPage() {
               <ArrowUpRight />
             </span>
           </a>
+        </div>
+        {/* The same illustrative workspace the homepage opens on, in the same
+            folded frame. */}
+        <div className="hero-dashboard-wrap">
+          <div className="hero-dashboard-frame">
+            <div className="hero-dashboard-float">
+              <Image
+                src="/media/cevrynt-dashboard-website-analytics.webp"
+                alt="Illustrative Cevrynt underwriting workspace showing business verification, cash-flow analysis, fraud review, and underwriting status"
+                width={1672}
+                height={941}
+                priority
+                loading="eager"
+                sizes="(max-width: 760px) 96vw, 1180px"
+              />
+            </div>
+          </div>
         </div>
         <div className="page-hero-orb" aria-hidden="true" />
       </section>
